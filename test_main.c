@@ -4,7 +4,7 @@
 #include <sys/stat.h>        /* For mode constants */
 #include <fcntl.h>           /* For O_* constants */
 
-#define SHM_ID 5555 
+#define SHM_ID  7777
 #define SHM_NAME "test_1"
 
 typedef struct test_packet{
