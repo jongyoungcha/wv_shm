@@ -4,9 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/Users/joyeongchan/projects/wv_shm/common/wv_file.c" "/Users/joyeongchan/projects/wv_shm/common/CMakeFiles/wv_shm_common.dir/wv_file.c.o"
+  "/root/projects/wv_shm/common/wv_file.c" "/root/projects/wv_shm/common/CMakeFiles/wv_shm_common.dir/wv_file.c.o"
   )
-set(CMAKE_C_COMPILER_ID "Clang")
+set(CMAKE_C_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_C_TARGET_INCLUDE_PATH

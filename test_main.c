@@ -16,9 +16,7 @@ typedef struct test_packet{
 
 int main(){
   /* wv_file_t* wv_file; */
-  /* shm_init(meta_file, const char *meta_dir_path) */
-  shm_add_mem(SHM_ID, SHM_NAME, sizeof(test_packet_t), 100);
-
+  wv_shm_init();
 
   return 0;
 }

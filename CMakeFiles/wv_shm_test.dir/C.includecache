@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -18,9 +18,13 @@ unistd.h
 dirent.h
 -
 
-/Users/joyeongchan/projects/wv_shm/test_main.c
+./common/wv_log.h
+stdio.h
+-
+
+/root/projects/wv_shm/test_main.c
 wv_shm_mngt.h
-/Users/joyeongchan/projects/wv_shm/wv_shm_mngt.h
+/root/projects/wv_shm/wv_shm_mngt.h
 sys/mman.h
 -
 sys/stat.h
@@ -28,11 +32,11 @@ sys/stat.h
 fcntl.h
 -
 
-/Users/joyeongchan/projects/wv_shm/wv_shm_mngt.c
+/root/projects/wv_shm/wv_shm_mngt.c
 wv_shm_mngt.h
-/Users/joyeongchan/projects/wv_shm/wv_shm_mngt.h
+/root/projects/wv_shm/wv_shm_mngt.h
 
-/Users/joyeongchan/projects/wv_shm/wv_shm_mngt.h
+/root/projects/wv_shm/wv_shm_mngt.h
 stdio.h
 -
 stdlib.h
@@ -53,6 +57,10 @@ fcntl.h
 -
 errno.h
 -
+sys/ipc.h
+-
 wv_file.h
+-
+wv_log.h
 -
 

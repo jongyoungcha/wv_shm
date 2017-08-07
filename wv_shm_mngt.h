@@ -11,49 +11,54 @@
 #include <sys/stat.h>        /* For mode constants */
 #include <fcntl.h>           /* For O_* constants */
 #include <errno.h>
+#include <sys/ipc.h>
 #include <wv_file.h>
+#include <wv_log.h>
 
 
-typedef struct shm_meta_node{
-  int shm_id;
-  char* shm_name;
-  void* shm_stat_addr;
-  int shm_length;
-  struct shm_meta_node *left;
-  struct shm_meta_node *right;
-} shm_meta_node_t;
+#define SHM_KEY 4000
+#define SHM_TOTAL_SIZE 1024
+#define SHM_JUNK_SIZE 100
+#define SHM_MAX_COUNT 100
 
 
-typedef struct shm_hdr{
-  void* write_pos;
-  void* read_pos;
-  int data_size;
+typedef struct wv_shm_junk_bndry_info{
+  void* start_addr;
+  void* end_addr;
+} wv_shm_part_bndry_info_t;
+
+
+typedef struct wv_shm_meta{
+  int shm_key;
+  int shm_total_size;
+  int shm_junk_size;
+  void* shm_start_addr;
+  void* shm_end_addr;
   int count;
-  int maximum;
-} shm_hdr_t;
+  wv_shm_part_bndry_info_t arr_shm_junk_bndry[SHM_MAX_COUNT];
+} wv_shm_meta_t;
 
 
-typedef struct shm_elem{
-  int is_empty;
-  void* elem_data;
-  void* next_node_addr;
-  void* padding;
-} shm_elem_t;
+typedef struct wv_shm_junk_hdr{
+  char* shm_name;
+  void* start_addr;
+  void* end_addr;
+  void* write_addr;
+  void* read_addr;
+  int remain_size;
+  int count;
+} wv_shm_hdr_t;
 
-typedef struct wv_shm_node{
-  void* node_data;
-  char* node_key;
-  struct wv_shm_node *left;
-  struct wv_shm_node *right;
-} wv_shm_node_t;
+
+typedef struct wv_shm_junk_elem{
+  int data_size;
+  void* data;
+  void* next_addr;
+} wv_shm_junk_elem_t;
 
 
 extern int
-shm_init (wv_file_t* meta_file, const char* meta_dir_path);
-
-
-extern int
-shm_get_meta_nodes (struct shm_meta_node** nodes);
+wv_shm_init();
 
 
 extern int
@@ -78,21 +83,32 @@ extern int
 shm_wr_dump_all();
 
 
+
 // Tree data structure for handling the shared memory haeder and the shm_meta_data structure.
-int
-wv_shm_init_tree(wv_shm_node_t** node);
+/* int */
+/* wv_shm_meta_tree_init(wv_shm_meta_node_t** node, */
+/* 		      int shm_id, */
+/* 		      char* shm_name, */
+/* 		      void* shm_addr, */
+/* 		      int shm_length); */
 
-int
-wv_shm_make_tn(wv_shm_node_t** node, char* node_key, void* data, size_t data_size);
 
-int
-wv_shm_push_tn(wv_shm_node_t** header, wv_shm_node_t* data);
+/* int */
+/* wv_shm_meta_tree_find_loc(wv_shm_meta_node_t* start_node, */
+/* 			  int shm_id_key, */
+/* 			  wv_shm_meta_node_t** loc_to_write); */
 
-int
-wv_shm_srch_tn(wv_shm_node_t* header, char* node_key);
+/* int */
+/* wv_shm_make_tn(wv_shm_meta_node_t** node, char* key, void* data, size_t data_size); */
 
-int
-wv_shm_del_tn(wv_shm_node_t** header, char* node_key);
+/* int */
+/* wv_shm_push_tn(wv_shm_meta_node_t** header, wv_shm_meta_node_t* data); */
+
+/* int */
+/* wv_shm_srch_tn(wv_shm_meta_node_t* header, char* node_key); */
+
+/* int */
+/* wv_shm_del_tn(wv_shm_meta_node_t** header, char* node_key); */
 
 
 #endif

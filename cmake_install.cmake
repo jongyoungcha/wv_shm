@@ -1,4 +1,4 @@
-# Install script for directory: /Users/joyeongchan/projects/wv_shm
+# Install script for directory: /root/projects/wv_shm
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -27,9 +27,14 @@ if(NOT CMAKE_INSTALL_COMPONENT)
   endif()
 endif()
 
+# Install shared libraries without execute permission?
+if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
+  set(CMAKE_INSTALL_SO_NO_EXE "0")
+endif()
+
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/Users/joyeongchan/projects/wv_shm/common/cmake_install.cmake")
+  include("/root/projects/wv_shm/common/cmake_install.cmake")
 
 endif()
 
@@ -41,5 +46,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/joyeongchan/projects/wv_shm/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/root/projects/wv_shm/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
