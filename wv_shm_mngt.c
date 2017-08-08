@@ -17,7 +17,8 @@ int wv_shm_init ()
   void* shm_addr = (void*)0;
   void* cur_addr = NULL;
 
-  int i, shm_alloc_size, page_size  = 0;
+
+  int i, j, shm_alloc_size, page_size  = 0;
   int shm_id = 0;
 
   struct shmid_ds shm_info;
@@ -96,33 +97,56 @@ int wv_shm_init ()
   for (i=0; i<SHM_MAX_COUNT; i++){
     shm_meta.arr_shm_junk_bndry[i].start_addr = cur_addr;
     shm_meta.arr_shm_junk_bndry[i].end_addr = cur_addr + SHM_JUNK_SIZE;
-    cur_addr = cur_addr + SHM_JUNK_SIZE;
+    cur_addr += SHM_JUNK_SIZE;
   }
 
-  for (i=0; i<SHM_MAX_COUNT; i++){
-    printf("shm_meta.arr_shm_junk_bndry[%d].start_addr : %p\n", i, shm_meta.arr_shm_junk_bndry[i].start_addr);
-    printf("shm_meta.arr_shm_junk_bndry[%d].end_addr : %p\n", i, shm_meta.arr_shm_junk_bndry[i].end_addr);
-  }
+  wv_shm_junk_bndry_info_t* shm_junk_info = &(shm_meta.arr_shm_junk_bndry[0]);
+  printf("shm_junk_info->start_addr : %p\n", shm_junk_info->start_addr);
+  printf("shm_junk_info->end_addr : %p\n", shm_junk_info->end_addr);
 
-
-  wv_shm_junk_bndry_info_t* shm_junk_info = &shm_meta.arr_shm_junk_bndry[0];
   void* junk_cur_addr = shm_junk_info->start_addr;
   void* junk_next_addr = NULL;
 
-  for(i=0; i<10000; i++){
+  for(i=0; i<10; i++){
     wv_packet_t packet;
     packet.packet_id = i;
     snprintf(packet.data, 8192, "%s%d", packet.data, packet.packet_id);
 
-    wv_shm_junk_elem_hdr_t shm_elem;
-    shm_elem.data_size = sizeof(wv_packet_t);
-    shm_elem.data = (void*)malloc(sizeof(packet));
-    shm_elem.data = junk_cur_addr;
-    shm_elem.next_addr = NULL;
+    wv_shm_junk_elem_hdr_t shm_junk_elem;
+    shm_junk_elem.attr_count=0;
+    shm_junk_elem.attrs = NULL;
 
-    wv_shm_wr_elem_limit(junk_cur_addr, shm_)
+    for(j=0; j<5; j++){
+      printf("into j\n");
+      wv_shm_junk_elem_attr_t attr;
 
+      attr.attr_size = sizeof(wv_packet_t);
 
+      snprintf(attr.key, 256, "kkk%d", i);
+      attr.data = (void*)malloc(sizeof(wv_packet_t));
+      memcpy(attr.data, &packet, sizeof(wv_packet_t));
+
+      if(shm_junk_elem.attrs){
+	printf("we are in realloc section\n");
+	shm_junk_elem.attrs = realloc(shm_junk_elem.attrs , sizeof(shm_junk_elem.attrs) + sizeof(wv_shm_junk_elem_attr_t));
+      }
+      else{
+	printf("we are in malloc section\n");
+	shm_junk_elem.attrs = (wv_shm_junk_elem_attr_t*)malloc(sizeof(wv_shm_junk_elem_attr_t));
+      }
+
+      printf("Usable size : %ld\n", malloc_usable_size(shm_junk_elem.attrs));
+      /* printf("size of shm_junk_elem.attrs : %ld", strlen(shm_junk_elem.attrs)); */
+    }
+
+    /* attr.attr_size = sizeof(wv_packet_t); */
+
+    /* shm_elem = sizeof(wv_packet_t); */
+    /* shm_elem.data = (void*)malloc(sizeof(packet)); */
+    /* shm_elem.data = junk_cur_addr; */
+    /* shm_elem.next_addr = NULL; */
+
+    /* wv_shm_wr_elem_limit(junk_cur_addr, shm_) */
   }
 
  shm_init_ret:

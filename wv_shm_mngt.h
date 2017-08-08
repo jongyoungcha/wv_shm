@@ -52,7 +52,7 @@ typedef struct wv_shm_junk_hdr{
 
 typedef struct wv_shm_junk_elem_attr{
   int attr_size;
-  char* key;
+  char key[256];
   void* data;
 } wv_shm_junk_elem_attr_t;
 
@@ -60,7 +60,7 @@ typedef struct wv_shm_junk_elem_attr{
 typedef struct wv_shm_junk_elem_hdr{
   int total_size;
   int attr_count;
-  wv_shm_junk_elem_attr_t** attrs;
+  wv_shm_junk_elem_attr_t* attrs;
 } wv_shm_junk_elem_hdr_t;
 
 
