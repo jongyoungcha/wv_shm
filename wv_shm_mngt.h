@@ -17,15 +17,15 @@
 
 
 #define SHM_KEY 4000
-#define SHM_TOTAL_SIZE 1024
-#define SHM_JUNK_SIZE 100
+#define SHM_TOTAL_SIZE (1024 * 1024 * 1024)
+#define SHM_JUNK_SIZE (100 * 1024 * 1024)
 #define SHM_MAX_COUNT 100
 
 
 typedef struct wv_shm_junk_bndry_info{
   void* start_addr;
   void* end_addr;
-} wv_shm_part_bndry_info_t;
+} wv_shm_junk_bndry_info_t;
 
 
 typedef struct wv_shm_meta{
@@ -35,7 +35,7 @@ typedef struct wv_shm_meta{
   void* shm_start_addr;
   void* shm_end_addr;
   int count;
-  wv_shm_part_bndry_info_t arr_shm_junk_bndry[SHM_MAX_COUNT];
+  wv_shm_junk_bndry_info_t arr_shm_junk_bndry[SHM_MAX_COUNT];
 } wv_shm_meta_t;
 
 
@@ -50,11 +50,18 @@ typedef struct wv_shm_junk_hdr{
 } wv_shm_hdr_t;
 
 
-typedef struct wv_shm_junk_elem{
-  int data_size;
+typedef struct wv_shm_junk_elem_attr{
+  int attr_size;
+  char* key;
   void* data;
-  void* next_addr;
-} wv_shm_junk_elem_t;
+} wv_shm_junk_elem_attr_t;
+
+
+typedef struct wv_shm_junk_elem_hdr{
+  int total_size;
+  int attr_count;
+  wv_shm_junk_elem_attr_t** attrs;
+} wv_shm_junk_elem_hdr_t;
 
 
 extern int
@@ -62,10 +69,10 @@ wv_shm_init();
 
 
 extern int
-shm_add_mem (int shm_id, char* shm_name, size_t data_size, size_t max_count);
+wv_shm_add_mem (int shm_id, char* shm_name, size_t data_size, size_t max_count);
 
-extern int
-shm_wr_elem(int shm_id, int pos, void* data, size_t size);
+extern void* 
+wv_shm_wr_elem(void* start_addr, void* data, size_t size, void** next_addr);
 
 extern int
 shm_chk_id_exist (int shm_id);
