@@ -9,5 +9,6 @@ CMakeFiles/wv_shm_test.dir/test_main.c.o
 CMakeFiles/wv_shm_test.dir/wv_shm_mngt.c.o
  ./common/wv_file.h
  ./common/wv_log.h
+ ./common/wv_mem.h
  /root/projects/wv_shm/wv_shm_mngt.c
  /root/projects/wv_shm/wv_shm_mngt.h

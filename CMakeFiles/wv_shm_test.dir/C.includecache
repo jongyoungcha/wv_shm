@@ -22,6 +22,14 @@ dirent.h
 stdio.h
 -
 
+./common/wv_mem.h
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+
 /root/projects/wv_shm/test_main.c
 wv_shm_mngt.h
 /root/projects/wv_shm/wv_shm_mngt.h
@@ -35,6 +43,8 @@ fcntl.h
 /root/projects/wv_shm/wv_shm_mngt.c
 wv_shm_mngt.h
 /root/projects/wv_shm/wv_shm_mngt.h
+wv_mem.h
+-
 
 /root/projects/wv_shm/wv_shm_mngt.h
 stdio.h
