@@ -15,8 +15,8 @@ typedef struct test_packet{
 
 
 int main(){
-  /* wv_file_t* wv_file; */
-  wv_shm_init();
+
+  wv_shm_test();
 
   return 0;
 }

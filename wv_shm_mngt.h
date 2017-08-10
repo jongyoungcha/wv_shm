@@ -24,9 +24,11 @@
 
 typedef struct wv_shm_junk_hdr{
   char shm_name[256];
+  int is_assigned;
   void* start_addr;
   void* end_addr;
   void* write_addr;
+  void* prev_write_addr;  // Used to link currnet element and prev element.
   void* read_addr;
   size_t remain_size;
   size_t count;
@@ -53,20 +55,47 @@ typedef struct wv_shm_junk_elem_attr{
 
 
 typedef struct wv_shm_junk_elem_hdr{
-  size_t total_size;
-  size_t attr_count;
-  wv_shm_junk_elem_attr_t attrs[256];
+  size_t size;
+  void* next_addr;
 } wv_shm_junk_elem_hdr_t;
 
+
+int
+wv_shm_test ();
 
 extern int
 wv_shm_init();
 
 extern int
+wv_shm_load_meta(void* shm_start_addr);
+
+extern int
+wv_shm_init_meta(void* shm_start_addr);
+
+extern wv_shm_junk_hdr_t*
+wv_shm_assign_junk(wv_shm_meta_t* shm_meta, const char* junk_name);
+
+extern wv_shm_junk_hdr_t*
+wv_shm_unassign_junk(wv_shm_meta_t* shm_meta, const char* junk_name);
+
+extern wv_shm_junk_hdr_t*
+wv_shm_find_junk(wv_shm_meta_t* shm_meta, const char* junk_name);
+
+extern int
+wv_shm_dump_junk(wv_shm_meta_t* shm_meta, const char* junk_name, const char* dir_name, const char* file_name);
+
+extern int
+wv_shm_clear_junk(wv_shm_junk_hdr_t* shm_junk_hdr);
+
+
+extern int
 wv_shm_junk_init(wv_shm_junk_hdr_t* shm_junk_hdr, char* shm_junk_name, void* start_addr, void* end_addr);
 
 extern void*
-wv_shm_rd_elem(wv_shm_junk_hdr_t* shm_hdr, size_t size);
+wv_shm_peek_elem(wv_shm_junk_hdr_t* shm_hdr, size_t size);
+
+extern int
+wv_shm_del_last_elem(wv_shm_junk_hdr_t* shm_junk_hdr);
 
 extern void*
 wv_shm_wr(void* start_addr, void* data, size_t size, void** next_addr, void* limit_addr);
@@ -74,60 +103,11 @@ wv_shm_wr(void* start_addr, void* data, size_t size, void** next_addr, void* lim
 extern void* 
 wv_shm_wr_elem(wv_shm_junk_hdr_t* shm_junk_hdr, void* data, size_t size);
 
+int
+wv_shm_link_elems(void* prev_elem_addr, void* cur_elem_addr);
 
-
-
-
-
-
-
-
-extern int
-wv_shm_add_mem (int shm_id, char* shm_name, size_t data_size, size_t max_count);
-
-
-extern int
-shm_chk_id_exist (int shm_id);
-
-extern int
-shm_rm_mem (int shm_id);
-
-extern int
-shm_wr_dump_file (int shm_id, const char* shm_dump_path);
-
-extern int
-shm_ld_dump_file (int shm_id, const char* shm_dump_path);
-
-extern int
-shm_wr_dump_all();
-
-
-
-// Tree data structure for handling the shared memory haeder and the shm_meta_data structure.
-/* int */
-/* wv_shm_meta_tree_init(wv_shm_meta_node_t** node, */
-/* 		      int shm_id, */
-/* 		      char* shm_name, */
-/* 		      void* shm_addr, */
-/* 		      int shm_length); */
-
-
-/* int */
-/* wv_shm_meta_tree_find_loc(wv_shm_meta_node_t* start_node, */
-/* 			  int shm_id_key, */
-/* 			  wv_shm_meta_node_t** loc_to_write); */
-
-/* int */
-/* wv_shm_make_tn(wv_shm_meta_node_t** node, char* key, void* data, size_t data_size); */
-
-/* int */
-/* wv_shm_push_tn(wv_shm_meta_node_t** header, wv_shm_meta_node_t* data); */
-
-/* int */
-/* wv_shm_srch_tn(wv_shm_meta_node_t* header, char* node_key); */
-
-/* int */
-/* wv_shm_del_tn(wv_shm_meta_node_t** header, char* node_key); */
+void*
+wv_shm_rd(void* start_addr, size_t size, void** next_addr);
 
 
 #endif
