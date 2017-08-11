@@ -10,11 +10,14 @@ typedef struct wv_packet{
   char data[8192];
 }wv_packet_t;
 
-wv_shm_meta_t shm_meta;
+wv_shm_meta_t* shm_meta = NULL;
 
 
 int wv_shm_init ()
 {
+
+  fprintf(stdout, "[ %s ]\n" , __func__);
+
   int ret = 0;
   void* shm_addr = (void*)0;
   void* cur_addr = NULL;
@@ -25,13 +28,15 @@ int wv_shm_init ()
 
   struct shmid_ds shm_ds;
 
-  memset(&shm_meta, 0x00, sizeof(shm_meta));
-  shm_meta.count = 0;
-  shm_meta.shm_key = SHM_KEY;
-  shm_meta.shm_junk_size = SHM_JUNK_SIZE;
+  shm_meta = (wv_shm_meta_t*)malloc(sizeof(wv_shm_meta_t));
+  memset(shm_meta, 0x00, sizeof(wv_shm_meta_t));
+
+  shm_meta->count = 0;
+  shm_meta->shm_key = SHM_KEY;
+  shm_meta->shm_junk_size = SHM_JUNK_SIZE;
 
   /* Getting shared memory */
-  if ( (shm_id = shmget(shm_meta.shm_key, 0, 0)) != -1 ){
+  if ( (shm_id = shmget(shm_meta->shm_key, 0, 0)) != -1 ){
     shm_exists = 1;
     fprintf(stderr,
 	    "[Success] Shared memory was existing.... (shm_id : %d, errno : %s)\n",
@@ -40,7 +45,7 @@ int wv_shm_init ()
   }
   else{
 
-    if ( (shm_id = shmget(shm_meta.shm_key,
+    if ( (shm_id = shmget(shm_meta->shm_key,
 			  SHM_TOTAL_SIZE,
 			  IPC_CREAT|0777)) == -1 ){
 
@@ -48,7 +53,7 @@ int wv_shm_init ()
       exit( errno );
       fprintf(stderr,
 	      "Getting Shared memory was failed..... (shm_key : %ld, errno : %s)\n",
-	      shm_meta.shm_key, strerror(errno));
+	      shm_meta->shm_key, strerror(errno));
       return -1;
     }
   }
@@ -58,7 +63,7 @@ int wv_shm_init ()
   if ( shm_addr == (void*)(-1) )
   {
     fprintf(stderr,
-  	    "Getting sharedaddr : %p\n", shm_meta.shm_start_addr);
+  	    "Getting sharedaddr : %p\n", shm_meta->shm_start_addr);
     printf("cur_addr : %p\n", cur_addr);
   }
 
@@ -72,37 +77,99 @@ int wv_shm_init ()
   printf( "[Info] shm_ds.shm_segsz : %ld\n", shm_ds.shm_segsz);
   printf( "[Info] shm_ds.shm_ctime : %ld\n", shm_ds.shm_ctime);
 
+  /* char* test_message = "eteest"; */
 
-  /* shm_exists = 0; */
+  shm_exists = 0;
   if ( shm_exists ){
 
-    /* Loading the shared memory meta information. */
-    printf( "[Info] loading shm_addr : %p\n", shm_addr);
-    for(i = 0; i<100; i++){
-      printf("%p", (shm_addr));
-    }
-
-    /* wv_shm_load_meta(shm_addr); */
+    wv_shm_load_meta(shm_addr);
   }
   else{
-
-    for(i = 0; i<100; i++){
-      printf("%p", (shm_addr));
-    }
-
     /* Setting the shared memory meta information. */
-    printf( "[Info] initializing shm_addr : %p\n", shm_addr);
-
-    /* wv_shm_init_meta(shm_addr); */
+       
+    wv_shm_init_meta(shm_addr);
+    wv_shm_sync_meta(shm_meta);
   }
 
   return ret;
 }
 
 
+typedef struct test_packet{
+  char from_ip[256];
+  int from_port;
+  char data[8192];
+}test_packet_t;
+
 int wv_shm_test(){
   int ret = 0;
   wv_shm_init();
+
+  test_packet_t test_packet[5] = {
+    {"111.111.111.111", 3000, "datadatadata"},
+    {"222.111.111.111", 3000, "datadatadata"},
+    {"333.111.111.111", 3000, "datadatadata"},
+  };
+
+  wv_shm_junk_hdr_t* shm_junk_hdr =  wv_shm_assign_junk("mytest_junk_shm");
+  printf("shm_junk_hdr->count : %ld\n", shm_junk_hdr->count);
+  printf("shm_junk_hdr->start_addr : %p\n", shm_junk_hdr->start_addr);
+  printf("shm_junk_hdr->end_addr : %p\n", shm_junk_hdr->end_addr);
+  printf("shm_junk_hdr->remain_size : %ld\n", shm_junk_hdr->remain_size);
+  printf("shm_junk_hdr->shm_name : %s\n", shm_junk_hdr->shm_name);
+  printf("shm_junk_hdr->is_assigned : %d\n", shm_junk_hdr->is_assigned);
+
+  wv_shm_junk_show(shm_junk_hdr);
+
+  /* Write the elems */
+  wv_shm_push_elem(shm_junk_hdr, &test_packet[0], sizeof(test_packet_t));
+  wv_shm_push_elem(shm_junk_hdr, &test_packet[1], sizeof(test_packet_t));
+  wv_shm_push_elem(shm_junk_hdr, &test_packet[2], sizeof(test_packet_t));
+
+  /* Read the elems */
+  wv_shm_junk_elem_hdr_t* shm_junk_elem_hdr = NULL;
+  test_packet_t* ptest_packet = NULL;
+
+  if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){
+    ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr);
+    printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip);
+    printf("ptest_packet->port : %d\n",  ptest_packet->from_port);
+    printf("ptest_packet->data : %s\n",  ptest_packet->data);
+  }
+
+  if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){
+    ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr);
+    printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip);
+    printf("ptest_packet->port : %d\n",  ptest_packet->from_port);
+    printf("ptest_packet->data : %s\n",  ptest_packet->data);
+  }
+
+  if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){
+    ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr);
+    printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip);
+    printf("ptest_packet->port : %d\n",  ptest_packet->from_port);
+    printf("ptest_packet->data : %s\n",  ptest_packet->data);
+  }
+
+  if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){
+    if((ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr))){
+      printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip);
+      printf("ptest_packet->port : %d\n",  ptest_packet->from_port);
+      printf("ptest_packet->data : %s\n",  ptest_packet->data);
+    }else{
+      printf("none\n");
+    }
+  }
+
+  if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){
+    if((ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr))){
+      printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip);
+      printf("ptest_packet->port : %d\n",  ptest_packet->from_port);
+      printf("ptest_packet->data : %s\n",  ptest_packet->data);
+    }else{
+      printf("none\n");
+    }
+  }
 
   return ret;
 }
@@ -111,41 +178,55 @@ int wv_shm_test(){
 int wv_shm_load_meta(void* shm_start_addr){
   int ret = 0;
 
-  shm_meta = *((wv_shm_meta_t*)wv_shm_rd(shm_start_addr, sizeof(shm_meta), NULL));
+
+  shm_meta = (wv_shm_meta_t*)wv_shm_rd(shm_start_addr, sizeof(wv_shm_meta_t), NULL);
   fprintf(stdout, "< The loaded shared meta data >\n");
-  printf("* shm_meta.count : %ld\n", shm_meta.count);
-  printf("* shm_meta.shm_start_addr : %p\n", shm_meta.shm_start_addr);
-  printf("* shm_meta.shm_end_addr : %p\n", shm_meta.shm_end_addr);
-  printf("* shm_meta.key : %ld\n", shm_meta.shm_key);
-  printf("* shm_meta.shm_junk_size : %ld\n", shm_meta.shm_junk_size);
-  printf("* shm_meta.shm_total_size : %ld\n", shm_meta.shm_total_size);
+  printf("* shm_meta.count : %ld\n", shm_meta->count);
+  printf("* shm_meta.shm_start_addr : %p\n", shm_meta->shm_start_addr);
+  printf("* shm_meta.shm_end_addr : %p\n", shm_meta->shm_end_addr);
+  printf("* shm_meta.key : %ld\n", shm_meta->shm_key);
+  printf("* shm_meta.shm_junk_size : %ld\n", shm_meta->shm_junk_size);
+  printf("* shm_meta.shm_total_size : %ld\n", shm_meta->shm_total_size);
 
   return ret;
 }
 
-int wv_shm_init_meta(void* shm_start_addr){
+int wv_shm_init_meta(void* shm_start_addr)
+{
+
+  fprintf(stdout, "[ %s ]\n" , __func__);
 
   int ret = 0;
   int i = 0;
   size_t page_size, shm_alloc_size = 0;
   void* cur_addr = NULL;
 
-  shm_meta.shm_start_addr = shm_start_addr;
+  shm_meta->shm_start_addr = shm_start_addr;
   page_size = getpagesize();
   shm_alloc_size = (SHM_TOTAL_SIZE / page_size) * page_size + page_size;
-  shm_meta.shm_end_addr = shm_meta.shm_start_addr + shm_alloc_size;
-  shm_meta.shm_total_size = shm_alloc_size;
-  memset(shm_meta.shm_start_addr, 0x00, sizeof(shm_alloc_size));
+  shm_meta->shm_end_addr = shm_meta->shm_start_addr + shm_alloc_size;
+  shm_meta->shm_total_size = shm_alloc_size;
+  memset(shm_meta->shm_start_addr, 0x00, sizeof(shm_alloc_size));
+
+  printf("< The Initialized shared meta data >\n");
+  printf("* shm_meta.count : %ld\n", shm_meta->count);
+  printf("* shm_meta.shm_start_addr : %p\n", shm_meta->shm_start_addr);
+  printf("* shm_meta.shm_end_addr : %p\n", shm_meta->shm_end_addr);
+  printf("* shm_meta.key : %ld\n", shm_meta->shm_key);
+  printf("* shm_meta.shm_junk_size : %ld\n", shm_meta->shm_junk_size);
+  printf("* shm_meta.shm_total_size : %ld\n", shm_meta->shm_total_size);
 
   /* Split the section of shared memory */
-  cur_addr = shm_meta.shm_start_addr;
-  shm_meta.count = 0;
-  for ( i=0; i < SHM_MAX_COUNT && (cur_addr < shm_meta.shm_end_addr); i++ ){
+  cur_addr = shm_meta->shm_start_addr;
+  shm_meta->count = 0;
+  for ( i=0; i < SHM_MAX_COUNT && (cur_addr < shm_meta->shm_end_addr); i++ ){
 
-    wv_shm_junk_init(&shm_meta.arr_shm_junk_hdr[i], "", cur_addr, cur_addr+SHM_JUNK_SIZE);
+    wv_shm_junk_init(&shm_meta->arr_shm_junk_hdr[i], "", cur_addr, cur_addr+SHM_JUNK_SIZE);
     cur_addr += SHM_JUNK_SIZE;
-    shm_meta.count++;
+    shm_meta->count++;
   }
+
+  /* wv_shm_sync_meta(shm_meta); */
 
   return ret;
 }
@@ -153,13 +234,24 @@ int wv_shm_init_meta(void* shm_start_addr){
 
 int wv_shm_sync_meta(wv_shm_meta_t* shm_meta)
 {
+  fprintf(stdout, "[ %s ]\n" , __func__);
+
   int ret = 0;
 
-  if ( wv_shm_wr( shm_meta->shm_start_addr,
-		  shm_meta,
-		  sizeof(wv_shm_meta_t),
-		  NULL,
-		  shm_meta->shm_end_addr ) == NULL ){
+  fprintf(stdout, "< The synced shared meta data >\n");
+  printf("* shm_meta.count : %ld\n", shm_meta->count);
+  printf("* shm_meta.shm_start_addr : %p\n", shm_meta->shm_start_addr);
+  printf("* shm_meta.shm_end_addr : %p\n", shm_meta->shm_end_addr);
+  printf("* shm_meta.key : %ld\n", shm_meta->shm_key);
+  printf("* shm_meta.shm_junk_size : %ld\n", shm_meta->shm_junk_size);
+  printf("* shm_meta.shm_total_size : %ld\n", shm_meta->shm_total_size);
+
+  if ( shm_meta && wv_shm_wr( shm_meta->shm_start_addr,
+			      shm_meta,
+			      sizeof(wv_shm_meta_t),
+			      NULL,
+			      shm_meta->shm_end_addr ) == NULL ){
+
     fprintf(stderr, "When wrote the shared memory meta data to the shared memory, error occured. ");
     return ret = 1;
   }
@@ -175,6 +267,7 @@ wv_shm_junk_hdr_t* wv_shm_find_junk(wv_shm_meta_t* shm_meta, const char* junk_na
 
   if ( shm_meta ){
     for(i = 0; i < shm_meta->count; i++){
+
       ret_shm_junk_hdr = &(shm_meta->arr_shm_junk_hdr[i]);
       if( ret_shm_junk_hdr->is_assigned &&
 	  strncmp(ret_shm_junk_hdr->shm_name, junk_name, strlen(junk_name)) == 0 )
@@ -188,12 +281,14 @@ wv_shm_junk_hdr_t* wv_shm_find_junk(wv_shm_meta_t* shm_meta, const char* junk_na
 }
 
 
-wv_shm_junk_hdr_t* wv_shm_assign_junk(wv_shm_meta_t* shm_meta, const char* junk_name)
+wv_shm_junk_hdr_t* wv_shm_assign_junk(const char* junk_name)
 {
+  fprintf(stdout, "[ %s ]\n" , __func__);
+
   wv_shm_junk_hdr_t* ret_shm_junk_hdr = NULL;
   int i = 0;
 
-  if ( shm_meta ){
+  if ( shm_meta && junk_name ){
 
     for ( i = 0; i < shm_meta->count; i++ ){
 
@@ -207,17 +302,17 @@ wv_shm_junk_hdr_t* wv_shm_assign_junk(wv_shm_meta_t* shm_meta, const char* junk_
 
       if ( ret_shm_junk_hdr->is_assigned == 0 ){
 
-	ret_shm_junk_hdr->is_assigned = 1;
-	snprintf(ret_shm_junk_hdr->shm_name, 256, "%s", junk_name);
+      	ret_shm_junk_hdr->is_assigned = 1;
+      	snprintf(ret_shm_junk_hdr->shm_name, 256, "%s", junk_name);
 
-	wv_shm_clear_junk(ret_shm_junk_hdr);
+      	wv_shm_clear_junk(ret_shm_junk_hdr);
 
-	return ret_shm_junk_hdr;
+      	return ret_shm_junk_hdr;
       }
     }
   }
   else{
-    fprintf(stderr, "When the shared memory junk assigned, The junk having the same name was existing\n" );
+    fprintf(stderr, "The Ware Valley Shared Memory was not initailized...\n" );
   }
 
   return ret_shm_junk_hdr = NULL;
@@ -226,6 +321,8 @@ wv_shm_junk_hdr_t* wv_shm_assign_junk(wv_shm_meta_t* shm_meta, const char* junk_
 
 wv_shm_junk_hdr_t* wv_shm_unassign_junk(wv_shm_meta_t* shm_meta, const char* junk_name)
 {
+  fprintf(stdout, "[ %s ]\n" , __func__);
+
   wv_shm_junk_hdr_t* ret_shm_junk_hdr = NULL;
   int i = 0;
 
@@ -253,17 +350,19 @@ wv_shm_junk_hdr_t* wv_shm_unassign_junk(wv_shm_meta_t* shm_meta, const char* jun
 
 int wv_shm_clear_junk(wv_shm_junk_hdr_t* shm_junk_hdr)
 {
+  fprintf(stdout, "[ %s ]\n" , __func__);
+
   int ret = 0;
   if ( shm_junk_hdr &&
        shm_junk_hdr->start_addr &&
        shm_junk_hdr->end_addr )
   {
-    memset(shm_junk_hdr->start_addr, 0x00 , shm_junk_hdr->start_addr - shm_junk_hdr->end_addr);
+    memset(shm_junk_hdr->start_addr, 0x00 , shm_junk_hdr->end_addr - shm_junk_hdr->start_addr);
 
     shm_junk_hdr->write_addr = shm_junk_hdr->start_addr;
     shm_junk_hdr->read_addr = shm_junk_hdr->start_addr;
     shm_junk_hdr->prev_write_addr = NULL;
-    shm_junk_hdr->remain_size = shm_junk_hdr->start_addr - shm_junk_hdr->end_addr;
+    shm_junk_hdr->remain_size =  shm_junk_hdr->end_addr - shm_junk_hdr->start_addr;
     shm_junk_hdr->count = 0;
   }
   else{
@@ -278,15 +377,52 @@ int wv_shm_clear_junk(wv_shm_junk_hdr_t* shm_junk_hdr)
 int wv_shm_dump_junk(wv_shm_meta_t* shm_meta, const char* junk_name,
 		 const char* dir_name, const char* file_name)
 {
+  fprintf(stdout, "[ %s ]\n" , __func__);
+
+  char mem_buff[8192] = {0};
+  char full_path[8192] = {0};
   int ret = 0;
+  const char* dlmt = "/";
+  wv_shm_junk_hdr_t* shm_junk_hdr = NULL;
+
+  snprintf( full_path, 8192, "%s%s%s", dir_name, dlmt, file_name );
+
+  /* Find if there is a file having the same name or not */
+  if ( access(full_path, F_OK) == 0 ){
+
+    fprintf( stdout, "There is a file existing...\n" );
+    ret = -1; goto wv_shm_dump_junk_ret;
+  }
+
+  /* Find if there is shm_junk existing or not */
+  if ( (shm_junk_hdr = wv_shm_find_junk(shm_meta, junk_name)) == NULL ){
+
+    fprintf( stdout, "Counldnt find the shared memory junk having same name...\n" );
+    ret = -1; goto wv_shm_dump_junk_ret;
+  }
+
+  /* Dump the founded shm_junk to a file. */
+
+  /* shm_junk_hdr->start_addr */
+
+ wv_shm_dump_junk_ret:
+
   return ret;
 }
 
 
 
+int wv_shm_load_junk(wv_shm_meta_t* shm_meta, const char* dir_name, const char* file_name)
+{
+  int ret = 0;
+  return ret;
+}
+
 
 int wv_shm_junk_init(wv_shm_junk_hdr_t* shm_junk_hdr, char* shm_junk_name, void* start_addr, void* end_addr)
 {
+  fprintf(stdout, "[ %s ]\n" , __func__);
+
   int ret = 0;
   void* junk_start_addr = NULL;
 
@@ -323,7 +459,12 @@ void* wv_shm_wr(void* start_addr, void* data, size_t size, void** next_addr, voi
 {
   void* alloc_addr = NULL;
 
-  if (start_addr && limit_addr)
+  /* fprintf(stdout, "< Inner wv_shm_wr  >\n"); */
+  /* printf("* shm_meta start addr : %p\n", start_addr); */
+  /* printf("* shm_meta data : %p\n", data); */
+  /* printf("* shm_meta size : %ld\n", size); */
+
+  if (start_addr && limit_addr && data)
   {
     if( start_addr > limit_addr )
     {
@@ -337,10 +478,14 @@ void* wv_shm_wr(void* start_addr, void* data, size_t size, void** next_addr, voi
       goto wv_shm_wr_elem_ret;
     }
 
+    printf("===========================\n");
+    printf("* start addr to write : %p\n", start_addr);
+    printf("* shm_meta data : %p\n", data);
+    printf("* shm_meta size : %ld\n", size);
 
     if ((alloc_addr = memcpy(start_addr, data, size)))
     {
-      *next_addr = alloc_addr + size;
+      if ( next_addr ) { *next_addr = alloc_addr +size; }
     }
     else
     {
@@ -354,10 +499,12 @@ void* wv_shm_wr(void* start_addr, void* data, size_t size, void** next_addr, voi
 }
 
 
-void* wv_shm_wr_elem(wv_shm_junk_hdr_t* shm_junk_hdr, void* data, size_t size)
+void* wv_shm_push_elem(wv_shm_junk_hdr_t* shm_junk_hdr, void* data, size_t size)
 {
   void* alloc_addr = NULL;
   wv_shm_junk_elem_hdr_t shm_junk_elem_hdr;
+
+  fprintf(stdout, "[ %s ]\n" , __func__);
 
   if (shm_junk_hdr &&
       shm_junk_hdr->write_addr &&
@@ -416,6 +563,8 @@ void* wv_shm_wr_elem(wv_shm_junk_hdr_t* shm_junk_hdr, void* data, size_t size)
 	goto wv_shm_wr_elem_ret;
       }
 
+      fprintf(stdout, "->pos_write_hdr : %p\n", alloc_addr);
+
       shm_junk_hdr->write_addr += sizeof(wv_shm_junk_elem_hdr_t);
     }
     else
@@ -425,6 +574,9 @@ void* wv_shm_wr_elem(wv_shm_junk_hdr_t* shm_junk_hdr, void* data, size_t size)
     }
 
     /* Write the element data information */
+    /* if ((alloc_addr = memcpy(shm_junk_hdr->write_addr, data, size))) */
+
+    printf(">>>shared emem header size : %ld\n", sizeof(wv_shm_junk_elem_hdr_t));
     if ((alloc_addr = memcpy(shm_junk_hdr->write_addr, data, size)))
     {
       // debug message
@@ -440,8 +592,7 @@ void* wv_shm_wr_elem(wv_shm_junk_hdr_t* shm_junk_hdr, void* data, size_t size)
 	goto wv_shm_wr_elem_ret;
       }
 
-
-      fprintf(stdout, "Writing pos : %p..\n", alloc_addr);
+      fprintf(stdout, "->pos_write_data : %p\n", alloc_addr);
 
       shm_junk_hdr->write_addr = shm_junk_hdr->write_addr + size;
       shm_junk_hdr->count++;
@@ -454,6 +605,8 @@ void* wv_shm_wr_elem(wv_shm_junk_hdr_t* shm_junk_hdr, void* data, size_t size)
   }
 
  wv_shm_wr_elem_ret:
+
+  fprintf(stdout, "shm_junk_hdr->read_addr : %p\n", shm_junk_hdr->read_addr);
 
   return alloc_addr;
 }
@@ -482,9 +635,10 @@ void* wv_shm_rd(void* start_addr, size_t size, void** next_addr)
 {
   void* ret = NULL;
 
-  if ( start_addr ){
+  if ( start_addr ){ 
 
-    *next_addr = start_addr + size;
+    if ( next_addr ) { *next_addr = start_addr + size; }
+    
     ret = start_addr;
   }
 
@@ -492,26 +646,116 @@ void* wv_shm_rd(void* start_addr, size_t size, void** next_addr)
 }
 
 
-/* Return the read addres and add a size value to the read address */
-void* wv_shm_peek_elem(wv_shm_junk_hdr_t* shm_junk_hdr, size_t size)
+wv_shm_junk_elem_hdr_t* wv_shm_peek_elem_hdr(wv_shm_junk_hdr_t* shm_junk_hdr)
 {
-  void* ret = NULL;
+  wv_shm_junk_elem_hdr_t* shm_junk_elem_hdr = NULL;
+
+  fprintf(stdout, "[ %s ]\n" , __func__);
+
   if (shm_junk_hdr &&
       shm_junk_hdr->start_addr &&
       shm_junk_hdr->end_addr &&
-      shm_junk_hdr->read_addr)
-  {
-    fprintf(stdout, "Reading pos : %p..\n", shm_junk_hdr->read_addr);
-    ret = shm_junk_hdr->read_addr;
-    shm_junk_hdr->read_addr += size;
-  } 
+      shm_junk_hdr->read_addr){
+
+    shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)shm_junk_hdr->read_addr;
+  }
   else{
-    fprintf(stderr, "shm_hdr is null");
+    fprintf(stderr, "!! a shm_hdr or its attrs is null...");
   }
 
-  size_t *test_int = (size_t*)ret;
-  fprintf(stderr, "Address of ret : %p\n", ret);
-  fprintf(stderr, "Readed shm_hdr int value : %ld\n", *test_int);
+  return shm_junk_elem_hdr;
+}
+
+
+/* Return the read addres and add a size value to the read address */
+void* wv_shm_peek_elem_data(wv_shm_junk_hdr_t* shm_junk_hdr)
+{
+  wv_shm_junk_elem_hdr_t* ret_shm_junk_elem_hdr = NULL;
+  void* pos_read = NULL;
+
+  fprintf(stdout, "[ %s ]\n" , __func__);
+
+  if ( shm_junk_hdr &&
+       shm_junk_hdr->start_addr &&
+       shm_junk_hdr->end_addr &&
+       shm_junk_hdr->read_addr )
+  {
+
+    pos_read = shm_junk_hdr->read_addr + sizeof(wv_shm_junk_elem_hdr_t);
+
+    fprintf(stdout, "-> shm_junk_hdr->read_addr : %p..\n", shm_junk_hdr->read_addr);
+    fprintf(stdout, "-> pos_read : %p..\n", pos_read);
+
+    ret_shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)pos_read;
+  }
+  else{
+
+    fprintf(stderr, "!! a shm_hdr or shm_junk_elem_hdr is null...");
+    return NULL;
+  }
+
+  return ret_shm_junk_elem_hdr;
+}
+
+
+void* wv_shm_pop_elem_data(wv_shm_junk_hdr_t* shm_junk_hdr, wv_shm_junk_elem_hdr_t* shm_junk_elem_hdr)
+{
+  void* ret = NULL;
+  wv_shm_junk_elem_hdr_t* cur_shm_junk_elem_hdr = NULL;
+
+  fprintf(stdout, "[ %s ]\n" , __func__);
+
+  if ( shm_junk_hdr &&
+       shm_junk_hdr->start_addr &&
+       shm_junk_hdr->end_addr &&
+       shm_junk_hdr->read_addr &&
+       shm_junk_elem_hdr ){
+
+    if(shm_junk_hdr->read_addr == shm_junk_hdr->write_addr){
+
+      fprintf(stderr, "** The queue was empty...\n");
+      return NULL;
+    }
+
+    ret = shm_junk_hdr->read_addr + sizeof(wv_shm_junk_elem_hdr_t);
+
+    cur_shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*) shm_junk_hdr->read_addr;
+
+    if ( shm_junk_elem_hdr->next_addr ){
+
+      if ( cur_shm_junk_elem_hdr->next_addr != shm_junk_elem_hdr->next_addr ){
+
+	fprintf(stderr,
+		"!! The pos of a argument hdr was different with the read pos of current header..."
+		"(size_stored : %p <--> size_wanted : %p)\n",
+		cur_shm_junk_elem_hdr->next_addr, shm_junk_elem_hdr->next_addr);
+
+	return NULL;
+      }
+    }
+
+    if ( cur_shm_junk_elem_hdr->size != shm_junk_elem_hdr->size ){
+
+      fprintf(stderr,
+	      "!! The size of a argument hdr was different with the read size of current header..."
+	      "(size_stored : %ld <--> size_wanted : %ld)\n",
+	      cur_shm_junk_elem_hdr->size, shm_junk_elem_hdr->size);
+
+      return NULL;
+    }
+
+    fprintf(stdout, ">>> %p\n", shm_junk_hdr->write_addr);
+    if ( shm_junk_elem_hdr->next_addr){
+
+      shm_junk_hdr->read_addr = shm_junk_elem_hdr->next_addr;
+      shm_junk_hdr->count--;
+      shm_junk_hdr->remain_size -= ( sizeof(wv_shm_junk_elem_hdr_t) + shm_junk_elem_hdr->size );
+    }
+    else{
+
+      shm_junk_hdr->read_addr = shm_junk_hdr->write_addr;
+    }
+  }
 
   return ret;
 }
@@ -527,7 +771,7 @@ int wv_shm_del_last_elem(wv_shm_junk_hdr_t* shm_junk_hdr){
      shm_junk_hdr->end_addr &&
      shm_junk_hdr->read_addr)
   {
-    shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem(shm_junk_hdr, sizeof(wv_shm_junk_elem_hdr_t));
+    shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr);
 
     if (shm_junk_elem_hdr->next_addr){
       shm_junk_hdr->read_addr = shm_junk_elem_hdr->next_addr;
@@ -551,199 +795,14 @@ int wv_shm_del_last_elem(wv_shm_junk_hdr_t* shm_junk_hdr){
 
 
 
-/* int wv_shm_test () */
-/* { */
-/*   int ret = 0; */
-/*   void* shm_addr = (void*)0; */
-/*   void* cur_addr = NULL; */
+void wv_shm_junk_show(wv_shm_junk_hdr_t* shm_junk_hdr)
+{
+  fprintf(stdout, "[ %s ]\n" , __func__);
 
-/*   int i, j, shm_alloc_size, page_size  = 0; */
-/*   int shm_id = 0; */
-
-/*   struct shmid_ds shm_info; */
-    
-/*   fprintf(stdout, "sizeof size_t : %ld\n", sizeof(size_t)); */
-
-/*   memset(&shm_meta, 0x00, sizeof(shm_meta)); */
-/*   shm_meta.count = 0; */
-/*   shm_meta.shm_key = SHM_KEY; */
-/*   shm_meta.shm_junk_size = SHM_JUNK_SIZE; */
-
-/*   /\* Remove previous shared memory *\/ */
-/*   if ((shm_id = shmget(shm_meta.shm_key, 0, 0)) != -1){ */
-/*     fprintf(stderr, */
-/* 	    "[Success] Shared memory was existing.... (shm_id : %d, errno : %s)\n", */
-/* 	    shm_id, strerror(errno)); */
-/*     shmctl(shm_id, IPC_RMID, 0); */
-/*   } */
-  
-/*   /\* Getting shared memory *\/ */
-/*   if ((shm_id = shmget(shm_meta.shm_key, */
-/* 		       SHM_TOTAL_SIZE, */
-/*   		       IPC_CREAT|0777)) == -1) */
-/*   { */
-/*     perror( "shmget" ); */
-/*     exit( errno ); */
-/*     fprintf(stderr, */
-/*   	    "Getting Shared memory was failed..... (shm_key : %ld, errno : %s)\n", */
-/*   	    shm_meta.shm_key, strerror(errno)); */
-/*     ret = -1; */
-/*     goto shm_test_ret; */
-/*   } */
-
-
-/*   /\* Attaching shared memory. *\/ */
-/*   shm_addr = shmat(shm_id, (void*)0, 0); */
-/*   if ( shm_addr == (void*)(-1) ) */
-/*   { */
-/*     fprintf(stderr, */
-/*   	    "Getting shared memory address was failed.... (shm_id : %d, errno : %s)\n", */
-/*   	    shm_id, strerror(errno)); */
-/*     ret = -1; */
-/*     goto shm_test_ret; */
-/*   } */
-
-/*   /\* Setting shared memory meta file. *\/ */
-/*   shm_meta.shm_start_addr = shm_addr; */
-/*   page_size = getpagesize(); */
-/*   shm_alloc_size = (page_size) * page_size + page_size; */
-/*   shm_meta.shm_end_addr = shm_meta.shm_start_addr + shm_alloc_size; */
-/*   shm_meta.shm_total_size = shm_alloc_size; */
-/*   memset(shm_meta.shm_start_addr, 0x00, sizeof(shm_alloc_size)); */
-
-/*   printf("< Shared memory information >\n"); */
-/*   printf("The size of OS page : %d\n", getpagesize()); */
-/*   printf("Shared memory start : %p\n", shm_meta.shm_start_addr); */
-/*   printf("Shared memory end : %p\n", shm_meta.shm_end_addr); */
-/*   printf("Shared memory total size : %ld\n", shm_meta.shm_total_size); */
-/*   puts(""); */
-/*   puts(""); */
-    
-
-/*   if (shmctl(shm_id, IPC_STAT, &shm_info) == -1){ */
-/*     printf( "[Error] Getting shred info failed...\n"); */
-/*     return -1; */
-/*   } */
-
-/*   cur_addr = shm_meta.shm_start_addr; */
-/*   if(wv_shm_wr(cur_addr, &shm_meta, sizeof(wv_shm_meta_t), &cur_addr, shm_meta.shm_end_addr)){ */
-/*     printf("shm_meta start addr : %p\n", shm_meta.shm_start_addr); */
-/*     printf("cur_addr : %p\n", cur_addr); */
-/*   } */
-
-/*   wv_shm_meta_t* shm_meta_test = (wv_shm_meta_t*)shm_meta.shm_start_addr; */
-/*   printf("shm_meta_test->shm_start_addr : %p\n", shm_meta_test->shm_start_addr); */
-/*   printf("shm_meta_test->shm_end_addr : %p\n", shm_meta_test->shm_end_addr); */
-/*   printf("shm_meta_test->shm_total_size : %ld\n", shm_meta_test->shm_total_size); */
-
-/*   /\* Split the section of shared memory *\/ */
-/*   for (i=0; i<SHM_MAX_COUNT && (cur_addr < shm_meta.shm_end_addr); i++){ */
-/*     printf("init junk index : %d\n", i); */
-/*     wv_shm_junk_init(&shm_meta.arr_shm_junk_hdr[i], "", cur_addr, cur_addr+SHM_JUNK_SIZE); */
-/*     cur_addr += SHM_JUNK_SIZE; */
-/*   } */
-
-/*   wv_shm_junk_hdr_t* shm_junk_hdr = &(shm_meta.arr_shm_junk_hdr[0]); */
-
-/*   printf("shm_junk_info->end_addr : %p\n", shm_junk_hdr->end_addr); */
-/*   cur_addr = shm_junk_hdr->start_addr; */
-
-/*   /\* Write data to shared memory *\/ */
-/*   printf("<============== Start Writing ==============>\n"); */
-
-/*   /\* Make a element *\/ */
-/*   for(i=0; i<3; i++){ */
-
-/*     wv_shm_junk_elem_hdr_t shm_junk_elem; */
-/*     shm_junk_elem.attr_count = 0; */
-/*     memset(&shm_junk_elem, 0x00, sizeof(wv_shm_junk_elem_hdr_t)); */
-
-/*     for(j=0; j<3; j++){ */
-/*       wv_shm_junk_elem_attr_t* attr = &shm_junk_elem.attrs[j]; */
-/*       memset(attr, 0x00, sizeof(wv_shm_junk_elem_attr_t)); */
-
-/*       /\* Write attributes key *\/ */
-/*       attr->key = (void*)malloc(sizeof(5)); */
-/*       memset(attr->key, 0x00, 5); */
-/*       snprintf(attr->key, 5, "%s%i", "key", j); */
-/*       printf("attr.key : %s\n",attr->key); */
-/*       attr->key_size = strlen(attr->key) + 1; */
-
-/*       /\* Write attributes data *\/ */
-/*       int data_size = strlen("testtest") + 1; */
-/*       attr->data = (void*)malloc(data_size); */
-/*       memset(attr->data, 0x00, data_size); */
-/*       snprintf(attr->data, strlen("testtest")+1, "%s", "testtest"); */
-/*       attr->attr_size = data_size; */
-
-/*       /\* Write attributes data size *\/ */
-/*       attr->attr_size = data_size; */
-
-/*       shm_junk_elem.attr_count++; */
-/*       shm_junk_elem.total_size += (sizeof(size_t) + sizeof(size_t) + attr->key_size + attr->attr_size); */
-/*     } */
-
-/*     /\* Write the element header information to memory *\/ */
-
-/*     wv_shm_wr_elem(shm_junk_hdr, (void*)&(shm_junk_elem.total_size), sizeof(size_t)); */
-/*     printf("shm_junk_lem.total_size : %ld\n", shm_junk_elem.total_size); */
-/*     wv_shm_wr_elem(shm_junk_hdr, (void*)&(shm_junk_elem.attr_count), sizeof(size_t)); */
-/*     printf("shm_junk_lem.attr_count : %ld\n", shm_junk_elem.attr_count); */
-
-/*     /\* Write the attributes information of a element to memory *\/ */
-/*     printf("Writing attributes.\n"); */
-
-/*     for(j=0; j<3; j++){ */
-
-/*       wv_shm_junk_elem_attr_t* attr = &shm_junk_elem.attrs[j]; */
-/*       printf("Writing key_size : %ld.\n", attr->key_size); */
-/*       wv_shm_wr_elem(shm_junk_hdr, (void*)&attr->key_size, sizeof(size_t)); */
-/*       printf("Writing data_size : %ld.\n", attr->attr_size); */
-/*       wv_shm_wr_elem(shm_junk_hdr, (void*)&attr->attr_size, sizeof(size_t)); */
-/*       printf("Writing key : %s\n", attr->key); */
-/*       wv_shm_wr_elem(shm_junk_hdr, (void*)attr->key, attr->key_size); */
-/*       printf("Writing data : %s\n", attr->data); */
-/*       wv_shm_wr_elem(shm_junk_hdr, (void*)attr->data, attr->attr_size); */
-/*     } */
-/*   } */
-
-/*   /\* Read data to shared memory *\/ */
-/*   printf("<============== Start Reading ==============>\n"); */
-/*   for(i=0; i<shm_junk_hdr->count; i++){ */
-/*     wv_shm_junk_elem_hdr_t shm_junk_elem_hdr; */
-/*     memset(&shm_junk_elem_hdr, 0x00, sizeof(wv_shm_junk_elem_hdr_t)); */
-/*     cur_addr = shm_junk_hdr->start_addr; */
-
-/*     /\* Read total size *\/ */
-/*     shm_junk_elem_hdr.total_size = *((size_t*)wv_shm_rd_elem(shm_junk_hdr, sizeof(size_t))); */
-
-/*     /\* Read attrs count  *\/ */
-/*     shm_junk_elem_hdr.attr_count = *((size_t*)wv_shm_rd_elem(shm_junk_hdr, sizeof(size_t))); */
- 
-/*     printf("(SHM_INIT) shm_elem_hdr_total_size : %ld\n", shm_junk_elem_hdr.total_size); */
-/*     printf("(SHM_INIT) shm_elem_hdr_count : %ld\n", shm_junk_elem_hdr.attr_count); */
-
-/*     for (j=0; j<shm_junk_elem_hdr.attr_count; j++){ */
-/*       size_t key_size = 0; */
-/*       size_t data_size = 0; */
-/*       char* shm_elem_attr_key = NULL; */
-/*       char* shm_elem_attr_data = NULL; */
-
-/*       key_size = *((size_t*)wv_shm_peek_elem(shm_junk_hdr, sizeof(size_t))); */
-/*       data_size = *((size_t*)wv_shm_peek_elem(shm_junk_hdr, sizeof(size_t))); */
-/*       shm_elem_attr_key = (char*)wv_shm_peek_elem(shm_junk_hdr, key_size); */
-/*       shm_elem_attr_data = (char*)wv_shm_peek_elem(shm_junk_hdr, data_size); */
-
-/*       printf("key_size : %ld\n", key_size); */
-/*       printf("data_size : %ld\n", data_size); */
-/*       printf("attr_key : %s\n", shm_elem_attr_key); */
-/*       printf("attr_data : %s\n", shm_elem_attr_data); */
-/*     } */
-/*   } */
-
-/*  shm_test_ret: */
-
-/*   return ret; */
-/* } */
-
-
+  printf("shm_junk_hdr->count : %ld\n", shm_junk_hdr->count);
+  printf("shm_junk_hdr->start_addr : %p\n", shm_junk_hdr->start_addr);
+  printf("shm_junk_hdr->end_addr : %p\n", shm_junk_hdr->end_addr);
+  printf("shm_junk_hdr->remain_size : %ld\n", shm_junk_hdr->remain_size);
+  printf("shm_junk_hdr->shm_name : %s\n", shm_junk_hdr->shm_name);
+  printf("shm_junk_hdr->is_assigned : %d\n", shm_junk_hdr->is_assigned);
+}
