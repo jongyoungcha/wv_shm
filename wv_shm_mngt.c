@@ -24,7 +24,6 @@ int wv_shm_init ()
 
   int shm_id = 0;
   int shm_exists = 0;
-  int i = 0;
 
   struct shmid_ds shm_ds;
 
@@ -34,19 +33,26 @@ int wv_shm_init ()
   shm_meta->count = 0;
   shm_meta->shm_key = SHM_KEY;
   shm_meta->shm_junk_size = SHM_JUNK_SIZE;
+  shm_meta->shm_total_size = SHM_TOTAL_SIZE;
+
+  
 
   /* Getting shared memory */
-  if ( (shm_id = shmget(shm_meta->shm_key, 0, 0)) != -1 ){
+  if ( (shm_id = shmget(shm_meta->shm_key, 0, 0)) != -1 )
+  {
     shm_exists = 1;
     fprintf(stderr,
 	    "[Success] Shared memory was existing.... (shm_id : %d, errno : %s)\n",
 	    shm_id, strerror(errno));
-    /* shmctl(shm_id, IPC_RMID, 0); */
+    shmctl(shm_id, IPC_RMID, 0);
   }
   else{
 
+    printf("shm_meta->shm_key : %ld\n", shm_meta->shm_key);
+    printf("shm_meta->shm_total_size : %ld\n", shm_meta->shm_total_size);
+
     if ( (shm_id = shmget(shm_meta->shm_key,
-			  SHM_TOTAL_SIZE,
+			  shm_meta->shm_total_size,
 			  IPC_CREAT|0777)) == -1 ){
 
       perror( "shmget" );
@@ -89,86 +95,6 @@ int wv_shm_init ()
        
     wv_shm_init_meta(shm_addr);
     wv_shm_sync_meta(shm_meta);
-  }
-
-  return ret;
-}
-
-
-typedef struct test_packet{
-  char from_ip[256];
-  int from_port;
-  char data[8192];
-}test_packet_t;
-
-int wv_shm_test(){
-  int ret = 0;
-  wv_shm_init();
-
-  test_packet_t test_packet[5] = {
-    {"111.111.111.111", 3000, "datadatadata"},
-    {"222.111.111.111", 3000, "datadatadata"},
-    {"333.111.111.111", 3000, "datadatadata"},
-  };
-
-  wv_shm_junk_hdr_t* shm_junk_hdr =  wv_shm_assign_junk("mytest_junk_shm");
-  printf("shm_junk_hdr->count : %ld\n", shm_junk_hdr->count);
-  printf("shm_junk_hdr->start_addr : %p\n", shm_junk_hdr->start_addr);
-  printf("shm_junk_hdr->end_addr : %p\n", shm_junk_hdr->end_addr);
-  printf("shm_junk_hdr->remain_size : %ld\n", shm_junk_hdr->remain_size);
-  printf("shm_junk_hdr->shm_name : %s\n", shm_junk_hdr->shm_name);
-  printf("shm_junk_hdr->is_assigned : %d\n", shm_junk_hdr->is_assigned);
-
-  wv_shm_junk_show(shm_junk_hdr);
-
-  /* Write the elems */
-  wv_shm_push_elem(shm_junk_hdr, &test_packet[0], sizeof(test_packet_t));
-  wv_shm_push_elem(shm_junk_hdr, &test_packet[1], sizeof(test_packet_t));
-  wv_shm_push_elem(shm_junk_hdr, &test_packet[2], sizeof(test_packet_t));
-
-  /* Read the elems */
-  wv_shm_junk_elem_hdr_t* shm_junk_elem_hdr = NULL;
-  test_packet_t* ptest_packet = NULL;
-
-  if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){
-    ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr);
-    printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip);
-    printf("ptest_packet->port : %d\n",  ptest_packet->from_port);
-    printf("ptest_packet->data : %s\n",  ptest_packet->data);
-  }
-
-  if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){
-    ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr);
-    printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip);
-    printf("ptest_packet->port : %d\n",  ptest_packet->from_port);
-    printf("ptest_packet->data : %s\n",  ptest_packet->data);
-  }
-
-  if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){
-    ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr);
-    printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip);
-    printf("ptest_packet->port : %d\n",  ptest_packet->from_port);
-    printf("ptest_packet->data : %s\n",  ptest_packet->data);
-  }
-
-  if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){
-    if((ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr))){
-      printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip);
-      printf("ptest_packet->port : %d\n",  ptest_packet->from_port);
-      printf("ptest_packet->data : %s\n",  ptest_packet->data);
-    }else{
-      printf("none\n");
-    }
-  }
-
-  if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){
-    if((ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr))){
-      printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip);
-      printf("ptest_packet->port : %d\n",  ptest_packet->from_port);
-      printf("ptest_packet->data : %s\n",  ptest_packet->data);
-    }else{
-      printf("none\n");
-    }
   }
 
   return ret;
@@ -354,15 +280,15 @@ int wv_shm_clear_junk(wv_shm_junk_hdr_t* shm_junk_hdr)
 
   int ret = 0;
   if ( shm_junk_hdr &&
-       shm_junk_hdr->start_addr &&
-       shm_junk_hdr->end_addr )
+       shm_junk_hdr->quu_start_addr &&
+       shm_junk_hdr->quu_end_addr )
   {
-    memset(shm_junk_hdr->start_addr, 0x00 , shm_junk_hdr->end_addr - shm_junk_hdr->start_addr);
+    memset(shm_junk_hdr->quu_start_addr, 0x00 , shm_junk_hdr->quu_end_addr - shm_junk_hdr->quu_start_addr);
 
-    shm_junk_hdr->write_addr = shm_junk_hdr->start_addr;
-    shm_junk_hdr->read_addr = shm_junk_hdr->start_addr;
+    shm_junk_hdr->write_addr = shm_junk_hdr->quu_start_addr;
+    shm_junk_hdr->read_addr = shm_junk_hdr->quu_start_addr;
     shm_junk_hdr->prev_write_addr = NULL;
-    shm_junk_hdr->remain_size =  shm_junk_hdr->end_addr - shm_junk_hdr->start_addr;
+    shm_junk_hdr->remain_size =  shm_junk_hdr->quu_end_addr - shm_junk_hdr->quu_start_addr;
     shm_junk_hdr->count = 0;
   }
   else{
@@ -379,31 +305,64 @@ int wv_shm_dump_junk(wv_shm_meta_t* shm_meta, const char* junk_name,
 {
   fprintf(stdout, "[ %s ]\n" , __func__);
 
-  char mem_buff[8192] = {0};
-  char full_path[8192] = {0};
   int ret = 0;
+  int wr_buf_size = 8192;
+  char full_path[8192] = {0};
+  void* cur_pos = NULL;
+  FILE* pfile = NULL;
   const char* dlmt = "/";
   wv_shm_junk_hdr_t* shm_junk_hdr = NULL;
+  int nwrite = 0;
 
   snprintf( full_path, 8192, "%s%s%s", dir_name, dlmt, file_name );
 
-  /* Find if there is a file having the same name or not */
-  if ( access(full_path, F_OK) == 0 ){
-
-    fprintf( stdout, "There is a file existing...\n" );
-    ret = -1; goto wv_shm_dump_junk_ret;
-  }
-
-  /* Find if there is shm_junk existing or not */
+  /* Find if there is shm_junk existing or not. */
   if ( (shm_junk_hdr = wv_shm_find_junk(shm_meta, junk_name)) == NULL ){
 
     fprintf( stdout, "Counldnt find the shared memory junk having same name...\n" );
     ret = -1; goto wv_shm_dump_junk_ret;
   }
 
-  /* Dump the founded shm_junk to a file. */
+  /* Find if there is a file having the same name or not. */
+  if ( access(full_path, F_OK) == 0 ){
 
-  /* shm_junk_hdr->start_addr */
+    fprintf( stdout, "There is a file existing...\n" );
+    ret = -1; goto wv_shm_dump_junk_ret;
+  }
+  else{
+
+    /* Dump the founded shm_junk to a file. */
+    if ( (pfile = fopen(full_path, "wb")) == NULL ){
+
+      fprintf( stdout, "Couldnt open the file with wb mode...\n" );
+      ret = -1; goto wv_shm_dump_junk_ret;
+    }
+  }
+
+  /* Dump the founed shm_junk to a file. */
+  if ( shm_junk_hdr->start_addr ){
+    cur_pos = shm_junk_hdr->start_addr;
+
+    while( 1 ){
+
+      if ((cur_pos + wr_buf_size) > shm_junk_hdr->quu_end_addr){
+
+	fwrite(cur_pos, sizeof(char), shm_junk_hdr->quu_end_addr - cur_pos, pfile);
+      }
+      else{
+
+	fwrite(cur_pos, sizeof(char), wr_buf_size, pfile);
+	break;
+      }
+      cur_pos += wr_buf_size;
+    }
+  }
+
+  if (pfile){
+
+    fclose(pfile);
+  }
+
 
  wv_shm_dump_junk_ret:
 
@@ -438,10 +397,13 @@ int wv_shm_junk_init(wv_shm_junk_hdr_t* shm_junk_hdr, char* shm_junk_name, void*
     goto wv_shm_junk_init_ret;
   }
 
+  /* Write the junk header information to shared memory */
+  shm_junk_hdr->start_addr = start_addr;
+
   wv_shm_wr(start_addr, shm_junk_hdr, sizeof(wv_shm_junk_hdr_t), &junk_start_addr, end_addr);
 
-  shm_junk_hdr->start_addr = junk_start_addr;
-  shm_junk_hdr->end_addr = end_addr;
+  shm_junk_hdr->quu_start_addr = junk_start_addr;
+  shm_junk_hdr->quu_end_addr = end_addr;
   shm_junk_hdr->write_addr = shm_junk_hdr->read_addr = junk_start_addr;
   shm_junk_hdr->prev_write_addr = NULL;
   shm_junk_hdr->remain_size = end_addr - junk_start_addr;
@@ -508,16 +470,16 @@ void* wv_shm_push_elem(wv_shm_junk_hdr_t* shm_junk_hdr, void* data, size_t size)
 
   if (shm_junk_hdr &&
       shm_junk_hdr->write_addr &&
-      shm_junk_hdr->start_addr &&
-      shm_junk_hdr->end_addr)
+      shm_junk_hdr->quu_start_addr &&
+      shm_junk_hdr->quu_end_addr)
   {
-    if ( shm_junk_hdr->write_addr < shm_junk_hdr->start_addr )
+    if ( shm_junk_hdr->write_addr < shm_junk_hdr->quu_start_addr )
     {
       fprintf(stdout, "write area was lower than end address..\n");
       goto wv_shm_wr_elem_ret;
     }
 
-    if ( (shm_junk_hdr->write_addr + size) > shm_junk_hdr->end_addr )
+    if ( (shm_junk_hdr->write_addr + size) > shm_junk_hdr->quu_end_addr )
     {
       fprintf(stdout, "write area was higher than end address..\n");
       goto wv_shm_wr_elem_ret;
@@ -529,8 +491,8 @@ void* wv_shm_push_elem(wv_shm_junk_hdr_t* shm_junk_hdr, void* data, size_t size)
     /* |                   elem_data  =>  |elem_data                | */
     /* +-------------------------+        +-------------------------+ */
 
-    if ( ( shm_junk_hdr->write_addr + sizeof(wv_shm_junk_elem_hdr_t) + size ) > shm_junk_hdr->end_addr ){
-      shm_junk_hdr->write_addr = shm_junk_hdr->start_addr;
+    if ( ( shm_junk_hdr->write_addr + sizeof(wv_shm_junk_elem_hdr_t) + size ) > shm_junk_hdr->quu_end_addr ){
+      shm_junk_hdr->write_addr = shm_junk_hdr->quu_start_addr;
     }
 
     /* Links the two elements if the prev_write_addr exists. */
@@ -653,8 +615,8 @@ wv_shm_junk_elem_hdr_t* wv_shm_peek_elem_hdr(wv_shm_junk_hdr_t* shm_junk_hdr)
   fprintf(stdout, "[ %s ]\n" , __func__);
 
   if (shm_junk_hdr &&
-      shm_junk_hdr->start_addr &&
-      shm_junk_hdr->end_addr &&
+      shm_junk_hdr->quu_start_addr &&
+      shm_junk_hdr->quu_end_addr &&
       shm_junk_hdr->read_addr){
 
     shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)shm_junk_hdr->read_addr;
@@ -676,8 +638,8 @@ void* wv_shm_peek_elem_data(wv_shm_junk_hdr_t* shm_junk_hdr)
   fprintf(stdout, "[ %s ]\n" , __func__);
 
   if ( shm_junk_hdr &&
-       shm_junk_hdr->start_addr &&
-       shm_junk_hdr->end_addr &&
+       shm_junk_hdr->quu_start_addr &&
+       shm_junk_hdr->quu_end_addr &&
        shm_junk_hdr->read_addr )
   {
 
@@ -706,8 +668,8 @@ void* wv_shm_pop_elem_data(wv_shm_junk_hdr_t* shm_junk_hdr, wv_shm_junk_elem_hdr
   fprintf(stdout, "[ %s ]\n" , __func__);
 
   if ( shm_junk_hdr &&
-       shm_junk_hdr->start_addr &&
-       shm_junk_hdr->end_addr &&
+       shm_junk_hdr->quu_start_addr &&
+       shm_junk_hdr->quu_end_addr &&
        shm_junk_hdr->read_addr &&
        shm_junk_elem_hdr ){
 
@@ -767,8 +729,8 @@ int wv_shm_del_last_elem(wv_shm_junk_hdr_t* shm_junk_hdr){
   wv_shm_junk_elem_hdr_t* shm_junk_elem_hdr = NULL;
 
   if(shm_junk_hdr &&
-     shm_junk_hdr->start_addr &&
-     shm_junk_hdr->end_addr &&
+     shm_junk_hdr->quu_start_addr &&
+     shm_junk_hdr->quu_end_addr &&
      shm_junk_hdr->read_addr)
   {
     shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr);
@@ -794,14 +756,13 @@ int wv_shm_del_last_elem(wv_shm_junk_hdr_t* shm_junk_hdr){
 }
 
 
-
 void wv_shm_junk_show(wv_shm_junk_hdr_t* shm_junk_hdr)
 {
   fprintf(stdout, "[ %s ]\n" , __func__);
 
   printf("shm_junk_hdr->count : %ld\n", shm_junk_hdr->count);
-  printf("shm_junk_hdr->start_addr : %p\n", shm_junk_hdr->start_addr);
-  printf("shm_junk_hdr->end_addr : %p\n", shm_junk_hdr->end_addr);
+  printf("shm_junk_hdr->start_addr : %p\n", shm_junk_hdr->quu_start_addr);
+  printf("shm_junk_hdr->end_addr : %p\n", shm_junk_hdr->quu_end_addr);
   printf("shm_junk_hdr->remain_size : %ld\n", shm_junk_hdr->remain_size);
   printf("shm_junk_hdr->shm_name : %s\n", shm_junk_hdr->shm_name);
   printf("shm_junk_hdr->is_assigned : %d\n", shm_junk_hdr->is_assigned);

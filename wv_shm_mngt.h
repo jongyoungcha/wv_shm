@@ -15,18 +15,35 @@
 #include <wv_file.h>
 #include <wv_log.h>
 
-
 #define SHM_KEY 4000
+/* #define SHM_TOTAL_SIZE (1024 * 1024 * 1024) */
 #define SHM_TOTAL_SIZE (1024 * 1024 * 1024)
 #define SHM_JUNK_SIZE (100 * 1024 * 1024)
 #define SHM_MAX_COUNT 100
 
 
+/* +-----------------------------+ */
+/* | A wv_shm structure.         | */
+/* +-----------------------------+ */
+/* |                 shm_mem     | */
+/* |                /  |   \     | */
+/* |        shm_junk  ..  ..     | */
+/* |        /  |  \              | */
+/* |  shm_elem ..  ..            | */
+/* +-----------------------------+ */
+
+/* +--------------------------------------------------------------+ */
+/* | A junk memory structure                                      | */
+/* +--------------------------------------------------------------+ */
+/* | junk_hdr | junk_elem_hdr | data | junk_elem_hdr | data | ... | */
+/* +--------------------------------------------------------------+ */
+
 typedef struct wv_shm_junk_hdr{
   char shm_name[256];
   int is_assigned;
   void* start_addr;
-  void* end_addr;
+  void* quu_start_addr;
+  void* quu_end_addr;
   void* write_addr;
   void* prev_write_addr;  // Used to link currnet element and prev element.
   void* read_addr;
@@ -46,18 +63,20 @@ typedef struct wv_shm_meta{
 } wv_shm_meta_t;
 
 
-typedef struct wv_shm_junk_elem_attr{
-  size_t attr_size;
-  size_t key_size;
-  void* data;
-  void* key;
-} wv_shm_junk_elem_attr_t;
-
-
 typedef struct wv_shm_junk_elem_hdr{
   size_t size;
   void* next_addr;
 } wv_shm_junk_elem_hdr_t;
+
+
+/* typedef struct wv_shm_junk_elem_attr{ */
+/*   size_t attr_size; */
+/*   size_t key_size; */
+/*   void* data; */
+/*   void* key; */
+/* } wv_shm_junk_elem_attr_t; */
+
+
 
 
 int

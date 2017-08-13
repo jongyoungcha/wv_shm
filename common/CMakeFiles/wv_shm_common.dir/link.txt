@@ -1,2 +1,2 @@
-/usr/bin/ar qc libwv_shm_common.a  CMakeFiles/wv_shm_common.dir/wv_file.c.o
-/usr/bin/ranlib libwv_shm_common.a
+/Library/Developer/CommandLineTools/usr/bin/ar qc libwv_shm_common.a  CMakeFiles/wv_shm_common.dir/wv_file.c.o CMakeFiles/wv_shm_common.dir/wv_mem.c.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib libwv_shm_common.a
