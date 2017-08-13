@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -6,13 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/joyeongchan/projects/wv_shm/common/wv_file.c
-wv_file.h
-/Users/joyeongchan/projects/wv_shm/common/wv_file.h
-wv_log.h
-/Users/joyeongchan/projects/wv_shm/common/wv_log.h
-
-/Users/joyeongchan/projects/wv_shm/common/wv_file.h
+./common/wv_file.h
 stdio.h
 -
 stdlib.h
@@ -24,7 +18,7 @@ unistd.h
 dirent.h
 -
 
-/Users/joyeongchan/projects/wv_shm/common/wv_log.h
+./common/wv_log.h
 stdio.h
 -
 string.h
@@ -36,11 +30,45 @@ stdarg.h
 time.h
 -
 
-/Users/joyeongchan/projects/wv_shm/common/wv_mem.c
-wv_mem.h
-/Users/joyeongchan/projects/wv_shm/common/wv_mem.h
+/root/projects/wv_shm/common/wv_file.c
+wv_file.h
+/root/projects/wv_shm/common/wv_file.h
+wv_log.h
+/root/projects/wv_shm/common/wv_log.h
 
-/Users/joyeongchan/projects/wv_shm/common/wv_mem.h
+/root/projects/wv_shm/common/wv_file.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+unistd.h
+-
+dirent.h
+-
+
+/root/projects/wv_shm/common/wv_log.c
+wv_log.h
+-
+
+/root/projects/wv_shm/common/wv_log.h
+stdio.h
+-
+string.h
+-
+wv_file.h
+-
+stdarg.h
+-
+time.h
+-
+
+/root/projects/wv_shm/common/wv_mem.c
+wv_mem.h
+/root/projects/wv_shm/common/wv_mem.h
+
+/root/projects/wv_shm/common/wv_mem.h
 stdio.h
 -
 stdlib.h

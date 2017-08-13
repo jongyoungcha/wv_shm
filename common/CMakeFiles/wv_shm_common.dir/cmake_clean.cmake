@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/wv_shm_common.dir/wv_file.c.o"
+  "CMakeFiles/wv_shm_common.dir/wv_log.c.o"
   "CMakeFiles/wv_shm_common.dir/wv_mem.c.o"
   "libwv_shm_common.pdb"
   "libwv_shm_common.a"

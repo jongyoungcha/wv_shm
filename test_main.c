@@ -91,5 +91,9 @@ int wv_shm_test()
     }
   }
 
+
+  wv_shm_junk_hdr_t** junk_list = (wv_shm_junk_hdr_t**) wv_shm_get_junk_list();
+  
+
   return ret;
 }

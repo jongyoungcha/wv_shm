@@ -274,6 +274,46 @@ wv_shm_junk_hdr_t* wv_shm_unassign_junk(wv_shm_meta_t* shm_meta, const char* jun
 }
 
 
+wv_shm_junk_hdr_t** wv_shm_get_junk_list(){
+
+  wv_shm_junk_hdr_t** ret_junk_hdr_list = NULL;
+  int i = 0;
+
+  if (shm_meta){
+
+    ret_junk_hdr_list = (wv_shm_junk_hdr_t**)malloc(sizeof(wv_shm_junk_hdr_t*) * (shm_meta->count + 1));
+
+    for(i = 0; i<shm_meta->count+1; i++){
+
+      (*(ret_junk_hdr_list+i)) = (wv_shm_junk_hdr_t*)malloc(sizeof(wv_shm_junk_hdr_t));
+      ((*ret_junk_hdr_list)+i)->count = shm_meta->arr_shm_junk_hdr[i].count;
+      ((*ret_junk_hdr_list)+i)->is_assigned = shm_meta->arr_shm_junk_hdr[i].is_assigned;
+      ((*ret_junk_hdr_list)+i)->prev_write_addr = shm_meta->arr_shm_junk_hdr[i].prev_write_addr;
+      ((*ret_junk_hdr_list)+i)->quu_start_addr = shm_meta->arr_shm_junk_hdr[i].quu_start_addr;
+      ((*ret_junk_hdr_list)+i)->quu_end_addr = shm_meta->arr_shm_junk_hdr[i].quu_end_addr;
+      ((*ret_junk_hdr_list)+i)->read_addr = shm_meta->arr_shm_junk_hdr[i].read_addr;
+      ((*ret_junk_hdr_list)+i)->remain_size = shm_meta->arr_shm_junk_hdr[i].remain_size;
+      snprintf(((*ret_junk_hdr_list)+i)->shm_name,
+	       256, "%s", shm_meta->arr_shm_junk_hdr[i].shm_name);
+      ((*ret_junk_hdr_list)+i)->start_addr = shm_meta->arr_shm_junk_hdr[i].start_addr;
+      ((*ret_junk_hdr_list)+i)->write_addr = shm_meta->arr_shm_junk_hdr[i].write_addr;
+    } 
+  }
+  else{
+    fprintf(stderr, "shm_meta was not initialized...");
+  }
+
+  return ret_junk_hdr_list;
+}
+
+
+wv_shm_junk_hdr_t**  wv_shm_free_junk_list(const wv_shm_junk_hdr_t* const* junk_hdr_list){
+
+  int i = 0;
+
+}
+
+
 int wv_shm_clear_junk(wv_shm_junk_hdr_t* shm_junk_hdr)
 {
   fprintf(stdout, "[ %s ]\n" , __func__);
@@ -300,8 +340,7 @@ int wv_shm_clear_junk(wv_shm_junk_hdr_t* shm_junk_hdr)
 }
 
 
-int wv_shm_dump_junk(wv_shm_meta_t* shm_meta, const char* junk_name,
-		 const char* dir_name, const char* file_name)
+int wv_shm_dump_junk(const char* junk_name, const char* dir_name, const char* file_name)
 {
   fprintf(stdout, "[ %s ]\n" , __func__);
 

@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -38,9 +38,9 @@ stdlib.h
 unistd.h
 -
 
-/Users/joyeongchan/projects/wv_shm/test_main.c
+/root/projects/wv_shm/test_main.c
 wv_shm_mngt.h
-/Users/joyeongchan/projects/wv_shm/wv_shm_mngt.h
+/root/projects/wv_shm/wv_shm_mngt.h
 sys/mman.h
 -
 sys/stat.h
@@ -48,13 +48,13 @@ sys/stat.h
 fcntl.h
 -
 
-/Users/joyeongchan/projects/wv_shm/wv_shm_mngt.c
+/root/projects/wv_shm/wv_shm_mngt.c
 wv_shm_mngt.h
-/Users/joyeongchan/projects/wv_shm/wv_shm_mngt.h
+/root/projects/wv_shm/wv_shm_mngt.h
 wv_mem.h
 -
 
-/Users/joyeongchan/projects/wv_shm/wv_shm_mngt.h
+/root/projects/wv_shm/wv_shm_mngt.h
 stdio.h
 -
 stdlib.h
