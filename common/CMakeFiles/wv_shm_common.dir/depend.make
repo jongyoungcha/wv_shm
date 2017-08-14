@@ -5,9 +5,8 @@ common/CMakeFiles/wv_shm_common.dir/wv_file.c.o: common/wv_file.c
 common/CMakeFiles/wv_shm_common.dir/wv_file.c.o: common/wv_file.h
 common/CMakeFiles/wv_shm_common.dir/wv_file.c.o: common/wv_log.h
 
-common/CMakeFiles/wv_shm_common.dir/wv_log.c.o: ./common/wv_file.h
-common/CMakeFiles/wv_shm_common.dir/wv_log.c.o: ./common/wv_log.h
 common/CMakeFiles/wv_shm_common.dir/wv_log.c.o: common/wv_log.c
+common/CMakeFiles/wv_shm_common.dir/wv_log.c.o: common/wv_log.h
 
 common/CMakeFiles/wv_shm_common.dir/wv_mem.c.o: common/wv_mem.c
 common/CMakeFiles/wv_shm_common.dir/wv_mem.c.o: common/wv_mem.h

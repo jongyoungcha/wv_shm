@@ -130,7 +130,7 @@ CMAKE_OBJCOPY:FILEPATH=/usr/bin/objcopy
 CMAKE_OBJDUMP:FILEPATH=/usr/bin/objdump
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=wv_shm
+CMAKE_PROJECT_NAME:STATIC=wv_shm_test
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -189,6 +189,12 @@ wv_shm_SOURCE_DIR:STATIC=/root/projects/wv_shm
 
 //Dependencies for target
 wv_shm_common_LIB_DEPENDS:STATIC=
+
+//Value Computed by CMake
+wv_shm_test_BINARY_DIR:STATIC=/root/projects/wv_shm
+
+//Value Computed by CMake
+wv_shm_test_SOURCE_DIR:STATIC=/root/projects/wv_shm
 
 
 ########################

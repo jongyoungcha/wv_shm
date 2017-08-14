@@ -6,30 +6,6 @@
 
 #IncludeRegexTransform: 
 
-./common/wv_file.h
-stdio.h
--
-stdlib.h
--
-string.h
--
-unistd.h
--
-dirent.h
--
-
-./common/wv_log.h
-stdio.h
--
-string.h
--
-wv_file.h
--
-stdarg.h
--
-time.h
--
-
 /root/projects/wv_shm/common/wv_file.c
 wv_file.h
 /root/projects/wv_shm/common/wv_file.h
@@ -50,18 +26,18 @@ dirent.h
 
 /root/projects/wv_shm/common/wv_log.c
 wv_log.h
--
+/root/projects/wv_shm/common/wv_log.h
 
 /root/projects/wv_shm/common/wv_log.h
 stdio.h
 -
 string.h
 -
-wv_file.h
--
 stdarg.h
 -
 time.h
+-
+unistd.h
 -
 
 /root/projects/wv_shm/common/wv_mem.c

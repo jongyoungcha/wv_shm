@@ -6,5 +6,5 @@ C_FLAGS =
 
 C_DEFINES = 
 
-C_INCLUDES = -I/root/projects/wv_shm/./common -I/root/projects/wv_shm/. 
+C_INCLUDES = -I/root/projects/wv_shm/common -I/root/projects/wv_shm/. 
 

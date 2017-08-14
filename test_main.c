@@ -3,6 +3,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>        /* For mode constants */
 #include <fcntl.h>           /* For O_* constants */
+#include <wv_log.h>
 
 #define SHM_ID  7777
 #define SHM_NAME "test_1"
@@ -23,6 +24,9 @@ int main()
 int wv_shm_test()
 {
   int ret = 0;
+
+  wv_init_log("./", "wv_shm_log");
+  wv_write_log(LOG_INF, "*** Start wv_shm TEST ***");
   wv_shm_init();
 
   test_packet_t test_packet[5] = {
@@ -31,14 +35,8 @@ int wv_shm_test()
     {"333.111.111.111", 3000, "datadatadata"},
   };
 
-  wv_shm_junk_hdr_t* shm_junk_hdr =  wv_shm_assign_junk("mytest_junk_shm");
-  printf("shm_junk_hdr->count : %ld\n", shm_junk_hdr->count);
-  printf("shm_junk_hdr->start_addr : %p\n", shm_junk_hdr->quu_start_addr);
-  printf("shm_junk_hdr->end_addr : %p\n", shm_junk_hdr->quu_end_addr);
-  printf("shm_junk_hdr->remain_size : %ld\n", shm_junk_hdr->remain_size);
-  printf("shm_junk_hdr->shm_name : %s\n", shm_junk_hdr->shm_name);
-  printf("shm_junk_hdr->is_assigned : %d\n", shm_junk_hdr->is_assigned);
-
+  wv_write_log(LOG_INF, "Assign the shared memory junk with \"mytest_junk\"");
+  wv_shm_junk_hdr_t* shm_junk_hdr =  wv_shm_assign_junk("mytest_junk");
   wv_shm_junk_show(shm_junk_hdr);
 
   /* Write the elems */
@@ -51,7 +49,11 @@ int wv_shm_test()
   test_packet_t* ptest_packet = NULL;
 
   if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){
+    /* printf("shm_junk_elem_hdr->next_pos : %ld\n", shm_junk_elem_hdr->next_offset); */
+    /* printf("shm_junk_elem_hdr->size : %ld\n",  shm_junk_elem_hdr->size); */
+    (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr));
     ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr);
+    wv_write_log(LOG_INF, "ok?", sizeof(test_packet_t));
     printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip);
     printf("ptest_packet->port : %d\n",  ptest_packet->from_port);
     printf("ptest_packet->data : %s\n",  ptest_packet->data);
@@ -93,6 +95,7 @@ int wv_shm_test()
 
 
   wv_shm_junk_hdr_t** junk_list = (wv_shm_junk_hdr_t**) wv_shm_get_junk_list();
+  wv_shm_free_junk_list(junk_list);
   
 
   return ret;
