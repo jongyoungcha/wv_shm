@@ -316,7 +316,9 @@ void wv_shm_free_junk_list(wv_shm_junk_hdr_t** junk_hdr_list){
   if ( junk_hdr_list ){
 
     for (i = 0; junk_hdr_list[i]; i++){
+
       if(junk_hdr_list[i]){
+
 	free(junk_hdr_list[i]);
 	printf("loop");
       }
@@ -363,73 +365,74 @@ int wv_shm_clear_junk(wv_shm_junk_hdr_t* shm_junk_hdr)
 }
 
 
-/* int wv_shm_dump_junk(const char* junk_name, const char* dir_name, const char* file_name) */
-/* { */
-/*   fprintf(stdout, "[ %s ]\n" , __func__); */
+int wv_shm_dump_junk(const char* junk_name, const char* dir_name, const char* file_name)
+{
+  fprintf(stdout, "[ %s ]\n" , __func__);
 
-/*   int ret = 0; */
-/*   int wr_buf_size = 8192; */
-/*   char full_path[8192] = {0}; */
-/*   void* cur_pos = NULL; */
-/*   FILE* pfile = NULL; */
-/*   const char* dlmt = "/"; */
-/*   wv_shm_junk_hdr_t* shm_junk_hdr = NULL; */
-/*   int nwrite = 0; */
+  int ret = 0;
+  int wr_buf_size = 8192;
+  char full_path[8192] = {0};
+  void* cur_pos = NULL;
+  FILE* pfile = NULL;
+  const char* dlmt = "/";
+  wv_shm_junk_hdr_t* junk_hdr = NULL;
+  int nwrite = 0;
 
-/*   snprintf( full_path, 8192, "%s%s%s", dir_name, dlmt, file_name ); */
+  snprintf( full_path, 8192, "%s%s%s", dir_name, dlmt, file_name );
 
-/*   /\* Find if there is shm_junk existing or not. *\/ */
-/*   if ( (shm_junk_hdr = wv_shm_find_junk(shm_meta, junk_name)) == NULL ){ */
+  /* Find if there is shm_junk existing or not. */
+  if ( (junk_hdr = wv_shm_find_junk(shm_meta, junk_name)) == NULL ){
 
-/*     fprintf( stdout, "Counldnt find the shared memory junk having same name...\n" ); */
-/*     ret = -1; goto wv_shm_dump_junk_ret; */
-/*   } */
+    wv_write_log(LOG_INF, "Counldnt find the shared memory junk having same name..." );
+    ret = -1; goto wv_shm_dump_junk_ret;
+  }
 
-/*   /\* Find if there is a file having the same name or not. *\/ */
-/*   if ( access(full_path, F_OK) == 0 ){ */
+  /* Find if there is a file having the same name or not. */
+  if ( access(full_path, F_OK) == 0 ){
 
-/*     fprintf( stdout, "There is a file existing...\n" ); */
-/*     ret = -1; goto wv_shm_dump_junk_ret; */
-/*   } */
-/*   else{ */
+    wv_write_log(LOG_INF, "There is a file existing..." );
+    ret = -1; goto wv_shm_dump_junk_ret;
+  }
+  else{
 
-/*     /\* Dump the founded shm_junk to a file. *\/ */
-/*     if ( (pfile = fopen(full_path, "wb")) == NULL ){ */
+    /* Dump the founded shm_junk to a file. */
+    if ( (pfile = fopen(full_path, "wb")) == NULL ){
 
-/*       fprintf( stdout, "Couldnt open the file with wb mode...\n" ); */
-/*       ret = -1; goto wv_shm_dump_junk_ret; */
-/*     } */
-/*   } */
+      wv_write_log(LOG_INF, "Couldnt open the file with wb mode..." );
+      ret = -1; goto wv_shm_dump_junk_ret;
+    }
+  }
 
-/*   /\* Dump the founed shm_junk to a file. *\/ */
-/*   if ( shm_junk_hdr->start_offset ){ */
-/*     cur_pos = shm_junk_hdr->start_offset; */
+  /* Dump the founed shm_junk to a file. */
+  if ( junk_hdr->start_offset ){
 
-/*     while( 1 ){ */
+    cur_pos = shm_meta->shm_start_addr+ junk_hdr->start_offset;
 
-/*       if ((cur_pos + wr_buf_size) > shm_junk_hdr->quu_end_offset){ */
+    while( 1 ){
 
-/* 	fwrite(cur_pos, sizeof(char), shm_junk_hdr->quu_end_offset - cur_pos, pfile); */
-/*       } */
-/*       else{ */
+      if ((cur_pos + wr_buf_size) > shm_meta->shm_start_addr + junk_hdr->quu_end_offset){
 
-/* 	fwrite(cur_pos, sizeof(char), wr_buf_size, pfile); */
-/* 	break; */
-/*       } */
-/*       cur_pos += wr_buf_size; */
-/*     } */
-/*   } */
+	fwrite(cur_pos, sizeof(char), (shm_meta->shm_start_addr + junk_hdr->quu_end_offset) - cur_pos, pfile);
+	break;
+      }
+      else{
 
-/*   if (pfile){ */
+	nwrite = fwrite(cur_pos, sizeof(char), wr_buf_size, pfile);
+      }
+      cur_pos += nwrite;
+    }
+  }
 
-/*     fclose(pfile); */
-/*   } */
+  if (pfile){
+
+    fclose(pfile);
+  }
 
 
-/*  wv_shm_dump_junk_ret: */
+ wv_shm_dump_junk_ret:
 
-/*   return ret; */
-/* } */
+  return ret;
+}
 
 
 

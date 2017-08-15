@@ -124,8 +124,8 @@ wv_shm_free_junk_list(wv_shm_junk_hdr_t** junk_hdr_list);
 /* extern wv_shm_junk_hdr_t* */
 /* wv_shm_find_junk(wv_shm_meta_t* shm_meta, const char* junk_name); */
 
-/* extern int */
-/* wv_shm_dump_junk(const char* junk_name, const char* dir_name, const char* file_name); */
+extern int
+wv_shm_dump_junk(const char* junk_name, const char* dir_name, const char* file_name);
 
 /* extern int */
 /* wv_shm_load_junk(wv_shm_meta_t* shm_meta, const char* dir_name, const char* file_name); */

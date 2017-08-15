@@ -19777,3 +19777,264 @@
 [ ** ] [07/14/2017][08:03:57] [ wv_shm_pop_elem_data ]
 [ ** ] [07/14/2017][08:03:57] The queue was empty...
 
+[ ** ] [07/15/2017][10:56:42] *** Start wv_shm TEST ***
+[ ** ] [07/15/2017][10:56:42] shm_meta->shm_key : 4000
+[ ** ] [07/15/2017][10:56:42] shm_meta->shm_total_size : 1073741824
+[ ** ] [07/15/2017][10:56:42] shm_ds.shm_segsz : 1073741824
+[ ** ] [07/15/2017][10:56:42] shm_ds.shm_ctime : 1502809002
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_init_meta ]
+[ ** ] [07/15/2017][10:56:42] Initailizing the shared memory meta structure...
+[ ** ] [07/15/2017][10:56:42] shm_meta->count : 0
+[ ** ] [07/15/2017][10:56:42] shm_meta->shm_start_addr : 0x7f2e09504000
+[ ** ] [07/15/2017][10:56:42] shm_meta->shm_end_addr : 0x7f2e49505000
+[ ** ] [07/15/2017][10:56:42] shm_meta->key : 4000
+[ ** ] [07/15/2017][10:56:42] shm_meta->shm_junk_size : 104857600
+[ ** ] [07/15/2017][10:56:42] shm_meta->shm_total_size : 1073745920
+[ ** ] [07/15/2017][10:56:42] Initailizing the shared memory junk queuere...
+[ ** ] [07/15/2017][10:56:42] Initailizing shared memory junk[0]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_junk_init ]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_wr ]
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->shm_name : 
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 32848
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 32848
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_start_offset : 32848
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_end_offset : 104890448
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->write_offset : 32848
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->remain_size : 104857600
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->count : 0
+[ ** ] [07/15/2017][10:56:42] Initailizing shared memory junk[1]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_junk_init ]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_wr ]
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->shm_name : 
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 104890448
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 104890448
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_start_offset : 104890448
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_end_offset : 209748048
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->write_offset : 104890448
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->remain_size : 104857600
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->count : 0
+[ ** ] [07/15/2017][10:56:42] Initailizing shared memory junk[2]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_junk_init ]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_wr ]
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->shm_name : 
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 209748048
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 209748048
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_start_offset : 209748048
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_end_offset : 314605648
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->write_offset : 209748048
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->remain_size : 104857600
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->count : 0
+[ ** ] [07/15/2017][10:56:42] Initailizing shared memory junk[3]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_junk_init ]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_wr ]
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->shm_name : 
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 314605648
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 314605648
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_start_offset : 314605648
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_end_offset : 419463248
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->write_offset : 314605648
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->remain_size : 104857600
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->count : 0
+[ ** ] [07/15/2017][10:56:42] Initailizing shared memory junk[4]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_junk_init ]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_wr ]
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->shm_name : 
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 419463248
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 419463248
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_start_offset : 419463248
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_end_offset : 524320848
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->write_offset : 419463248
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->remain_size : 104857600
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->count : 0
+[ ** ] [07/15/2017][10:56:42] Initailizing shared memory junk[5]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_junk_init ]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_wr ]
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->shm_name : 
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 524320848
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 524320848
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_start_offset : 524320848
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_end_offset : 629178448
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->write_offset : 524320848
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->remain_size : 104857600
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->count : 0
+[ ** ] [07/15/2017][10:56:42] Initailizing shared memory junk[6]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_junk_init ]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_wr ]
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->shm_name : 
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 629178448
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 629178448
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_start_offset : 629178448
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_end_offset : 734036048
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->write_offset : 629178448
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->remain_size : 104857600
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->count : 0
+[ ** ] [07/15/2017][10:56:42] Initailizing shared memory junk[7]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_junk_init ]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_wr ]
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->shm_name : 
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 734036048
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 734036048
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_start_offset : 734036048
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_end_offset : 838893648
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->write_offset : 734036048
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->remain_size : 104857600
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->count : 0
+[ ** ] [07/15/2017][10:56:42] Initailizing shared memory junk[8]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_junk_init ]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_wr ]
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->shm_name : 
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 838893648
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 838893648
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_start_offset : 838893648
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_end_offset : 943751248
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->write_offset : 838893648
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->remain_size : 104857600
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->count : 0
+[ ** ] [07/15/2017][10:56:42] Initailizing shared memory junk[9]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_junk_init ]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_wr ]
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->shm_name : 
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 943751248
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 943751248
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_start_offset : 943751248
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_end_offset : 1048608848
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->write_offset : 943751248
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->remain_size : 104857600
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->count : 0
+[ ** ] [07/15/2017][10:56:42] Initailizing shared memory junk[10]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_junk_init ]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_wr ]
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->shm_name : 
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 1048608848
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->start_offset : 1048608848
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_start_offset : 1048608848
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->quu_end_offset : 1153466448
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->write_offset : 1048608848
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->remain_size : 104857600
+[ ** ] [07/15/2017][10:56:42] shm_junk_hdr->count : 0
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_sync_meta ]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_wr ]
+[ ** ] [07/15/2017][10:56:42] Assign the shared memory junk with "mytest_junk"
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_assign_junk ]
+[ ** ] [07/15/2017][10:56:42] [ wv_shm_clear_junk ]
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_junk_show ]
+[ ** ] [07/15/2017][10:56:43] shm_junk_hdr->shm_name : mytest_junk
+[ ** ] [07/15/2017][10:56:43] shm_junk_hdr->is_assigned : 1
+[ ** ] [07/15/2017][10:56:43] shm_junk_hdr->start_offset : 32848
+[ ** ] [07/15/2017][10:56:43] shm_junk_hdr->start_offset : 32848
+[ ** ] [07/15/2017][10:56:43] shm_junk_hdr->quu_start_offset : 32848
+[ ** ] [07/15/2017][10:56:43] shm_junk_hdr->quu_end_offset : 104890448
+[ ** ] [07/15/2017][10:56:43] shm_junk_hdr->write_offset : 32848
+[ ** ] [07/15/2017][10:56:43] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/15/2017][10:56:43] shm_junk_hdr->remain_size : 104857600
+[ ** ] [07/15/2017][10:56:43] shm_junk_hdr->count : 0
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_push_elem ]
+[ ** ] [07/15/2017][10:56:43] test_hdr->size:4000
+[ ** ] [07/15/2017][10:56:43] test_hdr->next_offset:1073745920
+[ ** ] [07/15/2017][10:56:43] elem_hdr.size : 8452
+[ ** ] [07/15/2017][10:56:43] elem_hdr.next_offset : 0
+[ ** ] [07/15/2017][10:56:43] write position : 0x7f2e0950c050
+[ ** ] [07/15/2017][10:56:43] pos_write_hdr : 0x7f2e0950c050 (write_offset : 32848)
+[ ** ] [07/15/2017][10:56:43] pos_write_data : 0x7f2e0950c060 (write_offset : 32864)
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_push_elem ]
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_link_elems ]
+[ ** ] [07/15/2017][10:56:43] shm_junk_elem_hdr->next_offset : 41316
+[ ** ] [07/15/2017][10:56:43] test_hdr->size:8452
+[ ** ] [07/15/2017][10:56:43] test_hdr->next_offset:41316
+[ ** ] [07/15/2017][10:56:43] elem_hdr.size : 8452
+[ ** ] [07/15/2017][10:56:43] elem_hdr.next_offset : 0
+[ ** ] [07/15/2017][10:56:43] write position : 0x7f2e0950e164
+[ ** ] [07/15/2017][10:56:43] pos_write_hdr : 0x7f2e0950e164 (write_offset : 41316)
+[ ** ] [07/15/2017][10:56:43] pos_write_data : 0x7f2e0950e174 (write_offset : 41332)
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_push_elem ]
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_link_elems ]
+[ ** ] [07/15/2017][10:56:43] shm_junk_elem_hdr->next_offset : 49784
+[ ** ] [07/15/2017][10:56:43] test_hdr->size:8452
+[ ** ] [07/15/2017][10:56:43] test_hdr->next_offset:49784
+[ ** ] [07/15/2017][10:56:43] elem_hdr.size : 8452
+[ ** ] [07/15/2017][10:56:43] elem_hdr.next_offset : 0
+[ ** ] [07/15/2017][10:56:43] write position : 0x7f2e09510278
+[ ** ] [07/15/2017][10:56:43] pos_write_hdr : 0x7f2e09510278 (write_offset : 49784)
+[ ** ] [07/15/2017][10:56:43] pos_write_data : 0x7f2e09510288 (write_offset : 49800)
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_peek_elem_hdr ]
+[ ** ] [07/15/2017][10:56:43] offset to read : 32848
+[ ** ] [07/15/2017][10:56:43] address to read :  0x7f2e0950c050
+[ ** ] [07/15/2017][10:56:43] ret_elem_hdr->size : 8452
+[ ** ] [07/15/2017][10:56:43] ret_elem_hdr->next_offset : 41316
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_peek_elem_hdr ]
+[ ** ] [07/15/2017][10:56:43] offset to read : 32848
+[ ** ] [07/15/2017][10:56:43] address to read :  0x7f2e0950c050
+[ ** ] [07/15/2017][10:56:43] ret_elem_hdr->size : 8452
+[ ** ] [07/15/2017][10:56:43] ret_elem_hdr->next_offset : 41316
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_pop_elem_data ]
+[ ** ] [07/15/2017][10:56:43] cur_elem_hdr address : 0x7f2e0950c050
+[ ** ] [07/15/2017][10:56:43] next_offset : 41316
+[ ** ] [07/15/2017][10:56:43] size : 8452
+[ ** ] [07/15/2017][10:56:43] ok?
+[ ** ] [07/15/2017][10:56:43] ok?
+[ ** ] [07/15/2017][10:56:43] offset to read : 32864
+[ ** ] [07/15/2017][10:56:43] address to read : 0x7f2e0950c060
+[ ** ] [07/15/2017][10:56:43] ok?
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_peek_elem_hdr ]
+[ ** ] [07/15/2017][10:56:43] offset to read : 41316
+[ ** ] [07/15/2017][10:56:43] address to read :  0x7f2e0950e164
+[ ** ] [07/15/2017][10:56:43] ret_elem_hdr->size : 8452
+[ ** ] [07/15/2017][10:56:43] ret_elem_hdr->next_offset : 49784
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_pop_elem_data ]
+[ ** ] [07/15/2017][10:56:43] cur_elem_hdr address : 0x7f2e0950e164
+[ ** ] [07/15/2017][10:56:43] next_offset : 49784
+[ ** ] [07/15/2017][10:56:43] size : 8452
+[ ** ] [07/15/2017][10:56:43] ok?
+[ ** ] [07/15/2017][10:56:43] ok?
+[ ** ] [07/15/2017][10:56:43] offset to read : 41332
+[ ** ] [07/15/2017][10:56:43] address to read : 0x7f2e0950e174
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_peek_elem_hdr ]
+[ ** ] [07/15/2017][10:56:43] offset to read : 49784
+[ ** ] [07/15/2017][10:56:43] address to read :  0x7f2e09510278
+[ ** ] [07/15/2017][10:56:43] ret_elem_hdr->size : 8452
+[ ** ] [07/15/2017][10:56:43] ret_elem_hdr->next_offset : 0
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_pop_elem_data ]
+[ ** ] [07/15/2017][10:56:43] cur_elem_hdr address : 0x7f2e09510278
+[ ** ] [07/15/2017][10:56:43] next_offset : 0
+[ ** ] [07/15/2017][10:56:43] size : 8452
+[ ** ] [07/15/2017][10:56:43] ok?
+[ ** ] [07/15/2017][10:56:43] offset to read : 49800
+[ ** ] [07/15/2017][10:56:43] address to read : 0x7f2e09510288
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_peek_elem_hdr ]
+[ ** ] [07/15/2017][10:56:43] offset to read : 58252
+[ ** ] [07/15/2017][10:56:43] address to read :  0x7f2e0951238c
+[ ** ] [07/15/2017][10:56:43] ret_elem_hdr->size : 0
+[ ** ] [07/15/2017][10:56:43] ret_elem_hdr->next_offset : 0
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_pop_elem_data ]
+[ ** ] [07/15/2017][10:56:43] The queue was empty...
+
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_peek_elem_hdr ]
+[ ** ] [07/15/2017][10:56:43] offset to read : 58252
+[ ** ] [07/15/2017][10:56:43] address to read :  0x7f2e0951238c
+[ ** ] [07/15/2017][10:56:43] ret_elem_hdr->size : 0
+[ ** ] [07/15/2017][10:56:43] ret_elem_hdr->next_offset : 0
+[ ** ] [07/15/2017][10:56:43] [ wv_shm_pop_elem_data ]
+[ ** ] [07/15/2017][10:56:43] The queue was empty...
+
