@@ -59,7 +59,7 @@ typedef struct wv_shm_meta{
   void* shm_start_addr;
   void* shm_end_addr;
   size_t count;
-  wv_shm_junk_hdr_t arr_shm_junk_hdr[SHM_MAX_COUNT];
+  size_t arr_junk_hdr_offsets[SHM_MAX_COUNT];
 } wv_shm_meta_t;
 
 
@@ -69,18 +69,8 @@ typedef struct wv_shm_junk_elem_hdr{
 } wv_shm_junk_elem_hdr_t;
 
 
-/* typedef struct wv_shm_junk_elem_attr{ */
-/*   size_t attr_size; */
-/*   size_t key_size; */
-/*   void* data; */
-/*   void* key; */
-/* } wv_shm_junk_elem_attr_t; */
-
-
-
-
 int
-wv_shm_test ();
+wv_shm_init_test ();
 
 extern int
 wv_shm_init();
@@ -107,7 +97,8 @@ extern void*
 wv_shm_wr(size_t start_offs, void* data, size_t size, size_t *next_offs);
 
 extern int
-wv_shm_junk_init(wv_shm_junk_hdr_t* shm_junk_hdr, char* shm_junk_name, size_t start_offs, size_t end_offs);
+/* wv_shm_junk_init(wv_shm_junk_hdr_t* shm_junk_hdr, char* shm_junk_name, size_t start_offs, size_t end_offs); */
+wv_shm_junk_init(char* shm_junk_name, size_t start_offs, size_t end_offs);
 
 void*
 wv_shm_rd(void* start_addr, size_t size, void** next_addr);
@@ -121,40 +112,33 @@ wv_shm_get_junk_list();
 extern void
 wv_shm_free_junk_list(wv_shm_junk_hdr_t** junk_hdr_list);
 
-/* extern wv_shm_junk_hdr_t* */
-/* wv_shm_find_junk(wv_shm_meta_t* shm_meta, const char* junk_name); */
-
-extern int
-wv_shm_dump_junk(const char* junk_name, const char* dir_name, const char* file_name);
-
-/* extern int */
-/* wv_shm_load_junk(wv_shm_meta_t* shm_meta, const char* dir_name, const char* file_name); */
-
 extern wv_shm_junk_elem_hdr_t*
 wv_shm_peek_elem_hdr(wv_shm_junk_hdr_t* shm_junk_hdr);
 
-/* extern void* */
-/* wv_shm_peek_elem_data(wv_shm_junk_hdr_t* shm_junk_hdr); */
+extern void*
+wv_shm_peek_elem_data(wv_shm_junk_hdr_t* shm_junk_hdr);
 
 extern void*
 wv_shm_pop_elem_data(wv_shm_junk_hdr_t* shm_junk_hdr, wv_shm_junk_elem_hdr_t* shm_junk_elem_hdr);
 
-/* extern int */
-/* wv_shm_del_last_elem(wv_shm_junk_hdr_t* shm_junk_hdr); */
-
-
 extern void*
 wv_shm_push_elem(wv_shm_junk_hdr_t* shm_junk_hdr, void* data, size_t size);
 
+extern wv_shm_junk_hdr_t*
+wv_shm_find_junk(const char* junk_name);
 
+extern int
+wv_shm_dump_junk(const char* junk_name, const char* dir_name, const char* file_name);
+
+extern int
+wv_shm_load_junk(const char* dir_name, const char* file_name);
 
 int
 wv_shm_link_elems(wv_shm_junk_hdr_t* junk_hdr, size_t prev_offset, size_t cur_offset);
 
-
 extern void
-wv_shm_junk_show(wv_shm_junk_hdr_t* shm_junk_hdr);
+wv_shm_show_junk(wv_shm_junk_hdr_t* shm_junk_hdr);
 
-
+int wv_shm_check_init();
 
 #endif
