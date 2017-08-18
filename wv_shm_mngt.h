@@ -8,6 +8,7 @@
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/shm.h>
+#include <sys/sem.h>
 #include <sys/stat.h>        /* For mode constants */
 #include <fcntl.h>           /* For O_* constants */
 #include <errno.h>
@@ -16,6 +17,7 @@
 #include <wv_log.h>
 
 #define SHM_KEY 4000
+#define SHM_SMPR_KEY 3000
 
 #define SHM_TOTAL_SIZE (1024 * 1024 * 1024)
 #define SHM_JUNK_SIZE (100 * 1024 * 1024)
@@ -41,32 +43,39 @@
 typedef struct wv_shm_junk_hdr{
   char shm_name[256];
   int is_assigned;
-  size_t start_offset;
-  size_t quu_start_offset;
-  size_t quu_end_offset;
-  size_t write_offset;
-  size_t prev_write_offset;  // Used to link currnet element and prev element.
-  size_t read_offset;
-  size_t remain_size;
+  size_t startoffs;
+  size_t quu_startoffs;
+  size_t quu_endoffs;
+  size_t writeoffs;
+  size_t prev_writeoffs;  // Used to link currnet element and prev element.
+  size_t readoffs;
+  size_t remainsz;
   size_t count;
 } wv_shm_junk_hdr_t;
 
 
 typedef struct wv_shm_meta{
   size_t shm_key;
-  size_t shm_total_size;
-  size_t shm_junk_size;
-  void* shm_start_addr;
-  void* shm_end_addr;
+  size_t shm_totalsize;
+  size_t shm_junk;
+  void* shm_startaddr;
+  void* shm_endaddr;
   size_t count;
-  size_t arr_junk_hdr_offsets[SHM_MAX_COUNT];
+  size_t arr_junkhdr_offsets[SHM_MAX_COUNT];
 } wv_shm_meta_t;
 
 
 typedef struct wv_shm_junk_elem_hdr{
   size_t size;
-  size_t next_offset;
+  size_t nextoffs;
 } wv_shm_junk_elem_hdr_t;
+
+
+typedef union wv_shm_quusmphr{
+  int val;
+  struct semid_ds *buf;
+  unsigned short int *array;
+} wv_shm_quusmphr_t;
 
 
 int
@@ -76,19 +85,34 @@ extern int
 wv_shm_init();
 
 extern int
-wv_shm_load_meta(void* shm_start_addr);
+wv_shm_load_meta(void* shm_startaddr);
 
 extern int
-wv_shm_init_meta(void* shm_start_addr);
+wv_shm_init_meta(void* shm_startaddr);
+
+extern int
+wv_shm_init_smphr();
 
 extern int
 wv_shm_sync_meta();
+
+extern int
+wv_shm_init_smphr(int quucnt, int is_init);
+
+extern int
+wv_shm_lock_quu(int index);
+
+extern int
+wv_shm_unlock_quu(int index);
 
 extern wv_shm_junk_hdr_t*
 wv_shm_assign_junk(const char* junk_name);
 
 extern wv_shm_junk_hdr_t*
-wv_shm_unassign_junk(wv_shm_meta_t* shm_meta, const char* junk_name);
+wv_shm_unassign_junk(const char* junkname);
+
+extern int
+wv_shm_get_junk_index(wv_shm_junk_hdr_t* junkhdr);
 
 int
 wv_shm_chk_offs(size_t offset);
@@ -97,10 +121,9 @@ extern void*
 wv_shm_wr(size_t start_offs, void* data, size_t size, size_t *next_offs);
 
 extern int
-/* wv_shm_junk_init(wv_shm_junk_hdr_t* shm_junk_hdr, char* shm_junk_name, size_t start_offs, size_t end_offs); */
 wv_shm_junk_init(char* shm_junk_name, size_t start_offs, size_t end_offs);
 
-void*
+extern void*
 wv_shm_rd(void* start_addr, size_t size, void** next_addr);
 
 extern int
@@ -128,9 +151,9 @@ extern wv_shm_junk_hdr_t*
 wv_shm_find_junk(const char* junk_name);
 
 extern int
-wv_shm_dump_junk(const char* junk_name, const char* dir_name, const char* file_name);
+wv_shm_dump_junk(const char* junk_name, const char* dir_name);
 
-extern int
+extern wv_shm_junk_hdr_t*
 wv_shm_load_junk(const char* dir_name, const char* file_name);
 
 int

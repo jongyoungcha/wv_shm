@@ -30,56 +30,59 @@ int main()
 int wv_shm_load_test()
 {
   int ret = 0;
+  int index = 0;
 
   wv_write_log(LOG_INF, "*** Start wv_shm_load TEST ***");
   wv_init_log("./", "wv_shm_log");
 
   wv_shm_init();
-  /* wv_shm_load_junk("./", "mytest_junk"); */
   wv_shm_junk_elem_hdr_t* shm_junk_elem_hdr = NULL;
   test_packet_t* ptest_packet = NULL;
-  
+
   wv_shm_junk_hdr_t* shm_junk_hdr = NULL;
-  if ( !(shm_junk_hdr = wv_shm_assign_junk("mytest_junk")) ){
-    wv_write_log(LOG_INF, "The junk memory same name was found, so we had to get the junk memory queue. ");
-    shm_junk_hdr = wv_shm_find_junk("mytest_junk");
-    wv_shm_show_junk(shm_junk_hdr);
-  }
 
-  wv_write_log(LOG_INF, "ok?", sizeof(test_packet_t));
-  if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){
-    ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr);
-    printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip);
-    printf("ptest_packet->port : %d\n",  ptest_packet->from_port);
-    printf("ptest_packet->data : %s\n",  ptest_packet->data);
-  }
+  shm_junk_hdr = wv_shm_load_junk("./", "mytest_junk");
+  wv_shm_show_junk(shm_junk_hdr);
 
-  if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){
-    ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr);
-    printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip);
-    printf("ptest_packet->port : %d\n",  ptest_packet->from_port);
-    printf("ptest_packet->data : %s\n",  ptest_packet->data);
-  }
+  shm_junk_hdr = wv_shm_find_junk("mytest_junk");
+  index = wv_shm_get_junk_index(shm_junk_hdr);
+  printf("index : %d", index);
 
-  if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){
-    if((ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr))){
-      printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip);
-      printf("ptest_packet->port : %d\n",  ptest_packet->from_port);
-      printf("ptest_packet->data : %s\n",  ptest_packet->data);
-    }else{
-      printf("none\n");
-    }
-  }
+  /* wv_write_log(LOG_INF, "ok?", sizeof(test_packet_t)); */
+  /* if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){ */
+  /*   ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr); */
+  /*   printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip); */
+  /*   printf("ptest_packet->port : %d\n",  ptest_packet->from_port); */
+  /*   printf("ptest_packet->data : %s\n",  ptest_packet->data); */
+  /* } */
 
-  if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){
-    if((ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr))){
-      printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip);
-      printf("ptest_packet->port : %d\n",  ptest_packet->from_port);
-      printf("ptest_packet->data : %s\n",  ptest_packet->data);
-    }else{
-      printf("none\n");
-    }
-  }
+  /* if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){ */
+  /*   ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr); */
+  /*   printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip); */
+  /*   printf("ptest_packet->port : %d\n",  ptest_packet->from_port); */
+  /*   printf("ptest_packet->data : %s\n",  ptest_packet->data); */
+  /* } */
+
+  /* if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){ */
+  /*   if((ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr))){ */
+  /*     printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip); */
+  /*     printf("ptest_packet->port : %d\n",  ptest_packet->from_port); */
+  /*     printf("ptest_packet->data : %s\n",  ptest_packet->data); */
+  /*   }else{ */
+  /*     printf("none\n"); */
+  /*   } */
+  /* } */
+
+  /* if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){ */
+  /*   if((ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr))){ */
+  /*     printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip); */
+  /*     printf("ptest_packet->port : %d\n",  ptest_packet->from_port); */
+  /*     printf("ptest_packet->data : %s\n",  ptest_packet->data); */
+  /*   }else{ */
+  /*     printf("none\n"); */
+  /*   } */
+  /* } */
+
 
   return ret;
 }
@@ -87,6 +90,7 @@ int wv_shm_load_test()
 int wv_shm_init_test()
 {
   int ret = 0;
+  int i=0;
 
   wv_init_log("./", "wv_shm_log");
   wv_write_log(LOG_INF, "*** Start wv_shm_init TEST ***");
@@ -104,69 +108,25 @@ int wv_shm_init_test()
     wv_write_log(LOG_INF, "The junk memory same name was found, so we had to get the junk memory queue. ");
     shm_junk_hdr = wv_shm_find_junk("mytest_junk");
   }
-  wv_write_log(LOG_INF, "Assigned junk : %p", shm_junk_hdr);
-  wv_write_log(LOG_INF, "Assigned junk : %ld", shm_junk_hdr->start_offset);
-  wv_write_log(LOG_INF, "Assigned junk : %ld", shm_junk_hdr->quu_start_offset);
-  wv_write_log(LOG_INF, "Assigned junk : %ld", shm_junk_hdr->quu_end_offset);
+
   /* Write the elems */
   wv_shm_push_elem(shm_junk_hdr, &test_packet[0], sizeof(test_packet_t));
   wv_shm_push_elem(shm_junk_hdr, &test_packet[1], sizeof(test_packet_t));
   wv_shm_push_elem(shm_junk_hdr, &test_packet[2], sizeof(test_packet_t));
 
-  /* Read the elems */
-  /* wv_shm_junk_elem_hdr_t* shm_junk_elem_hdr = NULL; */
-  /* test_packet_t* ptest_packet = NULL; */
-  
+  wv_shm_junk_hdr_t** junk_list = (wv_shm_junk_hdr_t**) wv_shm_get_junk_list();
 
-  /* if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){ */
-  /*   /\* printf("shm_junk_elem_hdr->next_pos : %ld\n", shm_junk_elem_hdr->next_offset); *\/ */
-  /*   /\* printf("shm_junk_elem_hdr->size : %ld\n",  shm_junk_elem_hdr->size); *\/ */
-  /*   (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)); */
-  /*   ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr); */
-  /*   wv_write_log(LOG_INF, "ok?", sizeof(test_packet_t)); */
-  /*   printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip); */
-  /*   printf("ptest_packet->port : %d\n",  ptest_packet->from_port); */
-  /*   printf("ptest_packet->data : %s\n",  ptest_packet->data); */
-  /* } */
+  for (i=0; *(junk_list+i) != NULL; i++){
+    wv_shm_show_junk(*(junk_list + i));
+  }
 
-  /* if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){ */
+  wv_shm_free_junk_list(junk_list);
 
-  /*   printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip); */
-  /*   printf("ptest_packet->port : %d\n",  ptest_packet->from_port); */
-  /*   printf("ptest_packet->data : %s\n",  ptest_packet->data); */
-  /* } */
+  wv_shm_dump_junk("mytest_junk", "./");
 
-  /* if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){ */
-  /*   ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr); */
-  /*   printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip); */
-  /*   printf("ptest_packet->port : %d\n",  ptest_packet->from_port); */
-  /*   printf("ptest_packet->data : %s\n",  ptest_packet->data); */
-  /* } */
-
-  /* if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){ */
-  /*   if((ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr))){ */
-  /*     printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip); */
-  /*     printf("ptest_packet->port : %d\n",  ptest_packet->from_port); */
-  /*     printf("ptest_packet->data : %s\n",  ptest_packet->data); */
-  /*   }else{ */
-  /*     printf("none\n"); */
-  /*   } */
-  /* } */
-
-  /* if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){ */
-  /*   if((ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr))){ */
-  /*     printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip); */
-  /*     printf("ptest_packet->port : %d\n",  ptest_packet->from_port); */
-  /*     printf("ptest_packet->data : %s\n",  ptest_packet->data); */
-  /*   }else{ */
-  /*     printf("none\n"); */
-  /*   } */
-  /* } */
-
-
-  /* wv_shm_junk_hdr_t** junk_list = (wv_shm_junk_hdr_t**) wv_shm_get_junk_list(); */
-  /* wv_shm_free_junk_list(junk_list); */
-  /* wv_shm_dump_junk("mytest_junk", "./", "mytest_junk"); */
+  wv_shm_show_junk(shm_junk_hdr);
 
   return ret;
 }
+
+

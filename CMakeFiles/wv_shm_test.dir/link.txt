@@ -1,1 +1,0 @@
-/usr/local/bin/cc   -rdynamic CMakeFiles/wv_shm_test.dir/test_main.c.o CMakeFiles/wv_shm_test.dir/wv_shm_mngt.c.o  -o wv_shm_test common/libwv_shm_common.a 

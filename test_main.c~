@@ -1,8 +1,0 @@
-#include "wv_shm_mngt.h"
-
-
-
-int main(){
-
-  return 0;
-}

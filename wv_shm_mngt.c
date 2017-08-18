@@ -3,66 +3,66 @@
 #define SHMMAX 5000
 #define SHMMIN 1000
 
-typedef struct wv_packet{
-  int packet_id;
-  char data[8192];
-}wv_packet_t;
+wv_shm_meta_t* _shmmeta = NULL;
+wv_shm_quusmphr_t* _shmquusmphr = NULL;
+struct shmbuf* _shmsemopen = NULL;
+struct shmbuf* _shmsemclose = NULL;
+static int _semid = 0;
 
-wv_shm_meta_t* shm_meta = NULL;
 
 int wv_shm_init ()
 {
   wv_write_log(LOG_INF, "[ %s ]" , __func__);
 
   int ret = 0;
-  void* shm_addr = (void*)0;
-  void* cur_addr = NULL;
+  void* shmaddr = (void*)0;
+  void* curraddr = NULL;
 
-  int shm_id = 0;
+  int shmid = 0;
   int shm_exists = 0;
 
   struct shmid_ds shm_ds;
 
-  shm_meta = (wv_shm_meta_t*)malloc(sizeof(wv_shm_meta_t));
-  memset(shm_meta, 0x00, sizeof(wv_shm_meta_t));
+  _shmmeta = (wv_shm_meta_t*)malloc(sizeof(wv_shm_meta_t));
+  memset(_shmmeta, 0x00, sizeof(wv_shm_meta_t));
 
-  shm_meta->count = 0;
-  shm_meta->shm_key = SHM_KEY;
-  shm_meta->shm_junk_size = SHM_JUNK_SIZE;
-  shm_meta->shm_total_size = SHM_TOTAL_SIZE;
+  _shmmeta->count = 0;
+  _shmmeta->shm_key = SHM_KEY;
+  _shmmeta->shm_junk = SHM_JUNK_SIZE;
+  _shmmeta->shm_totalsize = SHM_TOTAL_SIZE;
 
   /* Getting shared memory */
-  if ( (shm_id = shmget(shm_meta->shm_key,
-			shm_meta->shm_total_size,
+  if ( (shmid = shmget(_shmmeta->shm_key,
+			_shmmeta->shm_totalsize,
+
 			IPC_CREAT | IPC_EXCL)) == -1 ){
 
     wv_write_log(LOG_INF,
 		 "Previous shared memory was existing... (shm_id : %d, errno : %s)",
-		 shm_id, strerror(errno));
+		 shmid, strerror(errno));
 
-    if ( (shm_id = shmget(shm_meta->shm_key,
-			  shm_meta->shm_total_size,
+    if ( (shmid = shmget(_shmmeta->shm_key,
+			  _shmmeta->shm_totalsize,
 			  0)) == -1 ){
       wv_write_log(LOG_INF,
 		   "Getting the previous shared memory faild... (shm_id : %d, errno : %s)",
-		   shm_id, strerror(errno));
+		   shmid, strerror(errno));
     }
     else{
       shm_exists = 1;
       /* shmctl(shm_id, IPC_RMID, 0); */
     }
-    /* exit( errno ); */
   }
   else{
-    wv_write_log(LOG_INF, "shm_meta->shm_key : %ld", shm_meta->shm_key);
-    wv_write_log(LOG_INF, "shm_meta->shm_total_size : %ld", shm_meta->shm_total_size);
+    wv_write_log(LOG_INF, "shm_meta->shm_key : %ld", _shmmeta->shm_key);
+    wv_write_log(LOG_INF, "shm_meta->shm_total_size : %ld", _shmmeta->shm_totalsize);
 
-    if ( (shm_id = shmget(shm_meta->shm_key,
-			  shm_meta->shm_total_size,
+    if ( (shmid = shmget(_shmmeta->shm_key,
+			  _shmmeta->shm_totalsize,
 			  IPC_CREAT|0777)) == -1 ){
 
       wv_write_log(LOG_ERR, "Getting Shared memory was failed..... (shm_key : %ld, errno : %s)",
-	      shm_meta->shm_key, strerror(errno));
+	      _shmmeta->shm_key, strerror(errno));
 
       exit( errno );
       return -1;
@@ -70,15 +70,15 @@ int wv_shm_init ()
   }
 
   /* Attaching shared memory. */
-  shm_addr = shmat(shm_id, (void*)0, 0);
-  if ( shm_addr == (void*)(-1) )
+  shmaddr = shmat(shmid, (void*)0, 0);
+  if ( shmaddr == (void*)(-1) )
   {
-    wv_write_log(LOG_ERR, "Getting sharedaddr : %p", shm_meta->shm_start_addr);
-    wv_write_log(LOG_ERR, "cur_addr : %p", cur_addr);
+    wv_write_log(LOG_ERR, "Getting sharedaddr : %p", _shmmeta->shm_startaddr);
+    wv_write_log(LOG_ERR, "cur_addr : %p", curraddr);
     return -1;
   }
 
-  if (shmctl(shm_id, IPC_STAT, &shm_ds) == -1){
+  if (shmctl(shmid, IPC_STAT, &shm_ds) == -1){
 
     wv_write_log(LOG_ERR, "[Error] Getting shred info failed...");
     return -1;
@@ -87,16 +87,19 @@ int wv_shm_init ()
   wv_write_log(LOG_INF, "shm_ds.shm_segsz : %ld", shm_ds.shm_segsz);
   wv_write_log(LOG_INF, "shm_ds.shm_ctime : %ld", shm_ds.shm_ctime);
 
-  shm_exists = 1;
-  /* shm_exists = 0; */
   if ( shm_exists ){
 
-    wv_shm_load_meta(shm_addr);
+    wv_shm_load_meta(shmaddr);
   }
   else{
     /* Setting the shared memory meta information. */
-    wv_shm_init_meta(shm_addr);
-    wv_shm_sync_meta(shm_meta);
+    wv_shm_init_meta(shmaddr);
+    wv_shm_sync_meta(_shmmeta);
+  }
+
+  if (wv_shm_init_smphr(_shmmeta->count, 1) == -1){
+
+    return -1;
   }
 
   return ret;
@@ -116,17 +119,17 @@ int wv_shm_load_meta(void* shm_start_addr)
     return ret = -1;
   }
 
-  shm_meta = (wv_shm_meta_t*)wv_shm_rd(shm_start_addr, sizeof(wv_shm_meta_t), NULL);
-  shm_meta->shm_start_addr = shm_start_addr;
-  shm_meta->shm_end_addr = shm_start_addr + shm_meta->shm_total_size;
+  _shmmeta = (wv_shm_meta_t*)wv_shm_rd(shm_start_addr, sizeof(wv_shm_meta_t), NULL);
+  _shmmeta->shm_startaddr = shm_start_addr;
+  _shmmeta->shm_endaddr = shm_start_addr + _shmmeta->shm_totalsize;
 
   wv_write_log(LOG_INF, "<The loaded shared meta data >");
-  wv_write_log(LOG_INF, "* shm_meta.count : %ld", shm_meta->count);
+  wv_write_log(LOG_INF, "* shm_meta.count : %ld", _shmmeta->count);
   wv_write_log(LOG_INF, "* shm_meta.shm_start_addr : %p", shm_start_addr);
-  wv_write_log(LOG_INF, "* shm_meta.shm_end_addr : %p", shm_start_addr + shm_meta->shm_total_size);
-  wv_write_log(LOG_INF, "* shm_meta.key : %ld", shm_meta->shm_key);
-  wv_write_log(LOG_INF, "* shm_meta.shm_junk_size : %ld", shm_meta->shm_junk_size);
-  wv_write_log(LOG_INF, "* shm_meta.shm_total_size : %ld", shm_meta->shm_total_size);
+  wv_write_log(LOG_INF, "* shm_meta.shm_end_addr : %p", shm_start_addr + _shmmeta->shm_totalsize);
+  wv_write_log(LOG_INF, "* shm_meta.key : %ld", _shmmeta->shm_key);
+  wv_write_log(LOG_INF, "* shm_meta.shm_junk_size : %ld", _shmmeta->shm_junk);
+  wv_write_log(LOG_INF, "* shm_meta.shm_total_size : %ld", _shmmeta->shm_totalsize);
 
   return ret;
 }
@@ -138,48 +141,148 @@ int wv_shm_init_meta(void* shm_start_addr)
 
   int ret = 0;
   int i = 0;
-  size_t page_size, shm_alloc_size = 0;
-  size_t cur_offs = 0;
+  size_t pagesize, shm_allocsize = 0;
+  size_t curroffset = 0;
 
-  shm_meta->shm_start_addr = shm_start_addr;
-  page_size = getpagesize();
-  shm_alloc_size = (SHM_TOTAL_SIZE / page_size) * page_size + page_size;
-  shm_meta->shm_end_addr = shm_meta->shm_start_addr + shm_alloc_size;
-  shm_meta->shm_total_size = shm_alloc_size;
-  memset(shm_meta->shm_start_addr, 0x00, sizeof(shm_alloc_size));
+  _shmmeta->shm_startaddr = shm_start_addr;
+  pagesize = getpagesize();
+  shm_allocsize = (SHM_TOTAL_SIZE / pagesize) * pagesize + pagesize;
+  _shmmeta->shm_endaddr = _shmmeta->shm_startaddr + shm_allocsize;
+  _shmmeta->shm_totalsize = shm_allocsize;
+  memset(_shmmeta->shm_startaddr, 0x00, sizeof(shm_allocsize));
 
   wv_write_log(LOG_INF, "Initailizing the shared memory meta structure...");
-  wv_write_log(LOG_INF, "shm_meta->count : %ld", shm_meta->count);
-  wv_write_log(LOG_INF, "shm_meta->shm_start_addr : %p", shm_meta->shm_start_addr);
-  wv_write_log(LOG_INF, "shm_meta->shm_end_addr : %p", shm_meta->shm_end_addr);
-  wv_write_log(LOG_INF, "shm_meta->key : %ld", shm_meta->shm_key);
-  wv_write_log(LOG_INF, "shm_meta->shm_junk_size : %ld", shm_meta->shm_junk_size);
-  wv_write_log(LOG_INF, "shm_meta->shm_total_size : %ld", shm_meta->shm_total_size);
+  wv_write_log(LOG_INF, "shm_meta->count : %ld", _shmmeta->count);
+  wv_write_log(LOG_INF, "shm_meta->shm_start_addr : %p", _shmmeta->shm_startaddr);
+  wv_write_log(LOG_INF, "shm_meta->shm_end_addr : %p", _shmmeta->shm_endaddr);
+  wv_write_log(LOG_INF, "shm_meta->key : %ld", _shmmeta->shm_key);
+  wv_write_log(LOG_INF, "shm_meta->shm_junk_size : %ld", _shmmeta->shm_junk);
+  wv_write_log(LOG_INF, "shm_meta->shm_total_size : %ld", _shmmeta->shm_totalsize);
 
   /* Split the section of shared memory */
-  cur_offs = sizeof(wv_shm_meta_t);
-  shm_meta->count = 0;
+  curroffset = sizeof(wv_shm_meta_t);
+  _shmmeta->count = 0;
 
   wv_write_log(LOG_INF, "Initailizing the shared memory junk queuere...");
-  for ( i=0; i < SHM_MAX_COUNT && ((shm_meta->shm_start_addr + cur_offs) < shm_meta->shm_end_addr); i++ ){
+  for ( i=0; i < SHM_MAX_COUNT && ((_shmmeta->shm_startaddr + curroffset) < _shmmeta->shm_endaddr); i++ ){
 
     wv_write_log(LOG_INF, "Initailizing shared memory junk[%d]", i);
-    wv_shm_junk_init(NULL, cur_offs, cur_offs + SHM_JUNK_SIZE);
-    shm_meta->arr_junk_hdr_offsets[i] = cur_offs;
-    cur_offs += SHM_JUNK_SIZE;
-    shm_meta->count++;
+    wv_shm_junk_init(NULL, curroffset, curroffset + SHM_JUNK_SIZE);
+    _shmmeta->arr_junkhdr_offsets[i] = curroffset;
+    curroffset += SHM_JUNK_SIZE;
+    _shmmeta->count++;
   }
 
   return ret;
 }
 
+
+int wv_shm_init_smphr(int quucnt, int is_init)
+{
+  wv_write_log(LOG_INF, "[ %s ]", __func__);
+
+  int ret = 0;
+  int i = 0;
+
+  wv_shm_quusmphr_t smphrunion;
+  smphrunion.val = quucnt;
+
+  if (!wv_shm_check_init()){
+
+    return ret = -1;
+  }
+
+  /* Remove previous the semaphores set. */
+  if (is_init){
+
+    if ((_semid = semget((key_t)SHM_SMPR_KEY, 0, 0660|IPC_CREAT|IPC_EXCL)) == -1){
+
+      wv_write_log(LOG_INF, "There was the semaphore set. (perror : %s)", strerror(errno));
+      semctl(_semid, 0, IPC_RMID);
+    }
+  }
+
+  if ( !_shmquusmphr ){
+
+    _shmquusmphr = malloc(sizeof(wv_shm_quusmphr_t));
+  }
+
+  /* Getting a semaphore set id by the key */
+  if ((_semid = semget((key_t)SHM_SMPR_KEY, quucnt, 0660|IPC_CREAT)) == -1){
+
+    wv_write_log(LOG_ERR, "semget() errror (perror : %s)", strerror(errno));
+    return ret = -1;
+  }
+
+  /* Initialize the semaphores */
+  for (i=0; i<quucnt; i++){
+
+    _shmquusmphr->val = 1;
+
+    if (semctl(_semid, i, SETVAL, smphrunion) == -1){
+
+      wv_write_log(LOG_ERR, "semctl() error (perror : %s)", strerror(errno));
+      return ret = -1;
+    }
+  }
+
+  return ret;
+}
+
+
+int wv_shm_lock_quu(int index){
+
+  wv_write_log(LOG_INF, "[ %s ]", __func__);
+
+  int ret = 0;
+  struct sembuf sem_open = {index, -1, SEM_UNDO};
+
+  if (index < 0){
+
+    wv_write_log(LOG_ERR, "the index value was smaller than 0...", index);
+    return ret = -1;
+  }
+
+  if (semop(_semid, &sem_open, 1) == -1){
+
+    wv_write_log(LOG_ERR, "Locking the semaphore was failed...(perror : %s)", strerror(errno));
+    return ret = -1;
+  }
+
+  return ret;
+}
+
+
+int wv_shm_unlock_quu(int index){
+
+  wv_write_log(LOG_INF, "[ %s ]", __func__);
+
+  int ret = 0;
+  struct sembuf sem_close = {index, 1, SEM_UNDO};
+
+  if (index < 0){
+
+    wv_write_log(LOG_ERR, "the index value was smaller than 0...", index);
+    return ret = -1;
+  }
+
+  if (semop(_semid, &sem_close, 1) == -1){
+
+    wv_write_log(LOG_ERR, "Unlocking the semaphore was failed...(perror : %s)", strerror(errno));
+    return ret = -1;
+  }
+
+  return ret;
+}
+
+
 int wv_shm_chk_offs(size_t offset){
 
   int ret = 1;
 
-  if ( shm_meta ){
+  if ( _shmmeta ){
 
-    if ( (shm_meta->shm_start_addr + offset) > shm_meta->shm_end_addr ){
+    if ( (_shmmeta->shm_startaddr + offset) > _shmmeta->shm_endaddr ){
       ret = -1;
     }
   }
@@ -195,15 +298,15 @@ int wv_shm_sync_meta()
   int ret = 0;
 
   wv_write_log(LOG_INF, "<The initailized shared meta data >");
-  wv_write_log(LOG_INF, "* shm_meta.count : %ld", shm_meta->count);
-  wv_write_log(LOG_INF, "* shm_meta.shm_start_addr : %p", shm_meta->shm_start_addr);
-  wv_write_log(LOG_INF, "* shm_meta.shm_end_addr : %p", shm_meta->shm_start_addr + shm_meta->shm_total_size);
-  wv_write_log(LOG_INF, "* shm_meta.key : %ld", shm_meta->shm_key);
-  wv_write_log(LOG_INF, "* shm_meta.shm_junk_size : %ld", shm_meta->shm_junk_size);
-  wv_write_log(LOG_INF, "* shm_meta.shm_total_size : %ld", shm_meta->shm_total_size);
+  wv_write_log(LOG_INF, "* shm_meta.count : %ld", _shmmeta->count);
+  wv_write_log(LOG_INF, "* shm_meta.shm_start_addr : %p", _shmmeta->shm_startaddr);
+  wv_write_log(LOG_INF, "* shm_meta.shm_end_addr : %p", _shmmeta->shm_startaddr + _shmmeta->shm_totalsize);
+  wv_write_log(LOG_INF, "* shm_meta.key : %ld", _shmmeta->shm_key);
+  wv_write_log(LOG_INF, "* shm_meta.shm_junk_size : %ld", _shmmeta->shm_junk);
+  wv_write_log(LOG_INF, "* shm_meta.shm_total_size : %ld", _shmmeta->shm_totalsize);
 
-  if ( shm_meta && wv_shm_wr( 0,
-			      shm_meta,
+  if ( _shmmeta && wv_shm_wr( 0,
+			      _shmmeta,
 			      sizeof(wv_shm_meta_t),
 			      NULL ) == NULL ){
 
@@ -217,68 +320,68 @@ int wv_shm_sync_meta()
 
 wv_shm_junk_hdr_t* wv_shm_find_junk(const char* junk_name)
 {
-  wv_shm_junk_hdr_t* ret_pshm_junk_hdr = NULL;
+  wv_shm_junk_hdr_t* ret_pjunkhdr = NULL;
   int i = 0;
 
-  if ( shm_meta ){
-    for(i = 0; i < shm_meta->count; i++){
+  if ( _shmmeta ){
+    for(i = 0; i < _shmmeta->count; i++){
 
-      ret_pshm_junk_hdr = shm_meta->shm_start_addr + shm_meta->arr_junk_hdr_offsets[i];
+      ret_pjunkhdr = _shmmeta->shm_startaddr + _shmmeta->arr_junkhdr_offsets[i];
 
-      if( ret_pshm_junk_hdr->is_assigned &&
-	  strncmp(ret_pshm_junk_hdr->shm_name, junk_name, strlen(junk_name)) == 0 )
-	{
-	  return ret_pshm_junk_hdr;
-	}
+      if( ret_pjunkhdr->is_assigned &&
+	  strncmp(ret_pjunkhdr->shm_name, junk_name, strlen(junk_name)) == 0 ){
+
+	return ret_pjunkhdr;
+      }
     }
   }
 
-  return ret_pshm_junk_hdr = NULL;
+  return ret_pjunkhdr = NULL;
 }
 
 
-wv_shm_junk_hdr_t* wv_shm_assign_junk(const char* junk_name)
+wv_shm_junk_hdr_t* wv_shm_assign_junk(const char* junkname)
 {
   wv_write_log(LOG_INF, "[ %s ]" , __func__);
 
-  wv_shm_junk_hdr_t* ret_pshm_junk_hdr = NULL;
+  wv_shm_junk_hdr_t* ret_pjunkhdr = NULL;
   int i = 0;
 
-  if ( shm_meta && junk_name ){
+  if ( _shmmeta && junkname ){
 
-    wv_write_log(LOG_INF, "The count of shm_meta : %d" , shm_meta->count);
+    wv_write_log(LOG_INF, "The count of shm_meta : %d" , _shmmeta->count);
 
-    for ( i = 0; i < shm_meta->count; i++ ){
-      wv_write_log(LOG_INF,"shm_meta->arr_junk_hdr_offsets[0] : %ld", shm_meta->arr_junk_hdr_offsets[i]);
-      wv_write_log(LOG_INF,"shm_meta->arr_junk_hdr_offsets[1] : %ld", shm_meta->arr_junk_hdr_offsets[i]);
+    for ( i = 0; i < _shmmeta->count; i++ ){
+      wv_write_log(LOG_INF,"shm_meta->arr_junk_hdr_offsets[0] : %ld", _shmmeta->arr_junkhdr_offsets[i]);
+      wv_write_log(LOG_INF,"shm_meta->arr_junk_hdr_offsets[1] : %ld", _shmmeta->arr_junkhdr_offsets[i]);
 
-      ret_pshm_junk_hdr = shm_meta->shm_start_addr + shm_meta->arr_junk_hdr_offsets[i];
-      wv_write_log(LOG_INF,"shm_junk_hdr : %p", ret_pshm_junk_hdr);
-      wv_write_log(LOG_INF,"shm_junk_hdr->quu_start_offset : %ld", ret_pshm_junk_hdr->quu_start_offset);
-      wv_write_log(LOG_INF,"shm_junk_hdr->quu_end_offset : %ld", ret_pshm_junk_hdr->quu_end_offset);
+      ret_pjunkhdr = _shmmeta->shm_startaddr + _shmmeta->arr_junkhdr_offsets[i];
+      wv_write_log(LOG_INF,"shm_junk_hdr : %p", ret_pjunkhdr);
+      wv_write_log(LOG_INF,"shm_junk_hdr->quu_start_offset : %ld", ret_pjunkhdr->quu_startoffs);
+      wv_write_log(LOG_INF,"shm_junk_hdr->quu_end_offset : %ld", ret_pjunkhdr->quu_endoffs);
 
-      if(wv_shm_find_junk(junk_name)){
+      if(wv_shm_find_junk(junkname)){
 
 	wv_write_log(LOG_WRN, "When the shared memory junk assigned, "
 		     "The junk having the same name was existing.");
-	ret_pshm_junk_hdr = NULL; goto ret_wv_shm_assign_junk;
+	ret_pjunkhdr = NULL; goto ret_wv_shm_assign_junk;
       }
 
-      if ( ret_pshm_junk_hdr->is_assigned == 0 ){
+      if ( ret_pjunkhdr->is_assigned == 0 ){
 
-      	ret_pshm_junk_hdr->is_assigned = 1;
-      	snprintf(ret_pshm_junk_hdr->shm_name, 256, "%s", junk_name);
+      	ret_pjunkhdr->is_assigned = 1;
+      	snprintf(ret_pjunkhdr->shm_name, 256, "%s", junkname);
 
-	wv_write_log(LOG_INF, "%p", ret_pshm_junk_hdr);
-      	wv_shm_clear_junk(ret_pshm_junk_hdr);
+	wv_write_log(LOG_INF, "%p", ret_pjunkhdr);
+      	wv_shm_clear_junk(ret_pjunkhdr);
 
-      	return ret_pshm_junk_hdr;
+      	return ret_pjunkhdr;
       }
       else{
 
 	wv_write_log(LOG_INF, "When we try to assign the shared memory junk,"
 		     "the is_assigned attribute was 1 (it means assigned...)");
-	ret_pshm_junk_hdr = NULL; goto ret_wv_shm_assign_junk;
+	ret_pjunkhdr = NULL; goto ret_wv_shm_assign_junk;
       }
     }
   }
@@ -289,102 +392,114 @@ wv_shm_junk_hdr_t* wv_shm_assign_junk(const char* junk_name)
 
  ret_wv_shm_assign_junk:
 
-  return ret_pshm_junk_hdr;
+  return ret_pjunkhdr;
 }
 
 
-wv_shm_junk_hdr_t* wv_shm_unassign_junk(wv_shm_meta_t* shm_meta, const char* junk_name)
+wv_shm_junk_hdr_t* wv_shm_unassign_junk(const char* junkname)
 {
   wv_write_log(LOG_INF, "[ %s ]\n" , __func__);
 
-  if (shm_meta == NULL){
-    wv_write_log(LOG_INF, "Please initailize the shared memory with wv_shm_init()...");
-    return NULL;
-  }
-
-  wv_shm_junk_hdr_t* ret_pshm_junk_hdr = NULL;
+  wv_shm_junk_hdr_t* ret_pjunkhdr = NULL;
   int i = 0;
 
-  if ( shm_meta ){
+  if ( _shmmeta ){
 
-    for ( i = 0; i < shm_meta->count; i++ ){
-      ret_pshm_junk_hdr = shm_meta->shm_start_addr + shm_meta->arr_junk_hdr_offsets[i];
+    for ( i = 0; i < _shmmeta->count; i++ ){
+      ret_pjunkhdr = _shmmeta->shm_startaddr + _shmmeta->arr_junkhdr_offsets[i];
 
-      if ( ret_pshm_junk_hdr->is_assigned == 1  &&
-	   strncmp(ret_pshm_junk_hdr->shm_name, junk_name, strlen(junk_name)) == 0 ){
+      if ( ret_pjunkhdr->is_assigned == 1  &&
+	   strncmp(ret_pjunkhdr->shm_name, junkname, strlen(junkname)) == 0 ){
 
-	ret_pshm_junk_hdr->is_assigned = 0;
-	strcpy(ret_pshm_junk_hdr->shm_name, "");
+	ret_pjunkhdr->is_assigned = 0;
+	strcpy(ret_pjunkhdr->shm_name, "");
 
-	wv_shm_clear_junk(ret_pshm_junk_hdr);
+	wv_shm_clear_junk(ret_pjunkhdr);
 
-	return ret_pshm_junk_hdr;
+	return ret_pjunkhdr;
       }
     }
   }
 
-  return ( ret_pshm_junk_hdr = NULL );
+  return ( ret_pjunkhdr = NULL );
 }
 
+
+int wv_shm_get_junk_index(wv_shm_junk_hdr_t* junkhdr){
+
+  int ret = -1;
+  int i = 0;
+
+  for (i=0; i<_shmmeta->count; i++){
+
+    if (_shmmeta->arr_junkhdr_offsets[i] == junkhdr->startoffs){
+      wv_write_log(LOG_INF, "find index : %ld", i);
+      return ret;
+    }
+  }
+
+  return ret;
+}
 
 
 wv_shm_junk_hdr_t** wv_shm_get_junk_list(){
 
-  wv_shm_junk_hdr_t** ret_junk_hdr_list = NULL;
-  wv_shm_junk_hdr_t* pjunk_hdr = NULL;
+  wv_shm_junk_hdr_t** ret_pjunkhdr_list = NULL;
+  wv_shm_junk_hdr_t* pjunkhdr = NULL;
   int i = 0;
 
   if (!wv_shm_check_init()){
+
     return NULL;
   }
 
-  ret_junk_hdr_list = (wv_shm_junk_hdr_t**)malloc(sizeof(wv_shm_junk_hdr_t*) * (shm_meta->count + 1));
-  memset(ret_junk_hdr_list, 0x00, sizeof(wv_shm_junk_hdr_t*) * (shm_meta->count + 1));
+  ret_pjunkhdr_list = (wv_shm_junk_hdr_t**)malloc(sizeof(wv_shm_junk_hdr_t*) * (_shmmeta->count + 1));
+  memset(ret_pjunkhdr_list, 0x00, sizeof(wv_shm_junk_hdr_t*) * (_shmmeta->count + 1));
 
-  for(i = 0; i<shm_meta->count; i++){
-    pjunk_hdr = shm_meta->shm_start_addr + shm_meta->arr_junk_hdr_offsets[i];
+  for(i = 0; i<_shmmeta->count; i++){
+    pjunkhdr = _shmmeta->shm_startaddr + _shmmeta->arr_junkhdr_offsets[i];
 
-    (*(ret_junk_hdr_list+i)) = (wv_shm_junk_hdr_t*)malloc(sizeof(wv_shm_junk_hdr_t));
-    snprintf((*(ret_junk_hdr_list+i))->shm_name, 256, "%s", pjunk_hdr->shm_name);
-    (*(ret_junk_hdr_list+i))->count = pjunk_hdr->count;
-    (*(ret_junk_hdr_list+i))->is_assigned = pjunk_hdr->is_assigned;
-    (*(ret_junk_hdr_list+i))->prev_write_offset = pjunk_hdr->prev_write_offset;
-    (*(ret_junk_hdr_list+i))->quu_start_offset = pjunk_hdr->quu_start_offset;
-    (*(ret_junk_hdr_list+i))->quu_end_offset = pjunk_hdr->quu_end_offset;
-    (*(ret_junk_hdr_list+i))->read_offset = pjunk_hdr->read_offset;
-    (*(ret_junk_hdr_list+i))->remain_size = pjunk_hdr->remain_size;
-    (*(ret_junk_hdr_list+i))->start_offset = pjunk_hdr->start_offset;
-    (*(ret_junk_hdr_list+i))->write_offset = pjunk_hdr->write_offset;
+    (*(ret_pjunkhdr_list+i)) = (wv_shm_junk_hdr_t*)malloc(sizeof(wv_shm_junk_hdr_t));
+    snprintf((*(ret_pjunkhdr_list+i))->shm_name, 256, "%s", pjunkhdr->shm_name);
+    (*(ret_pjunkhdr_list+i))->count = pjunkhdr->count;
+    (*(ret_pjunkhdr_list+i))->is_assigned = pjunkhdr->is_assigned;
+    (*(ret_pjunkhdr_list+i))->prev_writeoffs = pjunkhdr->prev_writeoffs;
+    (*(ret_pjunkhdr_list+i))->quu_startoffs = pjunkhdr->quu_startoffs;
+    (*(ret_pjunkhdr_list+i))->quu_endoffs = pjunkhdr->quu_endoffs;
+    (*(ret_pjunkhdr_list+i))->readoffs = pjunkhdr->readoffs;
+    (*(ret_pjunkhdr_list+i))->remainsz = pjunkhdr->remainsz;
+    (*(ret_pjunkhdr_list+i))->startoffs = pjunkhdr->startoffs;
+    (*(ret_pjunkhdr_list+i))->writeoffs = pjunkhdr->writeoffs;
   }
 
-  (*(ret_junk_hdr_list + (shm_meta->count+1))) = NULL;
+  (*(ret_pjunkhdr_list + (_shmmeta->count+1))) = NULL;
 
-  return ret_junk_hdr_list;
+  return ret_pjunkhdr_list;
 }
 
 
-void wv_shm_free_junk_list(wv_shm_junk_hdr_t** junk_hdr_list){
+void wv_shm_free_junk_list(wv_shm_junk_hdr_t** junkhdr_list){
 
   int i = 0;
 
-  if ( junk_hdr_list ){
+  if ( junkhdr_list ){
 
-    for (i = 0; junk_hdr_list[i]; i++){
+    for (i = 0; junkhdr_list[i]; i++){
 
-      if(junk_hdr_list[i]){
+      if(junkhdr_list[i]){
 
-	free(junk_hdr_list[i]);
+	free(junkhdr_list[i]);
       }
     }
   }
 
-  if (junk_hdr_list){
-    free(junk_hdr_list);
+  if (junkhdr_list){
+    free(junkhdr_list);
   }
 }
 
 
-int wv_shm_clear_junk(wv_shm_junk_hdr_t* shm_junk_hdr)
+int wv_shm_clear_junk(wv_shm_junk_hdr_t* junkhdr)
 {
   wv_write_log(LOG_INF, "[ %s ]" , __func__);
 
@@ -397,25 +512,25 @@ int wv_shm_clear_junk(wv_shm_junk_hdr_t* shm_junk_hdr)
     return ret;
   }
 
-  if ( shm_junk_hdr ){
+  if ( junkhdr ){
 
-    if ( shm_junk_hdr &&
-	 shm_junk_hdr->quu_start_offset &&
-	 shm_junk_hdr->quu_end_offset ){
+    if ( junkhdr &&
+	 junkhdr->quu_startoffs &&
+	 junkhdr->quu_endoffs ){
 
-	memset( (shm_meta->shm_start_addr + shm_junk_hdr->quu_start_offset),
+	memset( (_shmmeta->shm_startaddr + junkhdr->quu_startoffs),
 	        0x00,
-		shm_junk_hdr->quu_end_offset - shm_junk_hdr->quu_start_offset );
+		junkhdr->quu_endoffs - junkhdr->quu_startoffs );
 
-	shm_junk_hdr->write_offset = shm_junk_hdr->quu_start_offset;
-	shm_junk_hdr->read_offset = shm_junk_hdr->quu_start_offset;
-	shm_junk_hdr->prev_write_offset = 0;
-	shm_junk_hdr->remain_size =  shm_junk_hdr->quu_end_offset - shm_junk_hdr->quu_start_offset;
-	shm_junk_hdr->count = 0;
+	junkhdr->writeoffs = junkhdr->quu_startoffs;
+	junkhdr->readoffs = junkhdr->quu_startoffs;
+	junkhdr->prev_writeoffs = 0;
+	junkhdr->remainsz =  junkhdr->quu_endoffs - junkhdr->quu_startoffs;
+	junkhdr->count = 0;
 
-	wv_write_log(LOG_INF,"shm_junk_hdr : %p", shm_junk_hdr);
-	wv_write_log(LOG_INF,"shm_junk_hdr->quu_start_offset : %ld", shm_junk_hdr->quu_start_offset);
-	wv_write_log(LOG_INF,"shm_junk_hdr->quu_end_offset : %ld", shm_junk_hdr->quu_end_offset);
+	wv_write_log(LOG_INF,"shm_junk_hdr : %p", junkhdr);
+	wv_write_log(LOG_INF,"shm_junk_hdr->quu_start_offset : %ld", junkhdr->quu_startoffs);
+	wv_write_log(LOG_INF,"shm_junk_hdr->quu_end_offset : %ld", junkhdr->quu_endoffs);
     }
     else{
 
@@ -431,70 +546,90 @@ int wv_shm_clear_junk(wv_shm_junk_hdr_t* shm_junk_hdr)
 }
 
 
-int wv_shm_dump_junk(const char* junk_name, const char* dir_name, const char* file_name)
+int wv_shm_dump_junk(const char* junkname, const char* dirname)
 {
-  wv_write_log(LOG_INF, "[ %s ]\n" , __func__);
+  wv_write_log(LOG_INF, "[ %s ]" , __func__);
 
   int ret = 0;
-  int wr_buf_size = 8192;
-  char full_path[8192] = {0};
-  void* cur_pos = NULL;
+  int wr_bufsz = 8192;
+  char fullpath[8192] = {0};
+  void* curpos = NULL;
   FILE* pfile = NULL;
   const char* dlmt = "/";
   wv_shm_junk_hdr_t* junk_hdr = NULL;
   int nwrite = 0;
+  int dumpseq = 0;
+  int mgcnt = 1000;
 
 
   /* Find if there is shm_junk existing or not. */
-  if ( (junk_hdr = wv_shm_find_junk(junk_name)) == NULL ){
+  if ( (junk_hdr = wv_shm_find_junk(junkname)) == NULL ){
 
-    wv_write_log(LOG_INF, "Counldnt find the shared memory junk having same name..." );
+    wv_write_log(LOG_WRN, "Counldnt find the shared memory junk having same name..." );
     ret = -1; goto wv_shm_dump_junk_ret;
   }
 
-  /* Find if there is a file having the same name or not. */
-  snprintf( full_path, 8192, "%s%s%s", dir_name, dlmt, file_name );
-  wv_write_log(LOG_INF, "Checking if there is the file existing...(file path : %s)", full_path);
-  if ( access(full_path, F_OK) == 0 ){
+  /* Check the directory exsited */
+  if (access(dirname, F_OK) != 0){
 
-    wv_write_log(LOG_INF, "There is a file existing..." );
+    wv_write_log(LOG_ERR, "The directory not existed..." );
+    ret = -1; goto wv_shm_dump_junk_ret;
+  }
+
+  /* Make the path to write the shared memory dump.  */
+  /* If the same name of path existed, Add a sequance to the file name. */
+  snprintf( fullpath, 8192, "%s%s%s.sdmp", dirname, dlmt, junkname );
+  for (dumpseq=0;
+       (access(fullpath, F_OK) == 0) && dumpseq < mgcnt;
+       dumpseq++){
+
+    wv_write_log(LOG_INF, "Previous the shared memory dump file "
+		 "having same path existed. (file path : %s)", fullpath );
+
+    snprintf(fullpath, 8192, "%s%s%s_%d.sdmp", dirname, dlmt, junkname, dumpseq);
+  }
+
+  /* Dump the founded shm_junk to a file. */
+  if ( (pfile = fopen(fullpath, "wb")) == NULL ){
+
+    wv_write_log(LOG_INF, "Couldnt open the file with wb mode..." );
     ret = -1; goto wv_shm_dump_junk_ret;
   }
   else{
+    /* Dump the founed shm_junk to a file. */
+    if ( junk_hdr->startoffs ){
+      curpos = _shmmeta->shm_startaddr+ junk_hdr->startoffs;
+      /* wv_shm_junk_hdr_t* hdr_curr = curpos; */
+      /* wv_write_log(LOG_INF, "write start addr : %p...", curpos); */
+      /* wv_write_log(LOG_INF, "hdr_curr->count : %ld", hdr_curr->count); */
 
-    /* Dump the founded shm_junk to a file. */
-    if ( (pfile = fopen(full_path, "wb")) == NULL ){
+      while( 1 ){
+	/* wv_write_log(LOG_INF, "write start addr : %p...", curpos); */
 
-      wv_write_log(LOG_INF, "Couldnt open the file with wb mode..." );
+	if ((curpos + wr_bufsz) > _shmmeta->shm_startaddr + junk_hdr->quu_endoffs){
+
+	  nwrite = fwrite(curpos, sizeof(char),
+			  (_shmmeta->shm_startaddr + junk_hdr->quu_endoffs) - curpos,
+			  pfile);
+	  break;
+	}
+	else{
+	
+	  nwrite = fwrite(curpos, sizeof(char), wr_bufsz, pfile);
+	}
+	curpos += nwrite;
+      }
+    }
+    else{
+      wv_write_log(LOG_INF, "the offset of the junk_hdr was 0..." );
       ret = -1; goto wv_shm_dump_junk_ret;
     }
   }
 
-  /* Dump the founed shm_junk to a file. */
-  if ( junk_hdr->start_offset ){
-
-    cur_pos = shm_meta->shm_start_addr+ junk_hdr->start_offset;
-
-    while( 1 ){
-
-      if ((cur_pos + wr_buf_size) > shm_meta->shm_start_addr + junk_hdr->quu_end_offset){
-
-	fwrite(cur_pos, sizeof(char), (shm_meta->shm_start_addr + junk_hdr->quu_end_offset) - cur_pos, pfile);
-	break;
-      }
-      else{
-
-	nwrite = fwrite(cur_pos, sizeof(char), wr_buf_size, pfile);
-      }
-      cur_pos += nwrite;
-    }
-  }
 
   if (pfile){
-
     fclose(pfile);
   }
-
 
  wv_shm_dump_junk_ret:
 
@@ -502,101 +637,192 @@ int wv_shm_dump_junk(const char* junk_name, const char* dir_name, const char* fi
 }
 
 
-int wv_shm_load_junk(const char* dir_name, const char* file_name)
+wv_shm_junk_hdr_t* wv_shm_load_junk(const char* dirname, const char* junkname)
 {
+  wv_write_log(LOG_INF, "[ %s ]", __func__);
+
   int ret = 0;
   int i = 0;
-  char file_path[8192] = {0};
+  char fullpath[8192] = {0};
 
-  char* delimit = "/";
-  FILE* pfile_dump = NULL;
-  size_t size_file = 0;
-  int idx_assigned_junk = 0;
+  char* dlmt = "/";
+  FILE* pfile = NULL;
+  size_t filesz = 0;
+  int idx_assigned = -1;
 
-  void *addr_start = NULL;
-  void *addr_end = NULL;
-  void *addr_curr = NULL;
+  DIR* pdir = NULL;
+  struct dirent* pentry = NULL;
+  char* ext = NULL;
+
+  void *startaddr = NULL;
+  void *endaddr = NULL;
+  void *curraddr = NULL;
 
   int nread = 0;
 
-  wv_shm_junk_hdr_t* pjunk_hdr = NULL;
+  wv_shm_junk_hdr_t* ret_pjunkhdr = NULL;
 
-  if (shm_meta){
+  if (_shmmeta){
 
     /* Check if there is file existing. */
-    snprintf(file_path, 8192, "%s%s%s", dir_name, delimit, file_name);
+    snprintf(fullpath, 8192, "%s%s%s.sdmp", dirname, dlmt, junkname);
 
-    if (access(dir_name, F_OK) != 0){
-    
-      wv_write_log(LOG_ERR, "There is a file not exists... (file_path : %s)", file_path);
-      ret = -1; goto wv_shm_load_junk;
+    pdir = opendir(dirname);
+
+    if(pdir){
+
+      while((pentry = readdir(pdir))){
+
+	ext = strrchr(pentry->d_name, '.');
+
+	if ( ext && strncmp(pentry->d_name, ext, strlen(pentry->d_name))) { 
+
+	  if ( strncmp(ext, ".sdmp", strlen(".sdmp")) == 0 ){
+
+	    if ( strncmp(pentry->d_name, junkname, strlen(junkname)) == 0 ){
+	      wv_write_log(LOG_ERR, "We the junk file having the same name. (pentry->d_name : %s)", pentry->d_name);
+	      snprintf(fullpath, 8192, "%s%s%s", dirname, dlmt, pentry->d_name);
+
+	      break;
+	    }
+	  }
+	}
+	else{
+
+	  wv_write_log(LOG_ERR, "Not have ext...(%s)", pentry->d_name);
+	}
+	sprintf(fullpath, "");
+      }
+
+      if (pdir){
+
+	closedir(pdir);
+      }
+    }
+    else{
+      wv_write_log(LOG_ERR, "There is no the directory you want... (dir_path : %s)", dirname);
+      ret = -1; goto ret_wv_shm_load_junk;
     }
 
     /* Open the dump file. */
-    if ((pfile_dump = fopen(file_path, "rb")) == NULL){
+    if ((pfile = fopen(fullpath, "rb")) == NULL){
 
-      wv_write_log(LOG_ERR, "Opening the file was failed... (file_path : %s)", file_path);
-      ret = -1; goto wv_shm_load_junk;
+      wv_write_log(LOG_ERR, "Getting the shared memory junk file matching with the junk_name(%s)"
+		   "was failed...(file_path : %s)", junkname, fullpath);
+
+      ret = -1; goto ret_wv_shm_load_junk;
     }
 
     /* Check if the size of the dump file is larger then the reserved junk size. */
-    size_file = fseek(pfile_dump, 0, SEEK_END);
-    if (shm_meta->shm_junk_size < size_file){
+    filesz = fseek(pfile, 0, SEEK_END);
+    if (_shmmeta->shm_junk < filesz){
 
-      wv_write_log(LOG_ERR, "Opening the file was failed... (file_path : %s)", file_path);
+      wv_write_log(LOG_ERR, "Opening the file was failed... (file_path : %s)", fullpath);
 
-      if (pfile_dump){
+      if (pfile){
 
-	fclose(pfile_dump);
+	fclose(pfile);
       }
-      ret = -1; goto wv_shm_load_junk;
-    
-    }
-    fseek(pfile_dump, 0, SEEK_SET);
-
-    for ( i=0; i<shm_meta->count; i++ ){
-
-      pjunk_hdr = shm_meta->shm_start_addr + shm_meta->arr_junk_hdr_offsets[i];
-
-      idx_assigned_junk = i;
-
-
-      if ( pjunk_hdr->is_assigned == 0 ){
-
-	pjunk_hdr->is_assigned = 1;
-	wv_shm_clear_junk(pjunk_hdr);
-
-	snprintf(pjunk_hdr->shm_name, 256, "%s", file_name);
-	addr_end = shm_meta->shm_start_addr + pjunk_hdr->quu_end_offset;
-	addr_start = shm_meta->shm_start_addr + pjunk_hdr->start_offset;
-	addr_curr = addr_start;
-
-      }
+      ret = -1; goto ret_wv_shm_load_junk;
     }
 
+    fseek(pfile, 0, SEEK_SET);
 
-    while((nread = fread(addr_curr, 8192, sizeof(char), pfile_dump)) > 0){ }
+    /* Checking if There is the same name of the shared memory junk */
+    for ( i=0; i<_shmmeta->count; i++){
+
+      ret_pjunkhdr = _shmmeta->shm_startaddr + _shmmeta->arr_junkhdr_offsets[i];
+
+      if ( strncmp(ret_pjunkhdr->shm_name, junkname, strlen(junkname)) == 0 ){
+
+	wv_write_log(LOG_WRN, "There is a shared memory junk having same name (file_name : %s)", junkname);
+
+	endaddr = _shmmeta->shm_startaddr + ret_pjunkhdr->quu_endoffs;
+	startaddr = _shmmeta->shm_startaddr + ret_pjunkhdr->startoffs;
+	curraddr = startaddr;
+
+	break;
+      }
+
+      if ( ret_pjunkhdr ) {
+	ret_pjunkhdr = NULL;
+      }
+    }
+
+    if (ret_pjunkhdr == NULL){
+
+      /* If a pjunk_hdr were NULL, There was no the shared memory having same name. */
+      /* So we should have get a unassigned shared memory and assign it with the getted junk file. */
+      for ( i=0; i<_shmmeta->count; i++ ){
+
+	ret_pjunkhdr = _shmmeta->shm_startaddr + _shmmeta->arr_junkhdr_offsets[i];
+	
+	if ( ret_pjunkhdr->is_assigned == 0 ){
+
+	  wv_write_log(LOG_INF, "We found the unassigned shared memory junk (index : %d)", i);
+	  idx_assigned = i;
+
+	  ret_pjunkhdr->is_assigned = 1;
+	  /* wv_shm_clear_junk(ret_pjunk_hdr); */
+
+	  snprintf(ret_pjunkhdr->shm_name, 256, "%s", junkname);
+
+	  wv_write_log(LOG_INF, "Start address of queue : %p", _shmmeta->shm_startaddr);
+	  wv_write_log(LOG_INF, "Start address of queue : %p", _shmmeta->shm_startaddr);
+
+	  endaddr = _shmmeta->shm_startaddr + ret_pjunkhdr->quu_endoffs;
+	  startaddr = _shmmeta->shm_startaddr + ret_pjunkhdr->startoffs;
+	  curraddr = startaddr;
+
+	  break;
+	}
+
+	ret_pjunkhdr = NULL;
+      }
+    }
+
+    /* Load the dump file to the main memory */
+    if (ret_pjunkhdr){
+
+      /* wv_shm_clear_junk(ret_pjunk_hdr); */
+
+      wv_write_log(LOG_INF, "Start address of queue : %p", curraddr);
+
+      if(pfile){
+
+	while((nread = fread(curraddr, sizeof(char), 8192, pfile)) > 0){
+	  curraddr += nread;
+	}
+      }
+      else{
+	wv_write_log(LOG_WRN, "pfile_dump is NULL.");
+      }
+    }
+    else{
+
+      wv_write_log(LOG_WRN, "We coulnt the available shared memory junk.");
+    }
   }
 
- wv_shm_load_junk:
-  return ret;
+ ret_wv_shm_load_junk:
+  return ret_pjunkhdr;
 }
 
 
-int wv_shm_junk_init(char* shm_junk_name, size_t start_offs, size_t end_offs)
+int wv_shm_junk_init(char* junkname, size_t startoffs, size_t endoffs)
 {
   wv_write_log(LOG_INF, "[ %s ]" , __func__);
 
   int ret = 0;
 
-  int available_size = end_offs - start_offs;
+  int usablesz = endoffs - startoffs;
 
-  wv_shm_junk_hdr_t junk_hdr;
-  wv_shm_junk_hdr_t* pjunk_hdr = NULL;
+  wv_shm_junk_hdr_t junkhdr;
+  wv_shm_junk_hdr_t* pjunkhdr = NULL;
 
-  memset(&junk_hdr, 0x00, sizeof(wv_shm_junk_hdr_t));
+  memset(&junkhdr, 0x00, sizeof(wv_shm_junk_hdr_t));
 
-  if ( available_size < sizeof(wv_shm_junk_hdr_t) )
+  if ( usablesz < sizeof(wv_shm_junk_hdr_t) )
   {
     ret = -1;
     wv_write_log(LOG_ERR, "When write shared memory junk header to shared memory, "
@@ -605,33 +831,33 @@ int wv_shm_junk_init(char* shm_junk_name, size_t start_offs, size_t end_offs)
   }
 
   /* Write the junk header information to shared memory */
-  junk_hdr.start_offset = start_offs;
-  junk_hdr.quu_start_offset = start_offs + sizeof(wv_shm_junk_hdr_t);
-  junk_hdr.quu_end_offset = end_offs;
-  junk_hdr.write_offset = junk_hdr.read_offset = start_offs;
-  junk_hdr.prev_write_offset = 0;
-  junk_hdr.remain_size = end_offs - (start_offs + sizeof(wv_shm_junk_hdr_t));
-  junk_hdr.count = 0;
+  junkhdr.startoffs = startoffs;
+  junkhdr.quu_startoffs = startoffs + sizeof(wv_shm_junk_hdr_t);
+  junkhdr.quu_endoffs = endoffs;
+  junkhdr.writeoffs = junkhdr.readoffs = startoffs;
+  junkhdr.prev_writeoffs = 0;
+  junkhdr.remainsz = endoffs - (startoffs + sizeof(wv_shm_junk_hdr_t));
+  junkhdr.count = 0;
 
-  if (wv_shm_wr(start_offs, &junk_hdr, sizeof(wv_shm_junk_hdr_t), NULL) == NULL){
+  if (wv_shm_wr(startoffs, &junkhdr, sizeof(wv_shm_junk_hdr_t), NULL) == NULL){
 
     ret = -1;
     wv_write_log(LOG_ERR, "Writing the shared memory junk was failed...");
     goto wv_shm_junk_init_ret;
   }
 
-  pjunk_hdr = shm_meta->shm_start_addr + start_offs;
+  pjunkhdr = _shmmeta->shm_startaddr + startoffs;
 
-  wv_write_log(LOG_INF, "addr of shm_junk : %p", shm_meta->shm_start_addr + pjunk_hdr->start_offset);
-  wv_write_log(LOG_INF, "junk_hdr->shm_name : %s", pjunk_hdr->shm_name);
-  wv_write_log(LOG_INF, "junk_hdr->is_assigned : %d", pjunk_hdr->is_assigned);
-  wv_write_log(LOG_INF, "junk_hdr->start_offset : %ld", pjunk_hdr->start_offset);
-  wv_write_log(LOG_INF, "junk_hdr->quu_start_offset : %ld", pjunk_hdr->quu_start_offset);
-  wv_write_log(LOG_INF, "junk_hdr->quu_end_offset : %ld", pjunk_hdr->quu_end_offset );
-  wv_write_log(LOG_INF, "junk_hdr->write_offset : %ld", pjunk_hdr->write_offset);
-  wv_write_log(LOG_INF, "junk_hdr->prev_write_offset : %ld", pjunk_hdr->prev_write_offset);
-  wv_write_log(LOG_INF, "junk_hdr->remain_size : %ld", pjunk_hdr->remain_size);
-  wv_write_log(LOG_INF, "junk_hdr->count : %ld", pjunk_hdr->count);
+  wv_write_log(LOG_INF, "addr of shm_junk : %p", _shmmeta->shm_startaddr + pjunkhdr->startoffs);
+  wv_write_log(LOG_INF, "junk_hdr->shm_name : %s", pjunkhdr->shm_name);
+  wv_write_log(LOG_INF, "junk_hdr->is_assigned : %d", pjunkhdr->is_assigned);
+  wv_write_log(LOG_INF, "junk_hdr->start_offset : %ld", pjunkhdr->startoffs);
+  wv_write_log(LOG_INF, "junk_hdr->quu_start_offset : %ld", pjunkhdr->quu_startoffs);
+  wv_write_log(LOG_INF, "junk_hdr->quu_end_offset : %ld", pjunkhdr->quu_endoffs );
+  wv_write_log(LOG_INF, "junk_hdr->write_offset : %ld", pjunkhdr->writeoffs);
+  wv_write_log(LOG_INF, "junk_hdr->prev_write_offset : %ld", pjunkhdr->prev_writeoffs);
+  wv_write_log(LOG_INF, "junk_hdr->remain_size : %ld", pjunkhdr->remainsz);
+  wv_write_log(LOG_INF, "junk_hdr->count : %ld", pjunkhdr->count);
 
  wv_shm_junk_init_ret:
 
@@ -639,38 +865,38 @@ int wv_shm_junk_init(char* shm_junk_name, size_t start_offs, size_t end_offs)
 }
 
 
-void* wv_shm_wr(size_t start_offs, void* data, size_t size, size_t *next_offs)
+void* wv_shm_wr(size_t strtoffs, void* data, size_t size, size_t *nextoffs)
 {
-  void* write_addr = NULL;
-  void* ret_memcpy = NULL;
+  void* ret_wraddr = NULL;
+  void* mcpyaddr = NULL;
 
   wv_write_log(LOG_INF, "[ %s ]", __func__);
 
-  if ( shm_meta && shm_meta->shm_start_addr ){
+  if ( _shmmeta && _shmmeta->shm_startaddr ){
 
-    write_addr = shm_meta->shm_start_addr + start_offs;
-    if ( write_addr > shm_meta->shm_end_addr ){
+    ret_wraddr = _shmmeta->shm_startaddr + strtoffs;
+    if ( ret_wraddr > _shmmeta->shm_endaddr ){
 
       wv_write_log(LOG_ERR, "The address to write was higher than end address.");
-      write_addr = NULL;
+      ret_wraddr = NULL;
       goto wv_shm_wr_elem_ret;
     }
 
-    if ( write_addr + size > shm_meta->shm_end_addr ){
+    if ( ret_wraddr + size > _shmmeta->shm_endaddr ){
 
       wv_write_log(LOG_ERR, "The address after write was higher than end address.");
-      write_addr = NULL;
+      ret_wraddr = NULL;
       goto wv_shm_wr_elem_ret;
     }
 
-    if ( (ret_memcpy = memcpy(write_addr, data, size)) ) {
+    if ( (mcpyaddr = memcpy(ret_wraddr, data, size)) ) {
 
-      if ( write_addr != ret_memcpy ) {
+      if ( ret_wraddr != mcpyaddr ) {
 	wv_write_log(LOG_WRN, "The address returned by memcpy was not equaled with write_addr.");
       }
 
-      if (next_offs) {
-	*next_offs = start_offs + size;
+      if (nextoffs) {
+	*nextoffs = strtoffs + size;
       }
     }
     else{
@@ -680,42 +906,43 @@ void* wv_shm_wr(size_t start_offs, void* data, size_t size, size_t *next_offs)
 
  wv_shm_wr_elem_ret:
 
-  return write_addr;
+  return ret_wraddr;
 }
 
 
-void* wv_shm_push_elem(wv_shm_junk_hdr_t* shm_junk_hdr, void* data, size_t size)
+
+void* wv_shm_push_elem(wv_shm_junk_hdr_t* junkhdr, void* data, size_t size)
 {
-  void* ret_alloc_addr = NULL;
-  wv_shm_junk_elem_hdr_t elem_hdr;
-  void* write_addr = NULL;
-  size_t offs_after_write = 0;
+  void* ret_allocaddr = NULL;
+  wv_shm_junk_elem_hdr_t elemhdr;
+  void* wraddr = NULL;
+  size_t offs_afterwrite = 0;
 
   wv_write_log(LOG_INF, "[ %s ]" , __func__);
 
-  if (shm_meta == NULL){
+  if (_shmmeta == NULL){
     wv_write_log(LOG_INF, "Please initailize the shared memory with wv_shm_init()...");
-    ret_alloc_addr = NULL;
+    ret_allocaddr = NULL;
     goto wv_shm_wr_elem_ret;
   }
 
-  wv_write_log(LOG_INF, "shm_junk_hdr : %p", shm_junk_hdr);
-  wv_write_log(LOG_INF, "shm_junk_hdr : %ld", shm_junk_hdr->start_offset);
-  wv_write_log(LOG_INF, "shm_junk_hdr : %ld", shm_junk_hdr->write_offset);
-  wv_write_log(LOG_INF, "shm_junk_hdr : %ld", shm_junk_hdr->quu_start_offset);
-  wv_write_log(LOG_INF, "shm_junk_hdr : %ld", shm_junk_hdr->quu_end_offset);
-  if (shm_junk_hdr &&
-      shm_junk_hdr->write_offset &&
-      shm_junk_hdr->quu_start_offset &&
-      shm_junk_hdr->quu_end_offset)
+  wv_write_log(LOG_INF, "shm_junk_hdr : %p", junkhdr);
+  wv_write_log(LOG_INF, "shm_junk_hdr : %ld", junkhdr->startoffs);
+  wv_write_log(LOG_INF, "shm_junk_hdr : %ld", junkhdr->writeoffs);
+  wv_write_log(LOG_INF, "shm_junk_hdr : %ld", junkhdr->quu_startoffs);
+  wv_write_log(LOG_INF, "shm_junk_hdr : %ld", junkhdr->quu_endoffs);
+  if (junkhdr &&
+      junkhdr->writeoffs &&
+      junkhdr->quu_startoffs &&
+      junkhdr->quu_endoffs)
   {
-    if ( shm_junk_hdr->write_offset < shm_junk_hdr->quu_start_offset ){
+    if ( junkhdr->writeoffs < junkhdr->quu_startoffs ){
 
       wv_write_log(LOG_ERR, "write area was lower than end address..");
       goto wv_shm_wr_elem_ret;
     }
 
-    if ( (shm_junk_hdr->write_offset + size) > shm_junk_hdr->quu_end_offset ){
+    if ( (junkhdr->writeoffs + size) > junkhdr->quu_endoffs ){
 
       wv_write_log(LOG_ERR, "write area was higher than end address..");
       goto wv_shm_wr_elem_ret;
@@ -725,58 +952,58 @@ void* wv_shm_push_elem(wv_shm_junk_hdr_t* shm_junk_hdr, void* data, size_t size)
     /* +-------------------------+        +-------------------------+ */
     /* |                   elem_data  =>  |elem_data                | */
     /* +-------------------------+        +-------------------------+ */
-    offs_after_write = shm_junk_hdr->write_offset + sizeof(wv_shm_junk_elem_hdr_t) + size;
-    if ( offs_after_write > shm_junk_hdr->quu_end_offset ){
+    offs_afterwrite = junkhdr->writeoffs + sizeof(wv_shm_junk_elem_hdr_t) + size;
+    if ( offs_afterwrite > junkhdr->quu_endoffs ){
 
-      shm_junk_hdr->write_offset = shm_junk_hdr->quu_start_offset;
+      junkhdr->writeoffs = junkhdr->quu_startoffs;
     }
 
     /* Links the two elements if the prev_write_addr exists. */
-    if ( shm_junk_hdr->prev_write_offset ){
+    if ( junkhdr->prev_writeoffs ){
 
-      wv_shm_link_elems(shm_junk_hdr,
-      			shm_junk_hdr->prev_write_offset,
-      			shm_junk_hdr->write_offset);
+      wv_shm_link_elems(junkhdr,
+      			junkhdr->prev_writeoffs,
+      			junkhdr->writeoffs);
 
     }
 
-    wv_write_log(LOG_INF, "shm_meta->shm_start_addr : %p", shm_meta->shm_start_addr);
-    wv_write_log(LOG_INF, "shm_junk_hdr->write_offset : %ld", shm_junk_hdr->write_offset);
+    wv_write_log(LOG_INF, "shm_meta->shm_start_addr : %p", _shmmeta->shm_startaddr);
+    wv_write_log(LOG_INF, "shm_junk_hdr->write_offset : %ld", junkhdr->writeoffs);
 
-    shm_junk_hdr->prev_write_offset = shm_junk_hdr->write_offset;
+    junkhdr->prev_writeoffs = junkhdr->writeoffs;
 
     /* Write the element header information */
-    memset(&elem_hdr, 0x00, sizeof(wv_shm_junk_elem_hdr_t));
-    elem_hdr.size = size;
-    elem_hdr.next_offset = 0;
-    wv_write_log(LOG_INF, "elem_hdr.size : %ld", elem_hdr.size);
-    wv_write_log(LOG_INF, "elem_hdr.next_offset : %ld", elem_hdr.next_offset);
+    memset(&elemhdr, 0x00, sizeof(wv_shm_junk_elem_hdr_t));
+    elemhdr.size = size;
+    elemhdr.nextoffs = 0;
+    wv_write_log(LOG_INF, "elem_hdr.size : %ld", elemhdr.size);
+    wv_write_log(LOG_INF, "elem_hdr.next_offset : %ld", elemhdr.nextoffs);
 
-    write_addr = shm_meta->shm_start_addr + shm_junk_hdr->write_offset;
-    wv_write_log(LOG_INF, "write position : %p", write_addr);
+    wraddr = _shmmeta->shm_startaddr + junkhdr->writeoffs;
+    wv_write_log(LOG_INF, "write position : %p", wraddr);
 
     wv_write_log(LOG_INF, "ok?...");
 
-    if ((ret_alloc_addr = memcpy(write_addr,
-			     &elem_hdr,
+    if ((ret_allocaddr = memcpy(wraddr,
+			     &elemhdr,
 			     sizeof(wv_shm_junk_elem_hdr_t))))
     {
-      if ( ret_alloc_addr != shm_meta->shm_start_addr + shm_junk_hdr->write_offset ){
+      if ( ret_allocaddr != _shmmeta->shm_startaddr + junkhdr->writeoffs ){
 
-	ret_alloc_addr = NULL;
+	ret_allocaddr = NULL;
 	wv_write_log(LOG_ERR,
 		     "The returned value of malloc() and head->write_addr was not equal.."
 		     "(alloc_addr : %p <--> write_addr : %p)",
-		     ret_alloc_addr, write_addr);
+		     ret_allocaddr, wraddr);
 
 	goto wv_shm_wr_elem_ret;
       }
 
       /* Move the write position of junk_header to the postion added header size. */
       wv_write_log(LOG_INF, "pos_write_hdr : %p (write_offset : %ld)",
-		   write_addr, shm_junk_hdr->write_offset);
+		   wraddr, junkhdr->writeoffs);
 
-      shm_junk_hdr->write_offset += sizeof(wv_shm_junk_elem_hdr_t);
+      junkhdr->writeoffs += sizeof(wv_shm_junk_elem_hdr_t);
     }
     else
     {
@@ -785,27 +1012,26 @@ void* wv_shm_push_elem(wv_shm_junk_hdr_t* shm_junk_hdr, void* data, size_t size)
     }
 
     /* Write the element data information */
-
-    write_addr = shm_meta->shm_start_addr + shm_junk_hdr->write_offset;
-    if ((ret_alloc_addr = memcpy(write_addr, data, size)))
+    wraddr = _shmmeta->shm_startaddr + junkhdr->writeoffs;
+    if ((ret_allocaddr = memcpy(wraddr, data, size)))
     {
       // debug message
-      if ( ret_alloc_addr != write_addr )
+      if ( ret_allocaddr != wraddr )
       {
-	ret_alloc_addr = NULL;
+	ret_allocaddr = NULL;
 	wv_write_log(LOG_ERR,
 		"The returned value of malloc() and head->write_addr was not equal..\
                  (alloc_addr : %p <--> write_addr : %p)",
-		ret_alloc_addr, write_addr);
+		ret_allocaddr, wraddr);
 
 	goto wv_shm_wr_elem_ret;
       }
 
       wv_write_log(LOG_INF, "pos_write_data : %p (write_offset : %ld)",
-		   write_addr, shm_junk_hdr->write_offset);
+		   wraddr, junkhdr->writeoffs);
 
-      shm_junk_hdr->write_offset = shm_junk_hdr->write_offset + size;
-      shm_junk_hdr->count++;
+      junkhdr->writeoffs = junkhdr->writeoffs + size;
+      junkhdr->count++;
     }
     else
     {
@@ -819,23 +1045,24 @@ void* wv_shm_push_elem(wv_shm_junk_hdr_t* shm_junk_hdr, void* data, size_t size)
 
  wv_shm_wr_elem_ret:
 
-  return ret_alloc_addr;
+  return ret_allocaddr;
 }
 
 
 /* Links the two elements */
-int wv_shm_link_elems(wv_shm_junk_hdr_t* junk_hdr, size_t prev_offset, size_t cur_offset)
+int wv_shm_link_elems(wv_shm_junk_hdr_t* junkhdr, size_t prevoffs, size_t curoffs)
 {
   int ret = 0;
+
   wv_write_log(LOG_INF, "[ %s ]" , __func__);
 
-  wv_shm_junk_elem_hdr_t* shm_junk_elem_hdr = NULL;
+  wv_shm_junk_elem_hdr_t* elemhdr = NULL;
 
-  if (prev_offset && cur_offset){
+  if (prevoffs && curoffs){
 
-    shm_junk_elem_hdr = shm_meta->shm_start_addr + prev_offset;
-    shm_junk_elem_hdr->next_offset = cur_offset;
-    wv_write_log(LOG_INF, "shm_junk_elem_hdr->next_offset : %ld" , shm_junk_elem_hdr->next_offset);
+    elemhdr = _shmmeta->shm_startaddr + prevoffs;
+    elemhdr->nextoffs = curoffs;
+    wv_write_log(LOG_INF, "shm_junk_elem_hdr->next_offset : %ld" , elemhdr->nextoffs);
   }
   else{
     ret = -1;
@@ -845,45 +1072,45 @@ int wv_shm_link_elems(wv_shm_junk_hdr_t* junk_hdr, size_t prev_offset, size_t cu
 }
 
 
-void* wv_shm_rd(void* start_addr, size_t size, void** next_addr){
+void* wv_shm_rd(void* startaddr, size_t size, void** nextaddr){
 
   void* ret = NULL;
 
-  if ( start_addr ){
+  if ( startaddr ){
 
-    if ( next_addr ) { *next_addr = start_addr + size; }
+    if ( nextaddr ) { *nextaddr = startaddr + size; }
     
-    ret = start_addr;
+    ret = startaddr;
   }
 
   return ret;
 }
 
 
-wv_shm_junk_elem_hdr_t* wv_shm_peek_elem_hdr(wv_shm_junk_hdr_t* shm_junk_hdr)
+wv_shm_junk_elem_hdr_t* wv_shm_peek_elem_hdr(wv_shm_junk_hdr_t* junkhdr)
 {
   wv_write_log(LOG_INF, "[ %s ]", __func__);
 
-  wv_shm_junk_elem_hdr_t* ret_elem_hdr = NULL;
-  void* addr_read = NULL;
-  size_t offset_read = 0;
+  wv_shm_junk_elem_hdr_t* ret_elemhdr = NULL;
+  void* readaddr = NULL;
+  size_t readoffs = 0;
 
-  if (shm_junk_hdr &&
-      shm_junk_hdr->quu_start_offset &&
-      shm_junk_hdr->quu_end_offset &&
-      shm_junk_hdr->read_offset){
+  if (junkhdr &&
+      junkhdr->quu_startoffs &&
+      junkhdr->quu_endoffs &&
+      junkhdr->readoffs){
 
-    if (shm_junk_hdr->count > 0){
+    if (junkhdr->count > 0){
 
-      offset_read = shm_junk_hdr->read_offset;
-      addr_read = shm_meta->shm_start_addr + offset_read;
+      readoffs = junkhdr->readoffs;
+      readaddr = _shmmeta->shm_startaddr + readoffs;
 
-      wv_write_log(LOG_INF, "offset to read : %ld", offset_read);
-      wv_write_log(LOG_INF, "address to read :  %p", addr_read);
+      wv_write_log(LOG_INF, "offset to read : %ld", readoffs);
+      wv_write_log(LOG_INF, "address to read :  %p", readaddr);
 
-      ret_elem_hdr = (wv_shm_junk_elem_hdr_t*)addr_read;
-      wv_write_log(LOG_INF, "ret_elem_hdr->size : %ld", ret_elem_hdr->size);
-      wv_write_log(LOG_INF, "ret_elem_hdr->next_offset : %ld", ret_elem_hdr->next_offset);
+      ret_elemhdr = (wv_shm_junk_elem_hdr_t*)readaddr;
+      wv_write_log(LOG_INF, "ret_elem_hdr->size : %ld", ret_elemhdr->size);
+      wv_write_log(LOG_INF, "ret_elem_hdr->next_offset : %ld", ret_elemhdr->nextoffs);
 
     }
     else{
@@ -897,34 +1124,34 @@ wv_shm_junk_elem_hdr_t* wv_shm_peek_elem_hdr(wv_shm_junk_hdr_t* shm_junk_hdr)
     wv_write_log(LOG_ERR, "A shm_hdr or its attrs is null...");
   }
 
-  return ret_elem_hdr;
+  return ret_elemhdr;
 }
 
 
 /* Return the read addres and add a size value to the read address */
-void* wv_shm_peek_elem_data(wv_shm_junk_hdr_t* shm_junk_hdr)
+void* wv_shm_peek_elem_data(wv_shm_junk_hdr_t* junkhdr)
 {
   wv_write_log(LOG_INF, "[ %s ]", __func__);
 
-  wv_shm_junk_elem_hdr_t* ret_shm_junk_elem_hdr = NULL;
-  void* addr_read = NULL;
-  size_t offset_read = 0;
+  wv_shm_junk_elem_hdr_t* ret_elemhdr = NULL;
+  void* rd_addr = NULL;
+  size_t rd_offs = 0;
 
-  if ( shm_junk_hdr &&
-       shm_junk_hdr->quu_start_offset &&
-       shm_junk_hdr->quu_end_offset &&
-       shm_junk_hdr->read_offset )
+  if ( junkhdr &&
+       junkhdr->quu_startoffs &&
+       junkhdr->quu_endoffs &&
+       junkhdr->readoffs )
   {
 
-    if (shm_junk_hdr->count > 0){
+    if (junkhdr->count > 0){
 
-      offset_read = shm_junk_hdr->read_offset + sizeof(wv_shm_junk_elem_hdr_t);
-      addr_read = shm_meta->shm_start_addr + offset_read;
+      rd_offs = junkhdr->readoffs + sizeof(wv_shm_junk_elem_hdr_t);
+      rd_addr = _shmmeta->shm_startaddr + rd_offs;
 
-      wv_write_log(LOG_INF, "offset to read : %ld", offset_read);
-      wv_write_log(LOG_INF, "address to read : %p", addr_read);
+      wv_write_log(LOG_INF, "offset to read : %ld", rd_offs);
+      wv_write_log(LOG_INF, "address to read : %p", rd_addr);
 
-      ret_shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)addr_read;
+      ret_elemhdr = (wv_shm_junk_elem_hdr_t*)rd_addr;
     }
     else{
 
@@ -938,126 +1165,127 @@ void* wv_shm_peek_elem_data(wv_shm_junk_hdr_t* shm_junk_hdr)
     return NULL;
   }
 
-  return ret_shm_junk_elem_hdr;
+  return ret_elemhdr;
 }
 
 
-void* wv_shm_pop_elem_data(wv_shm_junk_hdr_t* junk_hdr, wv_shm_junk_elem_hdr_t* elem_hdr)
+void* wv_shm_pop_elem_data(wv_shm_junk_hdr_t* junkhdr, wv_shm_junk_elem_hdr_t* elemhdr)
 {
-  void* ret_addr_read = 0;
-  wv_shm_junk_elem_hdr_t* cur_elem_hdr = NULL;
-  size_t offs_read = 0;
+  void* ret_readaddr = 0;
+  wv_shm_junk_elem_hdr_t* cur_elemhdr = NULL;
+  size_t readoffs = 0;
 
   wv_write_log(LOG_INF,"[ %s ]" , __func__);
 
-  if ( junk_hdr &&
-       junk_hdr->quu_start_offset &&
-       junk_hdr->quu_end_offset &&
-       junk_hdr->read_offset &&
-       elem_hdr ){
+  if ( junkhdr &&
+       junkhdr->quu_startoffs &&
+       junkhdr->quu_endoffs &&
+       junkhdr->readoffs &&
+       elemhdr ){
 
-    if(junk_hdr->count == 0){
+    if(junkhdr->count == 0){
 
       wv_write_log(LOG_INF, "The queue was empty...\n");
       return NULL;
     }
 
     /* Read the header information */
-    wv_write_log(LOG_INF, "cur_elem_hdr address : %p", shm_meta->shm_start_addr + junk_hdr->read_offset);
+    wv_write_log(LOG_INF, "cur_elem_hdr address : %p", _shmmeta->shm_startaddr + junkhdr->readoffs);
 
-    cur_elem_hdr = shm_meta->shm_start_addr + junk_hdr->read_offset;
-    wv_write_log(LOG_INF, "next_offset : %ld", cur_elem_hdr->next_offset);
-    wv_write_log(LOG_INF, "size : %ld", cur_elem_hdr->size);
+    cur_elemhdr = _shmmeta->shm_startaddr + junkhdr->readoffs;
+    wv_write_log(LOG_INF, "next_offset : %ld", cur_elemhdr->nextoffs);
+    wv_write_log(LOG_INF, "size : %ld", cur_elemhdr->size);
 
-    if (cur_elem_hdr->next_offset && elem_hdr->next_offset ){
+    if (cur_elemhdr->nextoffs && elemhdr->nextoffs ){
 
       wv_write_log(LOG_INF, "ok?");
-      if ( cur_elem_hdr->next_offset != elem_hdr->next_offset ){
+      if ( cur_elemhdr->nextoffs != elemhdr->nextoffs ){
 
 	wv_write_log(LOG_ERR,
 		     "The pos of a argument hdr was different with the read pos of current header..."
 		     "(next_offset_stored : %ld <--> next_offset_wanted : %ld).",
-		     cur_elem_hdr->next_offset, elem_hdr->next_offset);
+		     cur_elemhdr->nextoffs, elemhdr->nextoffs);
 
 	return NULL;
       }
     }
 
     wv_write_log(LOG_INF, "ok?");
-    if ( cur_elem_hdr->size != elem_hdr->size ){
+    if ( cur_elemhdr->size != elemhdr->size ){
 
 	wv_write_log(LOG_ERR,
 		     "The size of a argument hdr was different with the read size of current header..."
 		     "(size_stored : %ld <--> size_wanted : %ld).",
-		     cur_elem_hdr->size, elem_hdr->size);
+		     cur_elemhdr->size, elemhdr->size);
 
       return NULL;
     }
 
-    offs_read = junk_hdr->read_offset + sizeof(wv_shm_junk_elem_hdr_t);
-    ret_addr_read = shm_meta->shm_start_addr + offs_read;
+    readoffs = junkhdr->readoffs + sizeof(wv_shm_junk_elem_hdr_t);
+    ret_readaddr = _shmmeta->shm_startaddr + readoffs;
 
-    wv_write_log(LOG_INF, "offset to read : %ld", offs_read);
-    wv_write_log(LOG_INF, "address to read : %p", ret_addr_read);
+    wv_write_log(LOG_INF, "offset to read : %ld", readoffs);
+    wv_write_log(LOG_INF, "address to read : %p", ret_readaddr);
 
     /* If cur_shm_junk_elem_hdr->next_offset is NULL, this case is the state of the queue. */
-    if ( cur_elem_hdr->next_offset){
+    if ( cur_elemhdr->nextoffs){
 
       /* Set the read postion to the next element position. */
-      if (junk_hdr->count > 0){
+      if (junkhdr->count > 0){
 
-	junk_hdr->count--;
-	junk_hdr->read_offset = elem_hdr->next_offset;
-	junk_hdr->remain_size -= ( sizeof(wv_shm_junk_elem_hdr_t) + elem_hdr->size );
+	junkhdr->count--;
+	junkhdr->readoffs = elemhdr->nextoffs;
+	junkhdr->remainsz -= ( sizeof(wv_shm_junk_elem_hdr_t) + elemhdr->size );
       }
       else{
 	wv_write_log(LOG_ERR, "This is weird case, although the next_offset existed"
 		     "but header->count was bigger than 0.");
-	ret_addr_read = NULL;
+	ret_readaddr = NULL;
       }
     }
     else{
 
-      if(junk_hdr->read_offset != junk_hdr->write_offset){
+      if(junkhdr->readoffs != junkhdr->writeoffs){
 
 	/* This case is existing the only one element. so return the position pointing the last element. */
-	junk_hdr->count--;
-	junk_hdr->read_offset = junk_hdr->write_offset;
-	junk_hdr->remain_size -= ( sizeof(wv_shm_junk_elem_hdr_t) + elem_hdr->size );
+	junkhdr->count--;
+	junkhdr->readoffs = junkhdr->writeoffs;
+	junkhdr->remainsz -= ( sizeof(wv_shm_junk_elem_hdr_t) + elemhdr->size );
       }
       else{
 
 	/* This case is the empty state, so make the read position same with the write position. */
-	ret_addr_read = NULL;
+	ret_readaddr = NULL;
       }
     }
   }
 
-  return ret_addr_read;
+  return ret_readaddr;
 }
 
 
-void wv_shm_show_junk(wv_shm_junk_hdr_t* shm_junk_hdr)
+void wv_shm_show_junk(wv_shm_junk_hdr_t* junkhdr)
 {
-  if (shm_junk_hdr){
+  if (junkhdr){
     wv_write_log(LOG_INF, "[ %s ]" , __func__);
-    printf("shm_junk_hdr->count : %ld\n", shm_junk_hdr->count);
-    printf("shm_junk_hdr->start_offset : %ld\n", shm_junk_hdr->quu_start_offset);
-    printf("shm_junk_hdr->end_offset : %ld\n", shm_junk_hdr->quu_end_offset);
-    printf("shm_junk_hdr->remain_size : %ld\n", shm_junk_hdr->remain_size);
-    printf("shm_junk_hdr->shm_name : %s\n", shm_junk_hdr->shm_name);
-    printf("shm_junk_hdr->is_assigned : %d\n", shm_junk_hdr->is_assigned);
+    printf("shm_junk_hdr->count : %ld\n", junkhdr->count);
+    printf("shm_junk_hdr->start_offset : %ld\n", junkhdr->quu_startoffs);
+    printf("shm_junk_hdr->end_offset : %ld\n", junkhdr->quu_endoffs);
+    printf("shm_junk_hdr->remain_size : %ld\n", junkhdr->remainsz);
+    printf("shm_junk_hdr->shm_name : %s\n", junkhdr->shm_name);
+    printf("shm_junk_hdr->is_assigned : %d\n", junkhdr->is_assigned);
 
-    wv_write_log(LOG_INF, "shm_junk_hdr->shm_name : %s", shm_junk_hdr->shm_name);
-    wv_write_log(LOG_INF, "shm_junk_hdr->is_assigned : %d", shm_junk_hdr->is_assigned);
-    wv_write_log(LOG_INF, "shm_junk_hdr->start_offset : %ld", shm_junk_hdr->start_offset);
-    wv_write_log(LOG_INF, "shm_junk_hdr->quu_start_offset : %ld", shm_junk_hdr->quu_start_offset);
-    wv_write_log(LOG_INF, "shm_junk_hdr->quu_end_offset : %ld", shm_junk_hdr->quu_end_offset );
-    wv_write_log(LOG_INF, "shm_junk_hdr->read_offset : %ld", shm_junk_hdr->read_offset);
-    wv_write_log(LOG_INF, "shm_junk_hdr->write_offset : %ld", shm_junk_hdr->write_offset);
-    wv_write_log(LOG_INF, "shm_junk_hdr->prev_write_offset : %ld", shm_junk_hdr->prev_write_offset);
-    wv_write_log(LOG_INF, "shm_junk_hdr->remain_size : %ld", shm_junk_hdr->remain_size);
-    wv_write_log(LOG_INF, "shm_junk_hdr->count : %ld", shm_junk_hdr->count);
+    wv_write_log(LOG_INF, "<junk_header : %p>", junkhdr);
+    wv_write_log(LOG_INF, "shm_junk_hdr->shm_name : %s", junkhdr->shm_name);
+    wv_write_log(LOG_INF, "shm_junk_hdr->is_assigned : %d", junkhdr->is_assigned);
+    wv_write_log(LOG_INF, "shm_junk_hdr->start_offset : %ld", junkhdr->startoffs);
+    wv_write_log(LOG_INF, "shm_junk_hdr->quu_start_offset : %ld", junkhdr->quu_startoffs);
+    wv_write_log(LOG_INF, "shm_junk_hdr->quu_end_offset : %ld", junkhdr->quu_endoffs );
+    wv_write_log(LOG_INF, "shm_junk_hdr->read_offset : %ld", junkhdr->readoffs);
+    wv_write_log(LOG_INF, "shm_junk_hdr->write_offset : %ld", junkhdr->writeoffs);
+    wv_write_log(LOG_INF, "shm_junk_hdr->prev_write_offset : %ld", junkhdr->prev_writeoffs);
+    wv_write_log(LOG_INF, "shm_junk_hdr->remain_size : %ld", junkhdr->remainsz);
+    wv_write_log(LOG_INF, "shm_junk_hdr->count : %ld", junkhdr->count);
   }
   else{
 
@@ -1066,8 +1294,9 @@ void wv_shm_show_junk(wv_shm_junk_hdr_t* shm_junk_hdr)
 }
 
 
-int wv_shm_check_init(){
-  if (shm_meta == NULL){
+int wv_shm_check_init()
+{
+  if (_shmmeta == NULL){
     wv_write_log(LOG_INF, "Please initailize the shared memory with wv_shm_init()...");
     return 0;
   }
