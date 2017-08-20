@@ -42,6 +42,8 @@ int wv_shm_load_test()
   wv_shm_junk_hdr_t* shm_junk_hdr = NULL;
 
   shm_junk_hdr = wv_shm_find_junk("mytest_junk");
+
+  
   index = wv_shm_get_junk_index(shm_junk_hdr);
   printf("index : %d", index);
   

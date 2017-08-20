@@ -321,19 +321,29 @@ int wv_shm_sync_meta()
 
 wv_shm_junk_hdr_t* wv_shm_find_junk(const char* junk_name)
 {
+  wv_write_log(LOG_INF, "[ %s ]" , __func__);  
   wv_shm_junk_hdr_t* ret_pjunkhdr = NULL;
   int i = 0;
 
   if ( _shmmeta ){
-    for(i = 0; i < _shmmeta->count; i++){
 
-      ret_pjunkhdr = _shmmeta->shm_startaddr + _shmmeta->arr_junkhdr_offsets[i];
+    if (_shmmeta->count > 0)
+    {
+      for(i = 0; i < _shmmeta->count; i++){
 
-      if( ret_pjunkhdr->is_assigned &&
-	  strncmp(ret_pjunkhdr->shm_name, junk_name, strlen(junk_name)) == 0 ){
+	ret_pjunkhdr = _shmmeta->shm_startaddr + _shmmeta->arr_junkhdr_offsets[i];
 
-	return ret_pjunkhdr;
+	if( ret_pjunkhdr->is_assigned &&
+	    strncmp(ret_pjunkhdr->shm_name, junk_name, strlen(junk_name)) == 0 ){
+
+	  return ret_pjunkhdr;
+	}
       }
+    }
+    else
+    {
+      wv_write_log(LOG_INF, "There wasnt any shared memory junk... ");
+      return ret_pjunkhdr = NULL;
     }
   }
 
@@ -404,7 +414,7 @@ wv_shm_junk_hdr_t* wv_shm_unassign_junk(const char* junkname)
   wv_shm_junk_hdr_t* ret_pjunkhdr = NULL;
   int i = 0;
 
-  if ( _shmmeta ){
+  if ( _shmmeta && junkname ){
 
     for ( i = 0; i < _shmmeta->count; i++ ){
       ret_pjunkhdr = _shmmeta->shm_startaddr + _shmmeta->arr_junkhdr_offsets[i];
@@ -421,22 +431,42 @@ wv_shm_junk_hdr_t* wv_shm_unassign_junk(const char* junkname)
       }
     }
   }
-
+  else
+  {
+    wv_write_log(LOG_ERR, "The _shmmeta or a junkname arg was NULL...");
+  }
   return ( ret_pjunkhdr = NULL );
 }
 
 
-int wv_shm_get_junk_index(wv_shm_junk_hdr_t* junkhdr){
-
+int wv_shm_get_junk_index(wv_shm_junk_hdr_t* junkhdr)
+{
+  wv_write_log(LOG_INF, "[ %s ]\n" , __func__);
+  
   int ret = -1;
   int i = 0;
 
-  for (i=0; i<_shmmeta->count; i++){
+  wv_write_log(LOG_INF, "shmmeta->count : %d", _shmmeta->count);
 
-    if (_shmmeta->arr_junkhdr_offsets[i] == junkhdr->startoffs){
-      wv_write_log(LOG_INF, "find index : %ld", i);
-      return ret;
+  if (_shmmeta && junkhdr)
+  {
+    if (_shmmeta->count > 0)
+    {
+      for (i=0; i<_shmmeta->count; i++)
+      {
+	wv_write_log(LOG_INF, "ok?");
+	if (_shmmeta->arr_junkhdr_offsets[i] == junkhdr->startoffs)
+	{
+	  wv_write_log(LOG_INF, "find index : %ld", i);
+	  return ret;
+	}
+      }
     }
+  }
+  else
+  {
+    wv_write_log(LOG_ERR, "The _shmmeta or a junkhdr arg was NULL...");
+    return ret;
   }
 
   return ret;
