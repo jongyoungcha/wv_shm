@@ -31,59 +31,20 @@ int wv_shm_load_test()
 {
   int ret = 0;
   int index = 0;
-
   wv_write_log(LOG_INF, "*** Start wv_shm_load TEST ***");
   wv_init_log("./", "wv_shm_log");
-
+  
   wv_shm_init();
+  
   wv_shm_junk_elem_hdr_t* shm_junk_elem_hdr = NULL;
   test_packet_t* ptest_packet = NULL;
 
   wv_shm_junk_hdr_t* shm_junk_hdr = NULL;
 
-  shm_junk_hdr = wv_shm_load_junk("./", "mytest_junk");
-  wv_shm_show_junk(shm_junk_hdr);
-
   shm_junk_hdr = wv_shm_find_junk("mytest_junk");
   index = wv_shm_get_junk_index(shm_junk_hdr);
   printf("index : %d", index);
-
-  /* wv_write_log(LOG_INF, "ok?", sizeof(test_packet_t)); */
-  /* if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){ */
-  /*   ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr); */
-  /*   printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip); */
-  /*   printf("ptest_packet->port : %d\n",  ptest_packet->from_port); */
-  /*   printf("ptest_packet->data : %s\n",  ptest_packet->data); */
-  /* } */
-
-  /* if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){ */
-  /*   ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr); */
-  /*   printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip); */
-  /*   printf("ptest_packet->port : %d\n",  ptest_packet->from_port); */
-  /*   printf("ptest_packet->data : %s\n",  ptest_packet->data); */
-  /* } */
-
-  /* if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){ */
-  /*   if((ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr))){ */
-  /*     printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip); */
-  /*     printf("ptest_packet->port : %d\n",  ptest_packet->from_port); */
-  /*     printf("ptest_packet->data : %s\n",  ptest_packet->data); */
-  /*   }else{ */
-  /*     printf("none\n"); */
-  /*   } */
-  /* } */
-
-  /* if ( (shm_junk_elem_hdr = (wv_shm_junk_elem_hdr_t*)wv_shm_peek_elem_hdr(shm_junk_hdr)) ){ */
-  /*   if((ptest_packet = (test_packet_t*) wv_shm_pop_elem_data(shm_junk_hdr, shm_junk_elem_hdr))){ */
-  /*     printf("ptest_packet->from_ip : %s\n", ptest_packet->from_ip); */
-  /*     printf("ptest_packet->port : %d\n",  ptest_packet->from_port); */
-  /*     printf("ptest_packet->data : %s\n",  ptest_packet->data); */
-  /*   }else{ */
-  /*     printf("none\n"); */
-  /*   } */
-  /* } */
-
-
+  
   return ret;
 }
 
@@ -128,5 +89,3 @@ int wv_shm_init_test()
 
   return ret;
 }
-
-

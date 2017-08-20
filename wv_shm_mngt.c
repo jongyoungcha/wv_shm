@@ -31,42 +31,43 @@ int wv_shm_init ()
   _shmmeta->shm_junk = SHM_JUNK_SIZE;
   _shmmeta->shm_totalsize = SHM_TOTAL_SIZE;
 
-  /* Getting shared memory */
+  /* Check if there is the previous shared memory. */
   if ( (shmid = shmget(_shmmeta->shm_key,
-			_shmmeta->shm_totalsize,
+		       _shmmeta->shm_totalsize,
+		       IPC_CREAT | IPC_EXCL)) == -1 )
+  {
+    wv_write_log(LOG_INF, "There is the shared memory was existing... (shm_id : %d", shmid);
 
-			IPC_CREAT | IPC_EXCL)) == -1 ){
-
-    wv_write_log(LOG_INF,
-		 "Previous shared memory was existing... (shm_id : %d, errno : %s)",
-		 shmid, strerror(errno));
-
-    if ( (shmid = shmget(_shmmeta->shm_key,
-			  _shmmeta->shm_totalsize,
-			  0)) == -1 ){
-      wv_write_log(LOG_INF,
-		   "Getting the previous shared memory faild... (shm_id : %d, errno : %s)",
+    /* Getting the  shared memory id by the shared memory key */
+    if ( (shmid = shmget(_shmmeta->shm_key,_shmmeta->shm_totalsize, 0)) == -1 )
+    {
+      /* Failed Getting shared memory id */
+      wv_write_log(LOG_INF, "Getting the previous shared memory faild... (shm_id : %d, errno : %s)",
 		   shmid, strerror(errno));
+      exit( errno );
     }
-    else{
-      shm_exists = 1;
-      /* shmctl(shm_id, IPC_RMID, 0); */
+    else
+    {
+      /* Successed Getting the previous shared memory */
+      if (SHM_INIT)
+      {
+	shm_exists = 0;
+	shmctl(shmid, IPC_RMID, 0);
+      }
+      else
+      {
+	shm_exists = 1;
+      }
     }
   }
-  else{
-    wv_write_log(LOG_INF, "shm_meta->shm_key : %ld", _shmmeta->shm_key);
-    wv_write_log(LOG_INF, "shm_meta->shm_total_size : %ld", _shmmeta->shm_totalsize);
-
-    if ( (shmid = shmget(_shmmeta->shm_key,
-			  _shmmeta->shm_totalsize,
-			  IPC_CREAT|0777)) == -1 ){
-
-      wv_write_log(LOG_ERR, "Getting Shared memory was failed..... (shm_key : %ld, errno : %s)",
-	      _shmmeta->shm_key, strerror(errno));
-
+  else
+  {
+    /* There is no the previous shared memory. So we shold make a new shared memory by key */
+    if ( (shmid = shmget(_shmmeta->shm_key, _shmmeta->shm_totalsize, IPC_CREAT)) == -1)
+    {
+      wv_write_log(LOG_ERR, "We failed making a new shared memory..... ");
       exit( errno );
-      return -1;
-    }
+    } 
   }
 
   /* Attaching shared memory. */
@@ -101,7 +102,7 @@ int wv_shm_init ()
 
     return -1;
   }
-
+  
   return ret;
 }
 
@@ -390,7 +391,7 @@ wv_shm_junk_hdr_t* wv_shm_assign_junk(const char* junkname)
     wv_write_log(LOG_ERR, "The Ware Valley Shared Memory was not initailized..." );
   }
 
- ret_wv_shm_assign_junk:
+ret_wv_shm_assign_junk:
 
   return ret_pjunkhdr;
 }
@@ -518,19 +519,19 @@ int wv_shm_clear_junk(wv_shm_junk_hdr_t* junkhdr)
 	 junkhdr->quu_startoffs &&
 	 junkhdr->quu_endoffs ){
 
-	memset( (_shmmeta->shm_startaddr + junkhdr->quu_startoffs),
-	        0x00,
-		junkhdr->quu_endoffs - junkhdr->quu_startoffs );
+      memset( (_shmmeta->shm_startaddr + junkhdr->quu_startoffs),
+	      0x00,
+	      junkhdr->quu_endoffs - junkhdr->quu_startoffs );
 
-	junkhdr->writeoffs = junkhdr->quu_startoffs;
-	junkhdr->readoffs = junkhdr->quu_startoffs;
-	junkhdr->prev_writeoffs = 0;
-	junkhdr->remainsz =  junkhdr->quu_endoffs - junkhdr->quu_startoffs;
-	junkhdr->count = 0;
+      junkhdr->writeoffs = junkhdr->quu_startoffs;
+      junkhdr->readoffs = junkhdr->quu_startoffs;
+      junkhdr->prev_writeoffs = 0;
+      junkhdr->remainsz =  junkhdr->quu_endoffs - junkhdr->quu_startoffs;
+      junkhdr->count = 0;
 
-	wv_write_log(LOG_INF,"shm_junk_hdr : %p", junkhdr);
-	wv_write_log(LOG_INF,"shm_junk_hdr->quu_start_offset : %ld", junkhdr->quu_startoffs);
-	wv_write_log(LOG_INF,"shm_junk_hdr->quu_end_offset : %ld", junkhdr->quu_endoffs);
+      wv_write_log(LOG_INF,"shm_junk_hdr : %p", junkhdr);
+      wv_write_log(LOG_INF,"shm_junk_hdr->quu_start_offset : %ld", junkhdr->quu_startoffs);
+      wv_write_log(LOG_INF,"shm_junk_hdr->quu_end_offset : %ld", junkhdr->quu_endoffs);
     }
     else{
 
@@ -631,7 +632,7 @@ int wv_shm_dump_junk(const char* junkname, const char* dirname)
     fclose(pfile);
   }
 
- wv_shm_dump_junk_ret:
+wv_shm_dump_junk_ret:
 
   return ret;
 }
@@ -804,7 +805,7 @@ wv_shm_junk_hdr_t* wv_shm_load_junk(const char* dirname, const char* junkname)
     }
   }
 
- ret_wv_shm_load_junk:
+ret_wv_shm_load_junk:
   return ret_pjunkhdr;
 }
 
@@ -859,7 +860,7 @@ int wv_shm_junk_init(char* junkname, size_t startoffs, size_t endoffs)
   wv_write_log(LOG_INF, "junk_hdr->remain_size : %ld", pjunkhdr->remainsz);
   wv_write_log(LOG_INF, "junk_hdr->count : %ld", pjunkhdr->count);
 
- wv_shm_junk_init_ret:
+wv_shm_junk_init_ret:
 
   return ret;
 }
@@ -904,7 +905,7 @@ void* wv_shm_wr(size_t strtoffs, void* data, size_t size, size_t *nextoffs)
     } 
   }
 
- wv_shm_wr_elem_ret:
+wv_shm_wr_elem_ret:
 
   return ret_wraddr;
 }
@@ -985,8 +986,8 @@ void* wv_shm_push_elem(wv_shm_junk_hdr_t* junkhdr, void* data, size_t size)
     wv_write_log(LOG_INF, "ok?...");
 
     if ((ret_allocaddr = memcpy(wraddr,
-			     &elemhdr,
-			     sizeof(wv_shm_junk_elem_hdr_t))))
+				&elemhdr,
+				sizeof(wv_shm_junk_elem_hdr_t))))
     {
       if ( ret_allocaddr != _shmmeta->shm_startaddr + junkhdr->writeoffs ){
 
@@ -1007,8 +1008,8 @@ void* wv_shm_push_elem(wv_shm_junk_hdr_t* junkhdr, void* data, size_t size)
     }
     else
     {
-	wv_write_log(LOG_ERR, "memcpy() was failed when write a elem_header.");
-	goto wv_shm_wr_elem_ret;
+      wv_write_log(LOG_ERR, "memcpy() was failed when write a elem_header.");
+      goto wv_shm_wr_elem_ret;
     }
 
     /* Write the element data information */
@@ -1020,9 +1021,9 @@ void* wv_shm_push_elem(wv_shm_junk_hdr_t* junkhdr, void* data, size_t size)
       {
 	ret_allocaddr = NULL;
 	wv_write_log(LOG_ERR,
-		"The returned value of malloc() and head->write_addr was not equal..\
+		     "The returned value of malloc() and head->write_addr was not equal..\
                  (alloc_addr : %p <--> write_addr : %p)",
-		ret_allocaddr, wraddr);
+		     ret_allocaddr, wraddr);
 
 	goto wv_shm_wr_elem_ret;
       }
@@ -1035,15 +1036,15 @@ void* wv_shm_push_elem(wv_shm_junk_hdr_t* junkhdr, void* data, size_t size)
     }
     else
     {
-	wv_write_log(LOG_ERR, "memcpy() was failed when write a elem_data.");
-	goto wv_shm_wr_elem_ret;
+      wv_write_log(LOG_ERR, "memcpy() was failed when write a elem_data.");
+      goto wv_shm_wr_elem_ret;
     }
   }
   else{
     wv_write_log(LOG_ERR, "The argument shm_junk_hdr was NULL.");
   }
 
- wv_shm_wr_elem_ret:
+wv_shm_wr_elem_ret:
 
   return ret_allocaddr;
 }
@@ -1213,10 +1214,10 @@ void* wv_shm_pop_elem_data(wv_shm_junk_hdr_t* junkhdr, wv_shm_junk_elem_hdr_t* e
     wv_write_log(LOG_INF, "ok?");
     if ( cur_elemhdr->size != elemhdr->size ){
 
-	wv_write_log(LOG_ERR,
-		     "The size of a argument hdr was different with the read size of current header..."
-		     "(size_stored : %ld <--> size_wanted : %ld).",
-		     cur_elemhdr->size, elemhdr->size);
+      wv_write_log(LOG_ERR,
+		   "The size of a argument hdr was different with the read size of current header..."
+		   "(size_stored : %ld <--> size_wanted : %ld).",
+		   cur_elemhdr->size, elemhdr->size);
 
       return NULL;
     }

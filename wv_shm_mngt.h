@@ -23,6 +23,8 @@
 #define SHM_JUNK_SIZE (100 * 1024 * 1024)
 #define SHM_MAX_COUNT 100
 
+#define SHM_INIT 0
+
 
 /* +-----------------------------+ */
 /* | A wv_shm structure.         | */
