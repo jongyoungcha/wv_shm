@@ -1,416 +1,646 @@
-[ ** ] [07/20/2017][09:57:49] [ wv_shm_init ]
-[ ** ] [07/20/2017][09:57:49] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][09:57:49] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][09:57:49] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][09:57:49] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][09:57:49] <The loaded shared meta data >
-[ ** ] [07/20/2017][09:57:49] * shm_meta.count : 11
-[ ** ] [07/20/2017][09:57:49] * shm_meta.shm_start_addr : 0x7fdffe956000
-[ ** ] [07/20/2017][09:57:49] * shm_meta.shm_end_addr : 0x7fe03e957000
-[ ** ] [07/20/2017][09:57:49] * shm_meta.key : 4000
-[ ** ] [07/20/2017][09:57:49] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][09:57:49] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][09:57:49] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][09:57:49] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:00:47] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:00:47] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:00:47] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:00:47] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:00:47] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:00:47] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:00:47] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:00:47] * shm_meta.shm_start_addr : 0x7f72d653b000
-[ ** ] [07/20/2017][10:00:47] * shm_meta.shm_end_addr : 0x7f731653c000
-[ ** ] [07/20/2017][10:00:47] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:00:47] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:00:47] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:00:47] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:00:47] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:01:11] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:01:11] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:01:11] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:01:11] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:01:11] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:01:11] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:01:11] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:01:11] * shm_meta.shm_start_addr : 0x7f89f9f11000
-[ ** ] [07/20/2017][10:01:11] * shm_meta.shm_end_addr : 0x7f8a39f12000
-[ ** ] [07/20/2017][10:01:11] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:01:11] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:01:11] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:01:11] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:01:11] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:02:03] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:02:03] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:02:03] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:02:03] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:02:03] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:02:03] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:02:03] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:02:03] * shm_meta.shm_start_addr : 0x7f2f16537000
-[ ** ] [07/20/2017][10:02:03] * shm_meta.shm_end_addr : 0x7f2f56538000
-[ ** ] [07/20/2017][10:02:03] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:02:03] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:02:03] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:02:03] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:02:03] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:02:46] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:02:46] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:02:46] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:02:46] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:02:46] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:02:46] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:02:46] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:02:46] * shm_meta.shm_start_addr : 0x7f75c50ab000
-[ ** ] [07/20/2017][10:02:46] * shm_meta.shm_end_addr : 0x7f76050ac000
-[ ** ] [07/20/2017][10:02:46] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:02:46] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:02:46] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:02:46] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:02:46] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:03:02] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:03:02] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:03:02] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:03:02] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:03:02] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:03:02] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:03:02] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:03:02] * shm_meta.shm_start_addr : 0x7fd3d4944000
-[ ** ] [07/20/2017][10:03:02] * shm_meta.shm_end_addr : 0x7fd414945000
-[ ** ] [07/20/2017][10:03:02] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:03:02] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:03:02] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:03:02] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:03:02] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:06:58] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:06:58] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:06:58] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:06:58] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:06:58] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:06:58] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:06:58] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:06:58] * shm_meta.shm_start_addr : 0x7f806c090000
-[ ** ] [07/20/2017][10:06:58] * shm_meta.shm_end_addr : 0x7f80ac091000
-[ ** ] [07/20/2017][10:06:58] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:06:58] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:06:58] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:06:58] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:06:58] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:06:58] There was the semaphore set. (perror : Invalid argument)
-[ ** ] [07/20/2017][10:06:58] There was the semaphore set. (perror : Invalid argument)
-[ ** ] [07/20/2017][10:06:58] There was the semaphore set. (perror : Invalid argument)
-[ ** ] [07/20/2017][10:24:00] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:24:00] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:24:00] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:24:00] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:24:00] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:24:00] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:24:00] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:24:00] * shm_meta.shm_start_addr : 0x7fb4bc690000
-[ ** ] [07/20/2017][10:24:00] * shm_meta.shm_end_addr : 0x7fb4fc691000
-[ ** ] [07/20/2017][10:24:00] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:24:00] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:24:00] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:24:00] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:24:00] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:24:00] There was the semaphore set. (perror : Invalid argument)
-[ ** ] [07/20/2017][10:24:00] There was the semaphore set. (perror : Invalid argument)
-[ ** ] [07/20/2017][10:24:00] There was the semaphore set. (perror : Invalid argument)
-[ ** ] [07/20/2017][10:24:23] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:24:23] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:24:23] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:24:23] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:24:23] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:24:23] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:24:23] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:24:23] * shm_meta.shm_start_addr : 0x7f2949396000
-[ ** ] [07/20/2017][10:24:23] * shm_meta.shm_end_addr : 0x7f2989397000
-[ ** ] [07/20/2017][10:24:23] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:24:23] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:24:23] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:24:23] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:24:23] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:30:14] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:30:14] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:30:14] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:30:14] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:30:14] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:30:14] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:30:14] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:30:14] * shm_meta.shm_start_addr : 0x7f1fc5c67000
-[ ** ] [07/20/2017][10:30:14] * shm_meta.shm_end_addr : 0x7f2005c68000
-[ ** ] [07/20/2017][10:30:14] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:30:14] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:30:14] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:30:14] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:30:14] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:30:14] *** Start wv_shm_load TEST ***
-[ ** ] [07/20/2017][10:30:14] *** Start wv_shm_load TEST ***
-[ ** ] [07/20/2017][10:30:14] *** Start wv_shm_load TEST ***
-[ ** ] [07/20/2017][10:34:38] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:34:38] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:34:38] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:34:38] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:34:38] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:34:38] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:34:38] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:34:38] * shm_meta.shm_start_addr : 0x7fcd9b757000
-[ ** ] [07/20/2017][10:34:38] * shm_meta.shm_end_addr : 0x7fcddb758000
-[ ** ] [07/20/2017][10:34:38] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:34:38] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:34:38] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:34:38] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:34:38] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:35:54] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:35:54] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:35:54] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:35:54] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:35:54] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:35:54] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:35:54] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:35:54] * shm_meta.shm_start_addr : 0x7f0c9961f000
-[ ** ] [07/20/2017][10:35:54] * shm_meta.shm_end_addr : 0x7f0cd9620000
-[ ** ] [07/20/2017][10:35:54] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:35:54] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:35:54] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:35:54] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:35:54] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:35:54] [ wv_shm_find_junk ]
-[ ** ] [07/20/2017][10:36:03] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:36:03] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:36:03] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:36:03] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:36:03] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:36:03] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:36:03] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:36:03] * shm_meta.shm_start_addr : 0x7f309da99000
-[ ** ] [07/20/2017][10:36:03] * shm_meta.shm_end_addr : 0x7f30dda9a000
-[ ** ] [07/20/2017][10:36:03] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:36:03] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:36:03] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:36:03] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:36:03] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:36:03] [ wv_shm_find_junk ]
-[ ** ] [07/20/2017][10:38:02] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:38:02] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:38:02] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:38:02] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:38:02] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:38:02] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:38:02] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:38:02] * shm_meta.shm_start_addr : 0x7f4869916000
-[ ** ] [07/20/2017][10:38:02] * shm_meta.shm_end_addr : 0x7f48a9917000
-[ ** ] [07/20/2017][10:38:02] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:38:02] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:38:02] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:38:02] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:38:02] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:38:02] [ wv_shm_find_junk ]
-[ ** ] [07/20/2017][10:38:08] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:38:08] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:38:08] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:38:08] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:38:08] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:38:08] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:38:08] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:38:08] * shm_meta.shm_start_addr : 0x7f2e4d223000
-[ ** ] [07/20/2017][10:38:08] * shm_meta.shm_end_addr : 0x7f2e8d224000
-[ ** ] [07/20/2017][10:38:08] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:38:08] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:38:08] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:38:08] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:38:08] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:38:08] [ wv_shm_find_junk ]
-[ ** ] [07/20/2017][10:48:15] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:48:15] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:48:15] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:48:15] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:48:15] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:48:15] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:48:15] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:48:15] * shm_meta.shm_start_addr : 0x7f05a7d0c000
-[ ** ] [07/20/2017][10:48:15] * shm_meta.shm_end_addr : 0x7f05e7d0d000
-[ ** ] [07/20/2017][10:48:15] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:48:15] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:48:15] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:48:15] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:48:15] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:48:15] [ wv_shm_find_junk ]
-[ ** ] [07/20/2017][10:48:15] [ wv_shm_get_junk_index ]
+[ ** ] [07/20/2017][20:38:45] [ wv_shm_init ]
+[ ** ] [07/20/2017][20:38:45] There is the shared memory was existing... (shm_id : -1
+[ !! ] [07/20/2017][20:38:45] Getting sharedaddr : (nil)
+[ !! ] [07/20/2017][20:38:45] cur_addr : (nil)
+[ ** ] [07/20/2017][20:38:45] [ wv_shm_find_junk ]
+[ ** ] [07/20/2017][20:38:45] There wasnt any shared memory junk... 
+[ ** ] [07/20/2017][20:38:45] [ wv_shm_get_junk_index ]
 
-[ ** ] [07/20/2017][10:52:02] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:52:02] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:52:02] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:52:02] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:52:02] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:52:02] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:52:02] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:52:02] * shm_meta.shm_start_addr : 0x7f98c3611000
-[ ** ] [07/20/2017][10:52:02] * shm_meta.shm_end_addr : 0x7f9903612000
-[ ** ] [07/20/2017][10:52:02] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:52:02] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:52:02] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:52:02] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:52:02] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:52:02] [ wv_shm_find_junk ]
-[ ** ] [07/20/2017][10:52:02] [ wv_shm_get_junk_index ]
+[ ** ] [07/20/2017][20:38:45] shmmeta->count : 0
+[ !! ] [07/20/2017][20:38:45] The _shmmeta or a junkhdr arg was NULL...
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_init ]
+[ ** ] [07/20/2017][20:41:55] shm_ds.shm_segsz : 1073741824
+[ ** ] [07/20/2017][20:41:55] shm_ds.shm_ctime : 1503276115
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_init_meta ]
+[ ** ] [07/20/2017][20:41:55] Initailizing the shared memory meta structure...
+[ ** ] [07/20/2017][20:41:55] shm_meta->count : 0
+[ ** ] [07/20/2017][20:41:55] shm_meta->shm_start_addr : 0x7f1fce898000
+[ ** ] [07/20/2017][20:41:55] shm_meta->shm_end_addr : 0x7f200e899000
+[ ** ] [07/20/2017][20:41:55] shm_meta->key : 4000
+[ ** ] [07/20/2017][20:41:55] shm_meta->shm_junk_size : 104857600
+[ ** ] [07/20/2017][20:41:55] shm_meta->shm_total_size : 1073745920
+[ ** ] [07/20/2017][20:41:55] Initailizing the shared memory junk queuere...
+[ ** ] [07/20/2017][20:41:55] Initailizing shared memory junk[0]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:41:55] addr of shm_junk : 0x7f1fce898350
+[ ** ] [07/20/2017][20:41:55] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:41:55] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->start_offset : 848
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_start_offset : 1176
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_end_offset : 104858448
+[ ** ] [07/20/2017][20:41:55] junk_hdr->write_offset : 848
+[ ** ] [07/20/2017][20:41:55] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:41:55] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:41:55] Initailizing shared memory junk[1]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:41:55] addr of shm_junk : 0x7f1fd4c98350
+[ ** ] [07/20/2017][20:41:55] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:41:55] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->start_offset : 104858448
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_start_offset : 104858776
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_end_offset : 209716048
+[ ** ] [07/20/2017][20:41:55] junk_hdr->write_offset : 104858448
+[ ** ] [07/20/2017][20:41:55] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:41:55] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:41:55] Initailizing shared memory junk[2]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:41:55] addr of shm_junk : 0x7f1fdb098350
+[ ** ] [07/20/2017][20:41:55] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:41:55] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->start_offset : 209716048
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_start_offset : 209716376
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_end_offset : 314573648
+[ ** ] [07/20/2017][20:41:55] junk_hdr->write_offset : 209716048
+[ ** ] [07/20/2017][20:41:55] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:41:55] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:41:55] Initailizing shared memory junk[3]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:41:55] addr of shm_junk : 0x7f1fe1498350
+[ ** ] [07/20/2017][20:41:55] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:41:55] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->start_offset : 314573648
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_start_offset : 314573976
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_end_offset : 419431248
+[ ** ] [07/20/2017][20:41:55] junk_hdr->write_offset : 314573648
+[ ** ] [07/20/2017][20:41:55] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:41:55] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:41:55] Initailizing shared memory junk[4]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:41:55] addr of shm_junk : 0x7f1fe7898350
+[ ** ] [07/20/2017][20:41:55] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:41:55] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->start_offset : 419431248
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_start_offset : 419431576
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_end_offset : 524288848
+[ ** ] [07/20/2017][20:41:55] junk_hdr->write_offset : 419431248
+[ ** ] [07/20/2017][20:41:55] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:41:55] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:41:55] Initailizing shared memory junk[5]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:41:55] addr of shm_junk : 0x7f1fedc98350
+[ ** ] [07/20/2017][20:41:55] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:41:55] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->start_offset : 524288848
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_start_offset : 524289176
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_end_offset : 629146448
+[ ** ] [07/20/2017][20:41:55] junk_hdr->write_offset : 524288848
+[ ** ] [07/20/2017][20:41:55] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:41:55] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:41:55] Initailizing shared memory junk[6]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:41:55] addr of shm_junk : 0x7f1ff4098350
+[ ** ] [07/20/2017][20:41:55] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:41:55] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->start_offset : 629146448
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_start_offset : 629146776
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_end_offset : 734004048
+[ ** ] [07/20/2017][20:41:55] junk_hdr->write_offset : 629146448
+[ ** ] [07/20/2017][20:41:55] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:41:55] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:41:55] Initailizing shared memory junk[7]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:41:55] addr of shm_junk : 0x7f1ffa498350
+[ ** ] [07/20/2017][20:41:55] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:41:55] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->start_offset : 734004048
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_start_offset : 734004376
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_end_offset : 838861648
+[ ** ] [07/20/2017][20:41:55] junk_hdr->write_offset : 734004048
+[ ** ] [07/20/2017][20:41:55] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:41:55] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:41:55] Initailizing shared memory junk[8]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:41:55] addr of shm_junk : 0x7f2000898350
+[ ** ] [07/20/2017][20:41:55] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:41:55] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->start_offset : 838861648
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_start_offset : 838861976
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_end_offset : 943719248
+[ ** ] [07/20/2017][20:41:55] junk_hdr->write_offset : 838861648
+[ ** ] [07/20/2017][20:41:55] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:41:55] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:41:55] Initailizing shared memory junk[9]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:41:55] addr of shm_junk : 0x7f2006c98350
+[ ** ] [07/20/2017][20:41:55] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:41:55] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->start_offset : 943719248
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_start_offset : 943719576
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_end_offset : 1048576848
+[ ** ] [07/20/2017][20:41:55] junk_hdr->write_offset : 943719248
+[ ** ] [07/20/2017][20:41:55] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:41:55] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:41:55] Initailizing shared memory junk[10]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:41:55] addr of shm_junk : 0x7f200d098350
+[ ** ] [07/20/2017][20:41:55] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:41:55] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->start_offset : 1048576848
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_start_offset : 1048577176
+[ ** ] [07/20/2017][20:41:55] junk_hdr->quu_end_offset : 1153434448
+[ ** ] [07/20/2017][20:41:55] junk_hdr->write_offset : 1048576848
+[ ** ] [07/20/2017][20:41:55] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:41:55] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:41:55] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_sync_meta ]
+[ ** ] [07/20/2017][20:41:55] <The initailized shared meta data >
+[ ** ] [07/20/2017][20:41:55] * shm_meta.count : 11
+[ ** ] [07/20/2017][20:41:55] * shm_meta.shm_start_addr : 0x7f1fce898000
+[ ** ] [07/20/2017][20:41:55] * shm_meta.shm_end_addr : 0x7f200e899000
+[ ** ] [07/20/2017][20:41:55] * shm_meta.key : 4000
+[ ** ] [07/20/2017][20:41:55] * shm_meta.shm_junk_size : 104857600
+[ ** ] [07/20/2017][20:41:55] * shm_meta.shm_total_size : 1073745920
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_init_smphr ]
+[ ** ] [07/20/2017][20:41:55] There was the semaphore set. (perror : File exists)
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_find_junk ]
+[ ** ] [07/20/2017][20:41:55] [ wv_shm_get_junk_index ]
 
-[ ** ] [07/20/2017][10:52:29] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:52:29] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:52:29] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:52:29] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:52:29] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:52:29] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:52:29] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:52:29] * shm_meta.shm_start_addr : 0x7f61cdf92000
-[ ** ] [07/20/2017][10:52:29] * shm_meta.shm_end_addr : 0x7f620df93000
-[ ** ] [07/20/2017][10:52:29] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:52:29] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:52:29] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:52:29] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:52:29] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:52:29] [ wv_shm_find_junk ]
-[ ** ] [07/20/2017][10:52:29] [ wv_shm_get_junk_index ]
+[ ** ] [07/20/2017][20:41:55] shmmeta->count : 11
+[ !! ] [07/20/2017][20:41:55] The _shmmeta or a junkhdr arg was NULL...
+[ ** ] [07/20/2017][20:42:18] [ wv_shm_init ]
+[ ** ] [07/20/2017][20:42:18] There is the shared memory was existing... (shm_id : -1
+[ !! ] [07/20/2017][20:42:18] Getting sharedaddr : (nil)
+[ !! ] [07/20/2017][20:42:18] cur_addr : (nil)
+[ ** ] [07/20/2017][20:42:18] [ wv_shm_find_junk ]
+[ ** ] [07/20/2017][20:42:18] There wasnt any shared memory junk... 
+[ ** ] [07/20/2017][20:42:18] [ wv_shm_get_junk_index ]
 
-[ ** ] [07/20/2017][10:56:07] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:56:07] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:56:07] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:56:07] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:56:07] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:56:07] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:56:07] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:56:07] * shm_meta.shm_start_addr : 0x7f9620fcf000
-[ ** ] [07/20/2017][10:56:07] * shm_meta.shm_end_addr : 0x7f9660fd0000
-[ ** ] [07/20/2017][10:56:07] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:56:07] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:56:07] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:56:07] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:56:07] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:56:07] [ wv_shm_find_junk ]
-[ ** ] [07/20/2017][10:56:07] [ wv_shm_get_junk_index ]
+[ ** ] [07/20/2017][20:42:18] shmmeta->count : 0
+[ !! ] [07/20/2017][20:42:18] The _shmmeta or a junkhdr arg was NULL...
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_init ]
+[ ** ] [07/20/2017][20:42:35] shm_ds.shm_segsz : 1073741824
+[ ** ] [07/20/2017][20:42:35] shm_ds.shm_ctime : 1503276155
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_init_meta ]
+[ ** ] [07/20/2017][20:42:35] Initailizing the shared memory meta structure...
+[ ** ] [07/20/2017][20:42:35] shm_meta->count : 0
+[ ** ] [07/20/2017][20:42:35] shm_meta->shm_start_addr : 0x7fd4232e2000
+[ ** ] [07/20/2017][20:42:35] shm_meta->shm_end_addr : 0x7fd4632e3000
+[ ** ] [07/20/2017][20:42:35] shm_meta->key : 4000
+[ ** ] [07/20/2017][20:42:35] shm_meta->shm_junk_size : 104857600
+[ ** ] [07/20/2017][20:42:35] shm_meta->shm_total_size : 1073745920
+[ ** ] [07/20/2017][20:42:35] Initailizing the shared memory junk queuere...
+[ ** ] [07/20/2017][20:42:35] Initailizing shared memory junk[0]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:42:35] addr of shm_junk : 0x7fd4232e2350
+[ ** ] [07/20/2017][20:42:35] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:42:35] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->start_offset : 848
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_start_offset : 1176
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_end_offset : 104858448
+[ ** ] [07/20/2017][20:42:35] junk_hdr->write_offset : 848
+[ ** ] [07/20/2017][20:42:35] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:42:35] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:42:35] Initailizing shared memory junk[1]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:42:35] addr of shm_junk : 0x7fd4296e2350
+[ ** ] [07/20/2017][20:42:35] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:42:35] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->start_offset : 104858448
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_start_offset : 104858776
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_end_offset : 209716048
+[ ** ] [07/20/2017][20:42:35] junk_hdr->write_offset : 104858448
+[ ** ] [07/20/2017][20:42:35] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:42:35] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:42:35] Initailizing shared memory junk[2]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:42:35] addr of shm_junk : 0x7fd42fae2350
+[ ** ] [07/20/2017][20:42:35] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:42:35] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->start_offset : 209716048
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_start_offset : 209716376
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_end_offset : 314573648
+[ ** ] [07/20/2017][20:42:35] junk_hdr->write_offset : 209716048
+[ ** ] [07/20/2017][20:42:35] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:42:35] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:42:35] Initailizing shared memory junk[3]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:42:35] addr of shm_junk : 0x7fd435ee2350
+[ ** ] [07/20/2017][20:42:35] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:42:35] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->start_offset : 314573648
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_start_offset : 314573976
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_end_offset : 419431248
+[ ** ] [07/20/2017][20:42:35] junk_hdr->write_offset : 314573648
+[ ** ] [07/20/2017][20:42:35] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:42:35] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:42:35] Initailizing shared memory junk[4]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:42:35] addr of shm_junk : 0x7fd43c2e2350
+[ ** ] [07/20/2017][20:42:35] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:42:35] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->start_offset : 419431248
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_start_offset : 419431576
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_end_offset : 524288848
+[ ** ] [07/20/2017][20:42:35] junk_hdr->write_offset : 419431248
+[ ** ] [07/20/2017][20:42:35] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:42:35] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:42:35] Initailizing shared memory junk[5]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:42:35] addr of shm_junk : 0x7fd4426e2350
+[ ** ] [07/20/2017][20:42:35] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:42:35] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->start_offset : 524288848
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_start_offset : 524289176
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_end_offset : 629146448
+[ ** ] [07/20/2017][20:42:35] junk_hdr->write_offset : 524288848
+[ ** ] [07/20/2017][20:42:35] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:42:35] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:42:35] Initailizing shared memory junk[6]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:42:35] addr of shm_junk : 0x7fd448ae2350
+[ ** ] [07/20/2017][20:42:35] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:42:35] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->start_offset : 629146448
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_start_offset : 629146776
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_end_offset : 734004048
+[ ** ] [07/20/2017][20:42:35] junk_hdr->write_offset : 629146448
+[ ** ] [07/20/2017][20:42:35] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:42:35] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:42:35] Initailizing shared memory junk[7]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:42:35] addr of shm_junk : 0x7fd44eee2350
+[ ** ] [07/20/2017][20:42:35] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:42:35] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->start_offset : 734004048
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_start_offset : 734004376
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_end_offset : 838861648
+[ ** ] [07/20/2017][20:42:35] junk_hdr->write_offset : 734004048
+[ ** ] [07/20/2017][20:42:35] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:42:35] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:42:35] Initailizing shared memory junk[8]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:42:35] addr of shm_junk : 0x7fd4552e2350
+[ ** ] [07/20/2017][20:42:35] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:42:35] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->start_offset : 838861648
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_start_offset : 838861976
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_end_offset : 943719248
+[ ** ] [07/20/2017][20:42:35] junk_hdr->write_offset : 838861648
+[ ** ] [07/20/2017][20:42:35] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:42:35] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:42:35] Initailizing shared memory junk[9]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:42:35] addr of shm_junk : 0x7fd45b6e2350
+[ ** ] [07/20/2017][20:42:35] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:42:35] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->start_offset : 943719248
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_start_offset : 943719576
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_end_offset : 1048576848
+[ ** ] [07/20/2017][20:42:35] junk_hdr->write_offset : 943719248
+[ ** ] [07/20/2017][20:42:35] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:42:35] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:42:35] Initailizing shared memory junk[10]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_junk_init ]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:42:35] addr of shm_junk : 0x7fd461ae2350
+[ ** ] [07/20/2017][20:42:35] junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:42:35] junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->start_offset : 1048576848
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_start_offset : 1048577176
+[ ** ] [07/20/2017][20:42:35] junk_hdr->quu_end_offset : 1153434448
+[ ** ] [07/20/2017][20:42:35] junk_hdr->write_offset : 1048576848
+[ ** ] [07/20/2017][20:42:35] junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:42:35] junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:42:35] junk_hdr->count : 0
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_sync_meta ]
+[ ** ] [07/20/2017][20:42:35] <The initailized shared meta data >
+[ ** ] [07/20/2017][20:42:35] * shm_meta.count : 11
+[ ** ] [07/20/2017][20:42:35] * shm_meta.shm_start_addr : 0x7fd4232e2000
+[ ** ] [07/20/2017][20:42:35] * shm_meta.shm_end_addr : 0x7fd4632e3000
+[ ** ] [07/20/2017][20:42:35] * shm_meta.key : 4000
+[ ** ] [07/20/2017][20:42:35] * shm_meta.shm_junk_size : 104857600
+[ ** ] [07/20/2017][20:42:35] * shm_meta.shm_total_size : 1073745920
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_wr ]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_init_smphr ]
+[ ** ] [07/20/2017][20:42:35] There was the semaphore set. (perror : File exists)
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_find_junk ]
+[ ** ] [07/20/2017][20:42:35] [ wv_shm_get_junk_index ]
 
-[ ** ] [07/20/2017][10:57:29] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:57:29] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:57:29] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:57:29] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:57:29] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:57:29] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:57:29] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:57:29] * shm_meta.shm_start_addr : 0x7f82afda5000
-[ ** ] [07/20/2017][10:57:29] * shm_meta.shm_end_addr : 0x7f82efda6000
-[ ** ] [07/20/2017][10:57:29] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:57:29] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:57:29] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:57:29] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:57:29] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:57:29] [ wv_shm_find_junk ]
-[ ** ] [07/20/2017][10:57:29] [ wv_shm_get_junk_index ]
+[ ** ] [07/20/2017][20:42:35] shmmeta->count : 11
+[ !! ] [07/20/2017][20:42:35] The _shmmeta or a junkhdr arg was NULL...
+[ ** ] [07/20/2017][20:44:56] [ wv_shm_init ]
+[ ** ] [07/20/2017][20:44:56] There is the shared memory was existing... (shm_id : -1
+[ ** ] [07/20/2017][20:44:56] shm_ds.shm_segsz : 1073741824
+[ ** ] [07/20/2017][20:44:56] shm_ds.shm_ctime : 1503276155
+[ ** ] [07/20/2017][20:44:56] [ wv_shm_load_meta ]
+[ ** ] [07/20/2017][20:44:56] <The loaded shared meta data >
+[ ** ] [07/20/2017][20:44:56] * shm_meta.count : 11
+[ ** ] [07/20/2017][20:44:56] * shm_meta.shm_start_addr : 0x7f82036aa000
+[ ** ] [07/20/2017][20:44:56] * shm_meta.shm_end_addr : 0x7f82436ab000
+[ ** ] [07/20/2017][20:44:56] * shm_meta.key : 4000
+[ ** ] [07/20/2017][20:44:56] * shm_meta.shm_junk_size : 104857600
+[ ** ] [07/20/2017][20:44:56] * shm_meta.shm_total_size : 1073745920
+[ ** ] [07/20/2017][20:44:56] [ wv_shm_init_smphr ]
+[ ** ] [07/20/2017][20:44:56] There was the semaphore set. (perror : File exists)
+[ ** ] [07/20/2017][20:44:56] [ wv_shm_find_junk ]
+[ ** ] [07/20/2017][20:44:56] [ wv_shm_get_junk_index ]
 
-[ ** ] [07/20/2017][10:57:29] ok?
-[ ** ] [07/20/2017][10:58:37] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:58:37] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:58:37] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:58:37] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:58:37] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:58:37] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:58:37] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:58:37] * shm_meta.shm_start_addr : 0x7ff622737000
-[ ** ] [07/20/2017][10:58:37] * shm_meta.shm_end_addr : 0x7ff662738000
-[ ** ] [07/20/2017][10:58:37] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:58:37] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:58:37] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:58:37] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:58:37] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:58:37] [ wv_shm_find_junk ]
-[ ** ] [07/20/2017][10:58:37] [ wv_shm_get_junk_index ]
+[ ** ] [07/20/2017][20:44:56] shmmeta->count : 11
+[ !! ] [07/20/2017][20:44:56] The _shmmeta or a junkhdr arg was NULL...
+[ ** ] [07/20/2017][20:54:00] *** Start wv_shm_init TEST ***
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_init ]
+[ ** ] [07/20/2017][20:54:00] There is the shared memory was existing... (shm_id : -1
+[ ** ] [07/20/2017][20:54:00] shm_ds.shm_segsz : 1073741824
+[ ** ] [07/20/2017][20:54:00] shm_ds.shm_ctime : 1503276155
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_load_meta ]
+[ ** ] [07/20/2017][20:54:00] <The loaded shared meta data >
+[ ** ] [07/20/2017][20:54:00] * shm_meta.count : 11
+[ ** ] [07/20/2017][20:54:00] * shm_meta.shm_start_addr : 0x7f23892ff000
+[ ** ] [07/20/2017][20:54:00] * shm_meta.shm_end_addr : 0x7f23c9300000
+[ ** ] [07/20/2017][20:54:00] * shm_meta.key : 4000
+[ ** ] [07/20/2017][20:54:00] * shm_meta.shm_junk_size : 104857600
+[ ** ] [07/20/2017][20:54:00] * shm_meta.shm_total_size : 1073745920
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_init_smphr ]
+[ ** ] [07/20/2017][20:54:00] There was the semaphore set. (perror : File exists)
+[ ** ] [07/20/2017][20:54:00] Assign the shared memory junk with "mytest_junk"
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_assign_junk ]
+[ ** ] [07/20/2017][20:54:00] The count of shm_meta : 11
+[ ** ] [07/20/2017][20:54:00] shm_meta->arr_junk_hdr_offsets[0] : 848
+[ ** ] [07/20/2017][20:54:00] shm_meta->arr_junk_hdr_offsets[1] : 848
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 0x7f23892ff350
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_start_offset : 1176
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_end_offset : 104858448
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_find_junk ]
+[ ** ] [07/20/2017][20:54:00] 0x7f23892ff350
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_clear_junk ]
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 0x7f23892ff350
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_start_offset : 1176
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_end_offset : 104858448
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_push_elem ]
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 0x7f23892ff350
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 848
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 1176
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 1176
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 104858448
+[ ** ] [07/20/2017][20:54:00] shm_meta->shm_start_addr : 0x7f23892ff000
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->write_offset : 1176
+[ ** ] [07/20/2017][20:54:00] elem_hdr.size : 8452
+[ ** ] [07/20/2017][20:54:00] elem_hdr.next_offset : 0
+[ ** ] [07/20/2017][20:54:00] write position : 0x7f23892ff498
+[ ** ] [07/20/2017][20:54:00] ok?...
+[ ** ] [07/20/2017][20:54:00] pos_write_hdr : 0x7f23892ff498 (write_offset : 1176)
+[ ** ] [07/20/2017][20:54:00] pos_write_data : 0x7f23892ff4a8 (write_offset : 1192)
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_push_elem ]
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 0x7f23892ff350
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 848
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 9644
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 1176
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 104858448
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_link_elems ]
+[ ** ] [07/20/2017][20:54:00] shm_junk_elem_hdr->next_offset : 9644
+[ ** ] [07/20/2017][20:54:00] shm_meta->shm_start_addr : 0x7f23892ff000
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->write_offset : 9644
+[ ** ] [07/20/2017][20:54:00] elem_hdr.size : 8452
+[ ** ] [07/20/2017][20:54:00] elem_hdr.next_offset : 0
+[ ** ] [07/20/2017][20:54:00] write position : 0x7f23893015ac
+[ ** ] [07/20/2017][20:54:00] ok?...
+[ ** ] [07/20/2017][20:54:00] pos_write_hdr : 0x7f23893015ac (write_offset : 9644)
+[ ** ] [07/20/2017][20:54:00] pos_write_data : 0x7f23893015bc (write_offset : 9660)
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_push_elem ]
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 0x7f23892ff350
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 848
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 18112
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 1176
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr : 104858448
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_link_elems ]
+[ ** ] [07/20/2017][20:54:00] shm_junk_elem_hdr->next_offset : 18112
+[ ** ] [07/20/2017][20:54:00] shm_meta->shm_start_addr : 0x7f23892ff000
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->write_offset : 18112
+[ ** ] [07/20/2017][20:54:00] elem_hdr.size : 8452
+[ ** ] [07/20/2017][20:54:00] elem_hdr.next_offset : 0
+[ ** ] [07/20/2017][20:54:00] write position : 0x7f23893036c0
+[ ** ] [07/20/2017][20:54:00] ok?...
+[ ** ] [07/20/2017][20:54:00] pos_write_hdr : 0x7f23893036c0 (write_offset : 18112)
+[ ** ] [07/20/2017][20:54:00] pos_write_data : 0x7f23893036d0 (write_offset : 18128)
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_show_junk ]
+[ ** ] [07/20/2017][20:54:00] <junk_header : 0x2048eb0>
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->shm_name : mytest_junk
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->is_assigned : 1
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->start_offset : 848
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_start_offset : 1176
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_end_offset : 104858448
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->read_offset : 1176
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->write_offset : 26580
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->prev_write_offset : 18112
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->count : 3
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_show_junk ]
+[ ** ] [07/20/2017][20:54:00] <junk_header : 0x2049000>
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->start_offset : 104858448
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_start_offset : 104858776
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_end_offset : 209716048
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->read_offset : 104858448
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->write_offset : 104858448
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->count : 0
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_show_junk ]
+[ ** ] [07/20/2017][20:54:00] <junk_header : 0x2049150>
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->start_offset : 209716048
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_start_offset : 209716376
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_end_offset : 314573648
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->read_offset : 209716048
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->write_offset : 209716048
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->count : 0
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_show_junk ]
+[ ** ] [07/20/2017][20:54:00] <junk_header : 0x20492a0>
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->start_offset : 314573648
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_start_offset : 314573976
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_end_offset : 419431248
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->read_offset : 314573648
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->write_offset : 314573648
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->count : 0
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_show_junk ]
+[ ** ] [07/20/2017][20:54:00] <junk_header : 0x20493f0>
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->start_offset : 419431248
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_start_offset : 419431576
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_end_offset : 524288848
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->read_offset : 419431248
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->write_offset : 419431248
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->count : 0
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_show_junk ]
+[ ** ] [07/20/2017][20:54:00] <junk_header : 0x2049540>
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->start_offset : 524288848
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_start_offset : 524289176
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_end_offset : 629146448
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->read_offset : 524288848
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->write_offset : 524288848
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->count : 0
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_show_junk ]
+[ ** ] [07/20/2017][20:54:00] <junk_header : 0x2049690>
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->start_offset : 629146448
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_start_offset : 629146776
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_end_offset : 734004048
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->read_offset : 629146448
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->write_offset : 629146448
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->count : 0
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_show_junk ]
+[ ** ] [07/20/2017][20:54:00] <junk_header : 0x20497e0>
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->start_offset : 734004048
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_start_offset : 734004376
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_end_offset : 838861648
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->read_offset : 734004048
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->write_offset : 734004048
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->count : 0
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_show_junk ]
+[ ** ] [07/20/2017][20:54:00] <junk_header : 0x2049930>
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->start_offset : 838861648
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_start_offset : 838861976
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_end_offset : 943719248
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->read_offset : 838861648
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->write_offset : 838861648
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->count : 0
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_show_junk ]
+[ ** ] [07/20/2017][20:54:00] <junk_header : 0x2049a80>
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->start_offset : 943719248
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_start_offset : 943719576
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_end_offset : 1048576848
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->read_offset : 943719248
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->write_offset : 943719248
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->count : 0
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_show_junk ]
+[ ** ] [07/20/2017][20:54:00] <junk_header : 0x2049bd0>
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->shm_name : 
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->is_assigned : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->start_offset : 1048576848
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_start_offset : 1048577176
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_end_offset : 1153434448
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->read_offset : 1048576848
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->write_offset : 1048576848
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->prev_write_offset : 0
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->count : 0
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_dump_junk ]
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_find_junk ]
+[ ** ] [07/20/2017][20:54:00] Previous the shared memory dump file having same path existed. (file path : .//mytest_junk.sdmp)
+[ ** ] [07/20/2017][20:54:00] Previous the shared memory dump file having same path existed. (file path : .//mytest_junk_0.sdmp)
+[ ** ] [07/20/2017][20:54:00] [ wv_shm_show_junk ]
+[ ** ] [07/20/2017][20:54:00] <junk_header : 0x7f23892ff350>
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->shm_name : mytest_junk
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->is_assigned : 1
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->start_offset : 848
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_start_offset : 1176
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->quu_end_offset : 104858448
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->read_offset : 1176
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->write_offset : 26580
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->prev_write_offset : 18112
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->remain_size : 104857272
+[ ** ] [07/20/2017][20:54:00] shm_junk_hdr->count : 3
+[ ** ] [07/20/2017][20:56:42] [ wv_shm_init ]
+[ ** ] [07/20/2017][20:56:42] There is the shared memory was existing... (shm_id : -1
+[ ** ] [07/20/2017][20:56:42] shm_ds.shm_segsz : 1073741824
+[ ** ] [07/20/2017][20:56:42] shm_ds.shm_ctime : 1503276155
+[ ** ] [07/20/2017][20:56:42] [ wv_shm_load_meta ]
+[ ** ] [07/20/2017][20:56:42] <The loaded shared meta data >
+[ ** ] [07/20/2017][20:56:42] * shm_meta.count : 11
+[ ** ] [07/20/2017][20:56:42] * shm_meta.shm_start_addr : 0x7fea7af35000
+[ ** ] [07/20/2017][20:56:42] * shm_meta.shm_end_addr : 0x7feabaf36000
+[ ** ] [07/20/2017][20:56:42] * shm_meta.key : 4000
+[ ** ] [07/20/2017][20:56:42] * shm_meta.shm_junk_size : 104857600
+[ ** ] [07/20/2017][20:56:42] * shm_meta.shm_total_size : 1073745920
+[ ** ] [07/20/2017][20:56:42] [ wv_shm_init_smphr ]
+[ ** ] [07/20/2017][20:56:42] There was the semaphore set. (perror : File exists)
+[ ** ] [07/20/2017][20:56:42] [ wv_shm_find_junk ]
+[ ** ] [07/20/2017][20:56:42] [ wv_shm_get_junk_index ]
 
-[ ** ] [07/20/2017][10:58:48] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:58:48] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:58:48] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:58:48] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:58:48] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:58:48] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:58:48] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:58:48] * shm_meta.shm_start_addr : 0x7fa87a4d1000
-[ ** ] [07/20/2017][10:58:48] * shm_meta.shm_end_addr : 0x7fa8ba4d2000
-[ ** ] [07/20/2017][10:58:48] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:58:48] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:58:48] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:58:48] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:58:48] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:58:48] [ wv_shm_find_junk ]
-[ ** ] [07/20/2017][10:58:48] [ wv_shm_get_junk_index ]
+[ ** ] [07/20/2017][20:56:42] shmmeta->count : 11
+[ ** ] [07/20/2017][20:56:42] ok?
+[ ** ] [07/20/2017][20:56:42] find index : 0
+[ ** ] [07/21/2017][03:35:38] [ wv_shm_init ]
+[ ** ] [07/21/2017][03:35:38] There is the shared memory was existing... (shm_id : -1
+[ ** ] [07/21/2017][03:35:38] shm_ds.shm_segsz : 1073741824
+[ ** ] [07/21/2017][03:35:38] shm_ds.shm_ctime : 1503276155
+[ ** ] [07/21/2017][03:35:38] [ wv_shm_load_meta ]
+[ ** ] [07/21/2017][03:35:38] <The loaded shared meta data >
+[ ** ] [07/21/2017][03:35:38] * shm_meta.count : 11
+[ ** ] [07/21/2017][03:35:38] * shm_meta.shm_start_addr : 0x7f94eaa24000
+[ ** ] [07/21/2017][03:35:38] * shm_meta.shm_end_addr : 0x7f952aa25000
+[ ** ] [07/21/2017][03:35:38] * shm_meta.key : 4000
+[ ** ] [07/21/2017][03:35:38] * shm_meta.shm_junk_size : 104857600
+[ ** ] [07/21/2017][03:35:38] * shm_meta.shm_total_size : 1073745920
+[ ** ] [07/21/2017][03:35:38] [ wv_shm_init_smphr ]
+[ ** ] [07/21/2017][03:35:38] There was the semaphore set. (perror : File exists)
+[ ** ] [07/21/2017][03:35:38] [ wv_shm_find_junk ]
+[ ** ] [07/21/2017][03:35:38] [ wv_shm_lock_quu ]
+[ ** ] [07/21/2017][03:35:38] [ wv_shm_unlock_quu ]
+[ ** ] [07/21/2017][03:35:38] [ wv_shm_get_junk_index ]
 
-[ ** ] [07/20/2017][10:59:03] [ wv_shm_init ]
-[ ** ] [07/20/2017][10:59:03] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][10:59:03] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][10:59:03] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][10:59:03] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][10:59:03] <The loaded shared meta data >
-[ ** ] [07/20/2017][10:59:03] * shm_meta.count : 11
-[ ** ] [07/20/2017][10:59:03] * shm_meta.shm_start_addr : 0x7f4e841a3000
-[ ** ] [07/20/2017][10:59:03] * shm_meta.shm_end_addr : 0x7f4ec41a4000
-[ ** ] [07/20/2017][10:59:03] * shm_meta.key : 4000
-[ ** ] [07/20/2017][10:59:03] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][10:59:03] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][10:59:03] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][10:59:03] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][10:59:03] [ wv_shm_find_junk ]
-[ ** ] [07/20/2017][10:59:03] [ wv_shm_get_junk_index ]
-
-[ ** ] [07/20/2017][11:01:45] [ wv_shm_init ]
-[ ** ] [07/20/2017][11:01:45] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][11:01:45] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][11:01:45] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][11:01:45] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][11:01:45] <The loaded shared meta data >
-[ ** ] [07/20/2017][11:01:45] * shm_meta.count : 11
-[ ** ] [07/20/2017][11:01:45] * shm_meta.shm_start_addr : 0x7f5a9a8c6000
-[ ** ] [07/20/2017][11:01:45] * shm_meta.shm_end_addr : 0x7f5ada8c7000
-[ ** ] [07/20/2017][11:01:45] * shm_meta.key : 4000
-[ ** ] [07/20/2017][11:01:45] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][11:01:45] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][11:01:45] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][11:01:45] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][11:01:45] [ wv_shm_find_junk ]
-[ ** ] [07/20/2017][11:01:45] [ wv_shm_get_junk_index ]
-
-[ !! ] [07/20/2017][11:01:45] The _shmmeta or a junkhdr arg was NULL...
-[ ** ] [07/20/2017][11:02:56] [ wv_shm_init ]
-[ ** ] [07/20/2017][11:02:56] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][11:02:56] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][11:02:56] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][11:02:56] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][11:02:56] <The loaded shared meta data >
-[ ** ] [07/20/2017][11:02:56] * shm_meta.count : 11
-[ ** ] [07/20/2017][11:02:56] * shm_meta.shm_start_addr : 0x7f15a1e4c000
-[ ** ] [07/20/2017][11:02:56] * shm_meta.shm_end_addr : 0x7f15e1e4d000
-[ ** ] [07/20/2017][11:02:56] * shm_meta.key : 4000
-[ ** ] [07/20/2017][11:02:56] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][11:02:56] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][11:02:56] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][11:02:56] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][11:02:56] [ wv_shm_find_junk ]
-[ ** ] [07/20/2017][11:02:56] [ wv_shm_get_junk_index ]
-
-[ ** ] [07/20/2017][11:02:56] shmmeta->count : 11
-[ !! ] [07/20/2017][11:02:56] The _shmmeta or a junkhdr arg was NULL...
-[ ** ] [07/20/2017][11:05:53] [ wv_shm_init ]
-[ ** ] [07/20/2017][11:05:53] There is the shared memory was existing... (shm_id : -1
-[ ** ] [07/20/2017][11:05:53] shm_ds.shm_segsz : 1073741824
-[ ** ] [07/20/2017][11:05:53] shm_ds.shm_ctime : 1503236666
-[ ** ] [07/20/2017][11:05:53] [ wv_shm_load_meta ]
-[ ** ] [07/20/2017][11:05:53] <The loaded shared meta data >
-[ ** ] [07/20/2017][11:05:53] * shm_meta.count : 11
-[ ** ] [07/20/2017][11:05:53] * shm_meta.shm_start_addr : 0x7fc21a097000
-[ ** ] [07/20/2017][11:05:53] * shm_meta.shm_end_addr : 0x7fc25a098000
-[ ** ] [07/20/2017][11:05:53] * shm_meta.key : 4000
-[ ** ] [07/20/2017][11:05:53] * shm_meta.shm_junk_size : 104857600
-[ ** ] [07/20/2017][11:05:53] * shm_meta.shm_total_size : 1073745920
-[ ** ] [07/20/2017][11:05:53] [ wv_shm_init_smphr ]
-[ ** ] [07/20/2017][11:05:53] There was the semaphore set. (perror : File exists)
-[ ** ] [07/20/2017][11:05:53] [ wv_shm_find_junk ]
-[ ** ] [07/20/2017][11:05:53] [ wv_shm_get_junk_index ]
-
-[ ** ] [07/20/2017][11:05:53] shmmeta->count : 11
-[ !! ] [07/20/2017][11:05:53] The _shmmeta or a junkhdr arg was NULL...
+[ ** ] [07/21/2017][03:35:38] shmmeta->count : 11
+[ ** ] [07/21/2017][03:35:38] ok?
+[ ** ] [07/21/2017][03:35:38] find index : 0

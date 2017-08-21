@@ -19,8 +19,8 @@
 #define SHM_KEY 4000
 #define SHM_SMPR_KEY 3000
 
-#define SHM_TOTAL_SIZE (1024 * 1024 * 1024)
-#define SHM_JUNK_SIZE (100 * 1024 * 1024)
+#define SHM_TOTAL_SIZE (10 * 1024 * 1024)
+#define SHM_JUNK_SIZE (1 * 1024 * 1024)
 #define SHM_MAX_COUNT 100
 
 #define SHM_INIT 0
