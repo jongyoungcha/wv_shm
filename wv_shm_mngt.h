@@ -19,11 +19,14 @@
 #define SHM_KEY 4000
 #define SHM_SMPR_KEY 3000
 
-#define SHM_TOTAL_SIZE (10 * 1024 * 1024)
+#define SHM_TOTAL_SIZE (1000 * 1024 * 1024)
 #define SHM_JUNK_SIZE (1 * 1024 * 1024)
 #define SHM_MAX_COUNT 100
 
-#define SHM_INIT 0
+enum {
+  SHM_INIT = 1,
+  SEMA_INIT = 2,
+};
 
 
 /* +-----------------------------+ */
@@ -80,11 +83,11 @@ typedef union wv_shm_quusmphr{
 } wv_shm_quusmphr_t;
 
 
-int
-wv_shm_init_test ();
+extern int
+wv_shm_shm(int flags);
 
 extern int
-wv_shm_init();
+wv_shm_init_shm(int flags);
 
 extern int
 wv_shm_load_meta(void* shm_startaddr);
@@ -99,7 +102,7 @@ extern int
 wv_shm_sync_meta();
 
 extern int
-wv_shm_init_smphr(int quucnt, int is_init);
+wv_shm_init_smphr(int flags);
 
 extern int
 wv_shm_lock_quu(int index);
@@ -116,8 +119,8 @@ wv_shm_unassign_junk(const char* junkname);
 extern int
 wv_shm_get_junk_index(wv_shm_junk_hdr_t* junkhdr);
 
-int
-wv_shm_chk_offs(size_t offset);
+extern int
+wv_shm_get_junk_count();
 
 extern void*
 wv_shm_wr(size_t start_offs, void* data, size_t size, size_t *next_offs);
@@ -146,7 +149,7 @@ wv_shm_peek_elem_data(wv_shm_junk_hdr_t* shm_junk_hdr);
 extern void*
 wv_shm_pop_elem_data(wv_shm_junk_hdr_t* shm_junk_hdr, wv_shm_junk_elem_hdr_t* shm_junk_elem_hdr);
 
-extern void*
+extern int
 wv_shm_push_elem(wv_shm_junk_hdr_t* shm_junk_hdr, void* data, size_t size);
 
 extern wv_shm_junk_hdr_t*

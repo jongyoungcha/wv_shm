@@ -25,23 +25,28 @@ int wv_init_log(const char* dir_path, const char* file_name){
   return ret;
 }
 
-const char* get_log_level_mark(int level){
-  if ( level == LOG_INF ){
+const char* get_log_level_mark(int level)
+{
+  if ( level == LOG_INF )
+  {
     return " ** ";
   }
-  else if ( level == LOG_WRN ){
+  else if ( level == LOG_WRN )
+  {
     return " ## ";
   }
-  else if ( level == LOG_ERR ){
+  else if ( level == LOG_ERR )
+  {
     return " !! ";
   }
-  else{
+  else
+  {
     return "    ";
   }
 }
 
-int wv_write_log(int level, const char* tmpl_msg, ...){
-
+int wv_write_log(int level, const char* tmpl_msg, ...)
+{
   int ret = 0;
 
   FILE* pfile = NULL;
@@ -53,17 +58,17 @@ int wv_write_log(int level, const char* tmpl_msg, ...){
   char log_full_msg[8192] = {0};
   va_list argptr;
 
-  if (init_ok){
+  if (init_ok)
+  {
     time(&raw_time);
     time_info = localtime(&raw_time);
 
     /* Make the log file path. */
     snprintf(file_full_path, 8192, "%s%s%s", log_dir_path, delimit, log_file_name);
 
-
     /* Open the log file */
-    if((pfile = fopen(file_full_path, "a+"))){
-
+    if((pfile = fopen(file_full_path, "a+")))
+    {
       /* Make the log message. */
       va_start(argptr, tmpl_msg);
       vsprintf(log_msg, tmpl_msg, argptr);
@@ -79,11 +84,13 @@ int wv_write_log(int level, const char* tmpl_msg, ...){
       /* Write log message. */
       fputs(log_full_msg, pfile);
 
-      if (pfile) {
+      if (pfile)
+      {
 	fclose(pfile);
       }
     }
-    else{
+    else
+    {
       fprintf(stderr, "[ !! ] Open the log file was filed...( path : %s)\n", file_full_path);
     }
   }
@@ -91,8 +98,6 @@ int wv_write_log(int level, const char* tmpl_msg, ...){
     fprintf(stderr, "[ !! ] Initializing log was filed...( path : %s)\n", file_full_path);
     ret = -1; goto wv_write_log_ret;
   }
-
-
 
  wv_write_log_ret:
   return ret;

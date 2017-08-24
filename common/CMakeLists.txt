@@ -3,4 +3,4 @@ file(GLOB SOURCES
     ./*.h
     ./*.c
 )
-add_library(wv_shm_common ${SOURCES})
+add_library(wv_shm_common SHARED ${SOURCES})
