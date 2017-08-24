@@ -8,7 +8,6 @@ int main(int argc, char* argv[])
   wv_shm_junk_hdr_t* junkhdr = NULL;
   wv_shm_junk_elem_hdr_t* elemhdr = NULL;
   
-  
   int junkidx = -1;
   int seq = 0;
   int i = 0;
@@ -16,9 +15,9 @@ int main(int argc, char* argv[])
 
   testelem_t* pelem = NULL;
 
-  wv_shm_init_shm(0);
-
   wv_init_log("./", logname);
+
+  wv_shm_init_shm(0);
   
   if ((junkhdr = wv_shm_find_junk(JUNKNAME)) == NULL)
   {

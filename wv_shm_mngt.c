@@ -57,7 +57,7 @@ int wv_shm_init_shm (int flags)
   {
     if (flags && SHM_INIT)
     {
-      if ((shmid = shmget(_shmmeta->shm_key,_shmmeta->shm_totalsize, 0)))
+      if ((shmid = shmget(_shmmeta->shm_key, _shmmeta->shm_totalsize, 0)))
       {
 	wv_write_log(LOG_INF, "SHM_INIT option existed, remove the shared memory...");
 	shmctl(shmid, IPC_RMID, 0);	  
@@ -220,13 +220,13 @@ int wv_shm_init_smphr(int is_init)
   int i = 0;
 
   wv_shm_quusmphr_t smphrunion;
+  memset(&smphrunion, 0x00, sizeof(wv_shm_quusmphr_t));
 
   if (!_shmmeta)
   {
     wv_write_log(LOG_WRN, "Please call wv_shm_init_shm(), Before conduct this function... ");
   }
   
-  smphrunion.val = _shmmeta->count;
 
   if (!wv_shm_check_init())
   {
@@ -234,35 +234,40 @@ int wv_shm_init_smphr(int is_init)
   }
 
   /* Remove previous the semaphores set. */
-  if (is_init)
+  if (SEMA_INIT && is_init)
   {
     if ((_semid = semget((key_t)SHM_SMPR_KEY, 0, 0660|IPC_CREAT|IPC_EXCL)) == -1)
     {
       wv_write_log(LOG_INF, "There was the semaphore set. (perror : %s)", strerror(errno));
       semctl(_semid, 0, IPC_RMID);
     }
-  }
-
-  if ( !_shmquusmphr )
-  {
-    _shmquusmphr = malloc(sizeof(wv_shm_quusmphr_t));
-  }
-
-  /* Getting a semaphore set id by the key */
-  if ((_semid = semget((key_t)SHM_SMPR_KEY, _shmmeta->count, 0660|IPC_CREAT)) == -1)
-  {
-    wv_write_log(LOG_ERR, "semget() errror (perror : %s)", strerror(errno));
-    return ret = -1;
-  }
-
-  /* Initialize the semaphores */
-  for (i=0; i<_shmmeta->count; i++)
-  {
-    _shmquusmphr->val = 1;
-
-    if (semctl(_semid, i, SETVAL, smphrunion) == -1)
+    
+    /* Getting a semaphore set id by the key */
+    wv_write_log(LOG_INF, "We was creating the %d of semaphores", _shmmeta->count);
+    if ((_semid = semget((key_t)SHM_SMPR_KEY, _shmmeta->count, 0660|IPC_CREAT)) == -1)
     {
-      wv_write_log(LOG_ERR, "semctl() error (perror : %s)", strerror(errno));
+      wv_write_log(LOG_ERR, "semget() errror (perror : %s)", strerror(errno));
+      return ret = -1;
+    }
+
+    /* Initialize the semaphores */
+    smphrunion.val = 1;
+    for (i=0; i<_shmmeta->count; i++)
+    {
+      wv_write_log(LOG_INF, "initialize %d semaphore with value 1", i);
+
+      if (semctl(_semid, i, SETVAL, smphrunion) == -1)
+      {
+	wv_write_log(LOG_ERR, "semctl() error (perror : %s)", strerror(errno));
+	return ret = -1;
+      }
+    }
+  }
+  else
+  {
+    if((_semid = semget((key_t)SHM_SMPR_KEY, 1,  0)) == -1)
+    {
+      wv_write_log(LOG_ERR, "Filed to get previous semaphore set.");
       return ret = -1;
     }
   }
@@ -284,6 +289,8 @@ int wv_shm_lock_quu(int index){
     return ret = -1;
   }
 
+  wv_write_log(LOG_INF, "index id : %d", index);
+  wv_write_log(LOG_INF, "locking with semaphore id : %d", _semid);
   if (semop(_semid, &sem_open, 1) == -1)
   {
     wv_write_log(LOG_ERR, "Locking the semaphore was failed...(perror : %s)", strerror(errno));
