@@ -18,6 +18,7 @@
 
 #define SHM_KEY 4000
 #define SHM_SMPR_KEY 3000
+#define PROC_LIMIT 65536
 
 #define SHM_TOTAL_SIZE (1000 * 1024 * 1024)
 #define SHM_JUNK_SIZE (1 * 1024 * 1024)
@@ -60,10 +61,11 @@ typedef struct wv_shm_junk_hdr{
 
 
 typedef struct wv_shm_meta{
+  int test_value;
   size_t shm_key;
   size_t shm_totalsize;
   size_t shm_junk;
-  void* shm_startaddr;
+  /* void* shm_startaddr[PROC_LIMIT]; */
   void* shm_endaddr;
   size_t count;
   size_t arr_junkhdr_offsets[SHM_MAX_COUNT];
@@ -84,7 +86,7 @@ typedef union wv_shm_quusmphr{
 
 
 extern int
-wv_shm_shm(int flags);
+wv_shm_init(int flags);
 
 extern int
 wv_shm_init_shm(int flags);

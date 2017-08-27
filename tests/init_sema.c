@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
 
   wv_init_log("./", "init_sema.log");
 
-  if (wv_shm_init_shm(SHM_INIT | SEMA_INIT) == -1)
+  if (wv_shm_init(SHM_INIT | SEMA_INIT) == -1)
   {
     printf("wv_shm_init_shm() error...\n");
   }

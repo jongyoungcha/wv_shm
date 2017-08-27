@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 
   wv_init_log("./", logname);
 
-  wv_shm_init_shm(0);
+  wv_shm_init(0);
   
   if ((junkhdr = wv_shm_find_junk(JUNKNAME)) == NULL)
   {
@@ -29,22 +29,22 @@ int main(int argc, char* argv[])
   
   while(1)
   {
-    printf("locking\n");
+    printf("try locking\n");
     wv_shm_lock_quu(junkidx);
 
     for(i = 0; i < 4; i++)
     {
       if ((elemhdr = wv_shm_peek_elem_hdr(junkhdr)))
       {
-	if((pelem = wv_shm_pop_elem_data(junkhdr, elemhdr)))
-	{
-	  printf("poped message : %s\n", pelem->data);
-	}
+      	if((pelem = wv_shm_pop_elem_data(junkhdr, elemhdr)))
+      	{
+      	  printf("poped message : %s\n", pelem->data);
+      	}
       }
-      sleep(2);
+      sleep(1);
     }
 
-    printf("unlocking\n");
+    printf("try unlocking\n");
     wv_shm_unlock_quu(junkidx);
   }
   

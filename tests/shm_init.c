@@ -10,7 +10,7 @@ int shm_init(int argc, char* argv[])
 
   wv_init_log("./", logname);
   
-  wv_shm_init_shm(SHM_INIT | SEMA_INIT);  
+  wv_shm_init(SHM_INIT | SEMA_INIT);  
   
   return ret;
 }
