@@ -11,7 +11,10 @@ int main(int argc, char* argv[])
   int junkidx = -1;
   int seq = 0;
   int i = 0;
+  int j = 0;
   char* logname = "producer.log";
+  time_t starttime;
+  time_t endtime;
 
   testelem_t elem;
 
@@ -26,25 +29,29 @@ int main(int argc, char* argv[])
   }
     
   junkidx = wv_shm_get_junk_index(junkhdr);
-  
-  while(1)
+
+  time(&starttime);
+  for (i = 0; i<100; i++)
   {
-    printf("try locking\n");
+    //printf("producer : try locking\n");
     wv_shm_lock_quu(junkidx);
 
     /* getchar(); */
 
-    for(i = 0; i < 4; i++)
+    for(j = 0; j < 100000; j++)
     {
       snprintf(elem.data, 8192, "test message %d", seq++);
-      printf("pushing %s\n", elem.data);
+      /* printf("pushing %s\n", elem.data); */
       wv_shm_push_elem(junkhdr, &elem, sizeof(testelem_t));
-      sleep(1);
     }
 
-    printf("try unlocking\n");
+    //printf("producer : try unlocking\n");
     wv_shm_unlock_quu(junkidx);
   }
+  time(&endtime);
+
+  printf("producer time span :%ld\n",  endtime - starttime);
+  
 
   return ret;
 }

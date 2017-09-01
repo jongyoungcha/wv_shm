@@ -11,7 +11,11 @@ int main(int argc, char* argv[])
   int junkidx = -1;
   int seq = 0;
   int i = 0;
+  int j = 0;
+  int cnt = 0;
   char* logname = "consumer.log";
+  time_t starttime;
+  time_t endtime;
 
   testelem_t* pelem = NULL;
 
@@ -27,26 +31,34 @@ int main(int argc, char* argv[])
     
   junkidx = wv_shm_get_junk_index(junkhdr);
   
-  while(1)
+  /* while(1) */
+  time(&starttime);
+  for (i = 0; i<100; i++)
   {
-    printf("try locking\n");
+    //printf("consumer : try locking\n");
     wv_shm_lock_quu(junkidx);
 
-    for(i = 0; i < 4; i++)
+    for(j = 0; j< 100000; j++)
     {
       if ((elemhdr = wv_shm_peek_elem_hdr(junkhdr)))
       {
       	if((pelem = wv_shm_pop_elem_data(junkhdr, elemhdr)))
       	{
-      	  printf("poped message : %s\n", pelem->data);
+	  if(pelem)
+	  {
+	    free(pelem);
+	  }
+      	  /* printf("poped message : %s\n", pelem->data); */
       	}
       }
-      sleep(1);
     }
 
-    printf("try unlocking\n");
+    //xdprintf("consumer: try unlocking\n");
     wv_shm_unlock_quu(junkidx);
   }
+  time(&endtime);
+
+  printf("consumer time span : %ld\n", endtime - starttime); 
   
   return 0;
 }
